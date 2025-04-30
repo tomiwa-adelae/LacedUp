@@ -8,7 +8,9 @@ const Logo = () => {
 			className="hover:text-primary transition-colors flex items-center justify-start"
 		>
 			<Footprints className="size-10 mr-2" />
-			<h3 className="text-3xl uppercase font-semibold">LacedUp</h3>
+			<h3 className="hidden md:block text-3xl uppercase font-semibold">
+				LacedUp
+			</h3>
 		</Link>
 	);
 };

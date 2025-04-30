@@ -30,7 +30,7 @@ export const Showcase = () => {
 						alt="A pair of multicolored sneakers"
 						width={1000}
 						height={1000}
-						className="object-cover w-auto h-auto aspect-auto"
+						className="object-cover size-auto aspect-auto"
 					/>
 				</div>
 			</div>

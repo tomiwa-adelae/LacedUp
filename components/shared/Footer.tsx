@@ -7,12 +7,12 @@ import Logo from "./Logo";
 const Footer = () => {
 	const year = new Date().getFullYear();
 	return (
-		<footer className="bg-white text-black">
+		<footer className="bg-white text-black dark:bg-black dark:text-white">
 			<div className="container">
 				<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 py-16">
 					<div className="col-span-2 md:col-span-1 lg:col-span-2">
 						<Logo />
-						<p className="text-muted-foreground text-base mt-4">
+						<p className="text-muted-foreground dark:text-gray-200 text-base mt-4">
 							Digitalizing Africa's housing market. Connecting
 							landlords with renters for a seamless property
 							experience.
@@ -25,7 +25,7 @@ const Footer = () => {
 										href={slug}
 										target="_blank"
 										key={index}
-										className="flex items-center justify-start gap-4 group"
+										className="flex items-center justify-start gap-4 group hover:text-primary transition-all"
 									>
 										<Icon className="size-6" />
 									</a>
@@ -42,7 +42,7 @@ const Footer = () => {
 								{links.map(({ slug, label }, idx) => (
 									<li key={idx}>
 										<Link
-											className="text-base text-muted-foreground hover:text-primary"
+											className="text-base text-muted-foreground dark:text-gray-200 hover:text-primary"
 											href={slug}
 										>
 											{label}
@@ -57,7 +57,7 @@ const Footer = () => {
 			<div className="container">
 				<Separator />
 			</div>
-			<div className="transition-all py-8 text-center text-black font-medium uppercase text-xs">
+			<div className="transition-all py-8 text-center font-medium uppercase text-xs">
 				<p className="container">
 					&copy; {year} LacedUp. All rights reserved.
 				</p>

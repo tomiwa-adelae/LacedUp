@@ -124,3 +124,38 @@ export const themes = [
 		icon: Settings,
 	},
 ];
+
+export const shopByCategories = [
+	{
+		image: "/assets/images/men-shoe.jpg",
+		category: "Men's shoes",
+	},
+	{
+		image: "/assets/images/women-shoe.jpg",
+		category: "Women's shoes",
+	},
+	{
+		image: "/assets/images/kids-shoe.jpg",
+		category: "Kid's shoes",
+	},
+	{
+		image: "/assets/images/sneakers.jpg",
+		category: "Sneakers",
+	},
+	{
+		image: "/assets/images/loafers.jpg",
+		category: "Loafers",
+	},
+	{
+		image: "/assets/images/boots.jpg",
+		category: "Boots",
+	},
+	{
+		image: "/assets/images/sandals.jpg",
+		category: "Sandals",
+	},
+	{
+		image: "/assets/images/slippers.jpg",
+		category: "Slippers",
+	},
+];

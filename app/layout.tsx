@@ -28,7 +28,7 @@ export default function RootLayout({
 				<ThemeProvider>
 					<Header />
 					<div className="flex-1 pt-20">{children}</div>
-					{/* <Footer /> */}
+					<Footer />
 				</ThemeProvider>
 			</body>
 		</html>
