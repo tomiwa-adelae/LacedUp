@@ -1,10 +1,15 @@
 import {
+	ChartSpline,
 	Facebook,
+	Footprints,
 	Instagram,
+	LayoutDashboard,
 	MoonStar,
 	Settings,
+	ShoppingCart,
 	Sun,
 	Twitter,
+	Users,
 } from "lucide-react";
 
 export const navLinks = [
@@ -175,4 +180,72 @@ export const shoeSizes = [
 	"47",
 	"48",
 	"49",
+];
+
+export const nigerianStates = [
+	"Abia",
+	"Adamawa",
+	"Akwa Ibom",
+	"Anambra",
+	"Bauchi",
+	"Bayelsa",
+	"Benue",
+	"Borno",
+	"Cross River",
+	"Delta",
+	"Ebonyi",
+	"Edo",
+	"Ekiti",
+	"Enugu",
+	"Gombe",
+	"Imo",
+	"Jigawa",
+	"Kaduna",
+	"Kano",
+	"Katsina",
+	"Kebbi",
+	"Kogi",
+	"Kwara",
+	"Lagos",
+	"Nasarawa",
+	"Niger",
+	"Ogun",
+	"Ondo",
+	"Osun",
+	"Oyo",
+	"Plateau",
+	"Rivers",
+	"Sokoto",
+	"Taraba",
+	"Yobe",
+	"Zamfara",
+	"FCT (Abuja)",
+] as const;
+
+export const sidebarLinks = [
+	{
+		label: "Dashboard",
+		href: "/dashboard",
+		icon: LayoutDashboard,
+	},
+	{
+		label: "Orders",
+		href: "/order",
+		icon: ShoppingCart,
+	},
+	{
+		label: "Products",
+		href: "/products",
+		icon: Footprints,
+	},
+	{
+		label: "Customers",
+		href: "/customers",
+		icon: Users,
+	},
+	{
+		label: "Analytics",
+		href: "/analytics",
+		icon: ChartSpline,
+	},
 ];

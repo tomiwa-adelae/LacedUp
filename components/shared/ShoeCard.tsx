@@ -9,7 +9,7 @@ interface Props {
 
 export const ShoeCard = ({ ratings }: Props) => {
 	return (
-		<div className="group">
+		<Link href="/shoes/12345" className="group">
 			<Image
 				src={"/assets/images/sneakers.jpg"}
 				alt={"Shoes"}
@@ -41,6 +41,6 @@ export const ShoeCard = ({ ratings }: Props) => {
 				</div>
 				{ratings && <Ratings />}
 			</div>
-		</div>
+		</Link>
 	);
 };

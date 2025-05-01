@@ -1,7 +1,6 @@
 import { CategoryBreadCrumbs } from "@/components/CategoryBreadCrumbs";
 import { Filter } from "@/components/shared/Filter";
 import { FilterModal } from "@/components/shared/FilterModal";
-import LoadMore from "@/components/shared/LoadMore";
 import { ShoeCard } from "@/components/shared/ShoeCard";
 import { Showcase } from "@/components/shared/Showcase";
 import { ShopNew } from "@/components/ShopNew";
@@ -21,7 +20,7 @@ const page = () => {
 	const isEven = shoes.length % 2 === 0;
 	return (
 		<div className="bg-white dark:bg-black py-4 relative">
-			{/* <CategoryBreadCrumbs /> */}
+			<CategoryBreadCrumbs />
 			<Showcase
 				title="Men's shoes"
 				image={"/assets/images/men-shoe-transparent.png"}

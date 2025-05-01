@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/shared/Header";
-import Footer from "@/components/shared/Footer";
 import { ThemeProvider } from "@/context/ThemeProvider";
 
 const montserrat = Montserrat({
@@ -25,11 +23,7 @@ export default function RootLayout({
 			<body
 				className={`${montserrat.className} antialiased min-h-screen flex flex-col justify-between dark:bg-black dark:text-white`}
 			>
-				<ThemeProvider>
-					<Header />
-					<div className="flex-1 pt-20">{children}</div>
-					<Footer />
-				</ThemeProvider>
+				<ThemeProvider>{children}</ThemeProvider>
 			</body>
 		</html>
 	);
