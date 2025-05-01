@@ -1,14 +1,18 @@
 import { Footprints } from "lucide-react";
 import Link from "next/link";
 
-const Logo = () => {
+const Logo = ({ hide = false }: { hide?: boolean }) => {
 	return (
 		<Link
 			href="/"
 			className="hover:text-primary transition-colors flex items-center justify-start"
 		>
 			<Footprints className="size-10 mr-2" />
-			<h3 className="hidden md:block text-3xl uppercase font-semibold">
+			<h3
+				className={`${
+					hide && "hidden"
+				} md:block text-3xl uppercase font-semibold`}
+			>
 				LacedUp
 			</h3>
 		</Link>

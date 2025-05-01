@@ -1,7 +1,6 @@
 import { footerDetails, socialLinks } from "@/constants";
 import Link from "next/link";
 import { Separator } from "../ui/separator";
-import { Footprints } from "lucide-react";
 import Logo from "./Logo";
 
 const Footer = () => {
@@ -9,7 +8,7 @@ const Footer = () => {
 	return (
 		<footer className="bg-white text-black dark:bg-black dark:text-white">
 			<div className="container">
-				<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 py-16">
+				<div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8 py-10">
 					<div className="col-span-2 md:col-span-1 lg:col-span-2">
 						<Logo />
 						<p className="text-muted-foreground dark:text-gray-200 text-base mt-4">

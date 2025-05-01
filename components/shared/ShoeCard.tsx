@@ -19,7 +19,7 @@ export const ShoeCard = ({ ratings }: Props) => {
 			/>
 			<div className="mt-4 pb-8">
 				<Link
-					href=""
+					href="/shoes/12345"
 					className="text-lg font-medium mb-1 group-hover:text-primary transition-all"
 				>
 					Nike Cosmic Unity

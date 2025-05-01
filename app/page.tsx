@@ -26,9 +26,6 @@ const page = () => {
 				<Separator />
 			</div>
 			<PopularShoes />
-			<div className="container">
-				<Separator />
-			</div>
 			<JoinWaitlist />
 		</div>
 	);
