@@ -9,7 +9,7 @@ import {
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-export function ShoeBreadCrumbs() {
+export function CategoryBreadCrumbs() {
 	return (
 		<div className="container">
 			<Breadcrumb>
@@ -24,16 +24,6 @@ export function ShoeBreadCrumbs() {
 						<BreadcrumbLink>
 							<Link href="/category/men-shoe">Men's shoe</Link>
 						</BreadcrumbLink>
-					</BreadcrumbItem>
-					<BreadcrumbSeparator />
-					<BreadcrumbItem>
-						<BreadcrumbLink>
-							<Link href="/category/loafers">Loafers</Link>
-						</BreadcrumbLink>
-					</BreadcrumbItem>
-					<BreadcrumbSeparator />
-					<BreadcrumbItem>
-						<BreadcrumbPage>Nike Cosmic Unity</BreadcrumbPage>
 					</BreadcrumbItem>
 				</BreadcrumbList>
 			</Breadcrumb>

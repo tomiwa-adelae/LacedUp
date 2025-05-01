@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 interface Props {
 	image: string;
@@ -7,7 +8,7 @@ interface Props {
 
 const Category = ({ image, category }: Props) => {
 	return (
-		<div className="group">
+		<Link href="/category/men" className="group">
 			<Image
 				src={image}
 				alt={category}
@@ -18,7 +19,7 @@ const Category = ({ image, category }: Props) => {
 			<p className="mt-4 text-sm lg:text-base font-medium mb-1 group-hover:text-primary transition-all text-center">
 				{category}
 			</p>
-		</div>
+		</Link>
 	);
 };
 

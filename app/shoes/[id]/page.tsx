@@ -10,20 +10,24 @@ import React from "react";
 const page = () => {
 	return (
 		<div className="bg-white dark:bg-black py-4">
+			<ShoeBreadCrumbs />
+			<div className="container grid grid-cols-1 md:grid-cols-2 gap-8 py-8">
+				<ShoeImages />
+				<ShoeDetails />
+			</div>
 			<div className="container">
-				<ShoeBreadCrumbs />
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-8">
-					<ShoeImages />
-					<ShoeDetails />
-				</div>
-				<Separator />
-				<Reviews />
-				<Separator />
-				<SimilarShoes />
-				<Separator />
-				<ShopNew />
 				<Separator />
 			</div>
+			<Reviews />
+			<div className="container">
+				<Separator />
+			</div>
+			<SimilarShoes />
+			<div className="container">
+				<Separator />
+			</div>
+			<ShopNew />
+			<Separator />
 		</div>
 	);
 };

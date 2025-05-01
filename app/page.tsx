@@ -9,7 +9,19 @@ import { Separator } from "@/components/ui/separator";
 const page = () => {
 	return (
 		<div>
-			<Showcase />
+			<Showcase
+				title={
+					<>
+						Lace up &{" "}
+						<span className="text-primary">Stand out.</span>
+					</>
+				}
+				description="Discover premium footwear for every occasion. From
+						limited edition sneakers to timeless classics, find your
+						perfect pair at LacedUp and elevate your stride."
+				cta={[{ slug: "/new", label: "Shop now" }]}
+				image={"/assets/images/showcase-img.png"}
+			/>
 			<div className="container">
 				<Separator />
 			</div>
