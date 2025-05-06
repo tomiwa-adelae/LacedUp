@@ -9,6 +9,7 @@ const Logo = ({ hide = false }: { hide?: boolean }) => {
 		>
 			<Footprints className="size-10 mr-2" />
 			<h3
+				style={{ fontFamily: "ClashDisplay" }}
 				className={`${
 					hide && "hidden"
 				} md:block text-3xl uppercase font-semibold`}
