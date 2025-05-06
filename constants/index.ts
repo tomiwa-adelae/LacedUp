@@ -230,7 +230,7 @@ export const sidebarLinks = [
 	},
 	{
 		label: "Orders",
-		href: "/order",
+		href: "/orders",
 		icon: ShoppingCart,
 	},
 	{

@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export const AppNavbar = () => {
 	return (
-		<div className="hidden h-16 border-b md:flex items-center justify-center w-full">
+		<div className="hidden h-16 border-b lg:flex items-center justify-center bg-white dark:bg-black w-[calc(100vw-16rem)] fixed top-0 left-[16rem] z-50">
 			<div className="container flex items-center justify-between">
 				<Input
 					className="rounded-full max-w-[400px] dark:border-white border-2 h-12"

@@ -18,7 +18,7 @@ export function Theme() {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button size={"icon"} variant="ghost">
+				<Button size={"icon"} variant="outline">
 					{mode === "light" ? (
 						<Sun className="size-6" />
 					) : (
@@ -31,7 +31,7 @@ export function Theme() {
 					const Icon = item.icon;
 					return (
 						<DropdownMenuItem
-							className={`dark:text-white text-xs uppercase cursor-pointer dark:hover:bg-primary font-semibold dark:text-white ${
+							className={`dark:text-white text-xs uppercase cursor-pointer dark:hover:bg-primary font-semibold ${
 								mode === item.value &&
 								"bg-primary text-white dark:bg-primary"
 							}`}
