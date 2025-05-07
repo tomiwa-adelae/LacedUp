@@ -154,6 +154,8 @@ export async function POST(req: Request) {
 			picture: image_url,
 		};
 
+		console.log("YESSSS", user);
+
 		const newUser = await createUser(user);
 
 		if (newUser) {
