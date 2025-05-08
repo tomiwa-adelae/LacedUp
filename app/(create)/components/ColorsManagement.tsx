@@ -297,13 +297,13 @@ export function ColorsSelector({
 								<TooltipProvider key={index}>
 									<Tooltip>
 										<TooltipTrigger asChild>
-											<button
+											<div
 												onClick={() =>
 													isSelected
 														? removeColor(color)
 														: addColor(color)
 												}
-												className={`w-8 h-8 rounded-full relative flex items-center justify-center ${
+												className={`size-8 cursor-pointer rounded-full relative flex items-center justify-center ${
 													isSelected
 														? "ring-2 ring-blue-500"
 														: "border border-gray-200 hover:ring-2 hover:ring-gray-300"
@@ -322,7 +322,7 @@ export function ColorsSelector({
 														}}
 													/>
 												)}
-											</button>
+											</div>
 										</TooltipTrigger>
 										<TooltipContent>
 											<p>{color.name}</p>

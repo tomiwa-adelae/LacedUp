@@ -12,6 +12,7 @@ interface IUser extends Document {
 	bio?: string;
 	createdAt?: Date;
 	updatedAt?: Date;
+	isAdmin?: boolean;
 }
 
 // Define Mongoose Schema with Type Safety
@@ -46,6 +47,11 @@ const UserSchema = new Schema<IUser>(
 		},
 		bio: {
 			type: String,
+		},
+		isAdmin: {
+			type: Boolean,
+			default: false,
+			required: true,
 		},
 	},
 	{ timestamps: true } // Enables createdAt and updatedAt

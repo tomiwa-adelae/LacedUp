@@ -249,3 +249,20 @@ export const sidebarLinks = [
 		icon: ChartSpline,
 	},
 ];
+
+export const suggestedTags = [
+	"Running",
+	"Casual",
+	"Formal",
+	"Sports",
+	"Kids",
+	"Waterproof",
+	"Leather",
+	"Canvas",
+	"Summer",
+	"Winter",
+	"Sale",
+	"New Arrival",
+	"Limited Edition",
+	"Sustainable",
+];

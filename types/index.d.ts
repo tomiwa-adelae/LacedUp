@@ -5,3 +5,14 @@ declare interface CreateUserParams {
 	email: string;
 	picture: string;
 }
+
+declare interface CreateNewProductParams {
+	name: string;
+	description: string;
+	category: string;
+	// media: string[];
+	price: string;
+	// availableColors: string[];
+	// tags?: string[];
+	userId: string;
+}

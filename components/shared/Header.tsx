@@ -6,6 +6,8 @@ import Logo from "./Logo";
 import { Button } from "../ui/button";
 import { Theme } from "./Theme";
 import { MobileNavbar } from "./MobileNavbar";
+import { ProfileDropdown } from "./ProfileDropdown";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 
 export const Header = () => {
 	return (
@@ -26,9 +28,14 @@ export const Header = () => {
 						))}
 						<Theme />
 					</nav>
-					<Button className="hidden md:flex" asChild size={"md"}>
-						<Link href="/contact">Contact us</Link>
-					</Button>
+					<SignedIn>
+						<ProfileDropdown />
+					</SignedIn>
+					<SignedOut>
+						<Button className="hidden md:flex" asChild size={"md"}>
+							<Link href="/sign-in">Login</Link>
+						</Button>
+					</SignedOut>
 					<div className="md:hidden">
 						<MobileNavbar />
 					</div>
