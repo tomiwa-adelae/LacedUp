@@ -10,8 +10,8 @@ const layout = ({ children }: { children: React.ReactNode }) => {
 				<AppNavbar />
 				<div className="lg:pt-16">
 					<Header />
-					<div className="min-h-screen pt-20 lg:pt-4">
-						<div className="container py-4 lg:py-0">{children}</div>
+					<div className="min-h-screen pt-20 lg:pt-0">
+						<div className="">{children}</div>
 					</div>
 				</div>
 			</div>

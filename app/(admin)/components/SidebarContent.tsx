@@ -16,7 +16,6 @@ export const SidebarContent = ({ setOpenMobile }: any) => {
 
 	const handleClick = () => {
 		if (isMobile && setOpenMobile) {
-			console.log("yes");
 			setOpenMobile(false);
 		}
 	};

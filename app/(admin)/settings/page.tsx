@@ -1,7 +1,13 @@
 import { SettingsForm } from "@/components/forms/SettingsForm";
 import { Separator } from "@/components/ui/separator";
+import { getUserInfo } from "@/lib/actions/user.actions";
+import { currentUser } from "@clerk/nextjs/server";
 
-const page = () => {
+const page = async () => {
+	const clerkUser = await currentUser();
+
+	const user = await getUserInfo(clerkUser?.id!);
+
 	return (
 		<div>
 			<div className="flex items-center justify-between gap-8">
@@ -15,7 +21,14 @@ const page = () => {
 				</div>
 			</div>
 			<Separator className="my-8" />
-			<SettingsForm />
+			<SettingsForm
+				userId={user?.user._id}
+				firstName={user?.user.firstName}
+				lastName={user?.user.lastName}
+				email={user?.user.email}
+				phoneNumber={user?.user.phoneNumber}
+				picture={user?.user.picture}
+			/>
 		</div>
 	);
 };

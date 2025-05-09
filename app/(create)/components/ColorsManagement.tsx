@@ -43,7 +43,7 @@ import {
 // Define types and interfaces
 export interface ColorsOption {
 	name: string;
-	hex: string;
+	colorCode: string;
 }
 
 interface ColorsSelectorProps {
@@ -54,7 +54,7 @@ interface ColorsSelectorProps {
 
 const formSchema = z.object({
 	colorName: z.string().min(2, { message: "Color name is required" }),
-	colorHex: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, {
+	colorCode: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, {
 		message: "Valid hex color code is required",
 	}),
 });
@@ -63,26 +63,26 @@ type FormValues = z.infer<typeof formSchema>;
 
 // Common shoe colors with their hex values
 const DEFAULT_COLORS: ColorsOption[] = [
-	{ name: "Black", hex: "#000000" },
-	{ name: "White", hex: "#FFFFFF" },
-	{ name: "Red", hex: "#FF0000" },
-	{ name: "Blue", hex: "#0000FF" },
-	{ name: "Green", hex: "#008000" },
-	{ name: "Yellow", hex: "#FFFF00" },
-	{ name: "Brown", hex: "#A52A2A" },
-	{ name: "Grey", hex: "#808080" },
-	{ name: "Navy", hex: "#000080" },
-	{ name: "Beige", hex: "#F5F5DC" },
-	{ name: "Pink", hex: "#FFC0CB" },
-	{ name: "Purple", hex: "#800080" },
-	{ name: "Orange", hex: "#FFA500" },
-	{ name: "Silver", hex: "#C0C0C0" },
-	{ name: "Gold", hex: "#FFD700" },
-	{ name: "Tan", hex: "#D2B48C" },
-	{ name: "Teal", hex: "#008080" },
-	{ name: "Olive", hex: "#808000" },
-	{ name: "Burgundy", hex: "#800020" },
-	{ name: "Khaki", hex: "#F0E68C" },
+	{ name: "Black", colorCode: "#000000" },
+	{ name: "White", colorCode: "#FFFFFF" },
+	{ name: "Red", colorCode: "#FF0000" },
+	{ name: "Blue", colorCode: "#0000FF" },
+	{ name: "Green", colorCode: "#008000" },
+	{ name: "Yellow", colorCode: "#FFFF00" },
+	{ name: "Brown", colorCode: "#A52A2A" },
+	{ name: "Grey", colorCode: "#808080" },
+	{ name: "Navy", colorCode: "#000080" },
+	{ name: "Beige", colorCode: "#F5F5DC" },
+	{ name: "Pink", colorCode: "#FFC0CB" },
+	{ name: "Purple", colorCode: "#800080" },
+	{ name: "Orange", colorCode: "#FFA500" },
+	{ name: "Silver", colorCode: "#C0C0C0" },
+	{ name: "Gold", colorCode: "#FFD700" },
+	{ name: "Tan", colorCode: "#D2B48C" },
+	{ name: "Teal", colorCode: "#008080" },
+	{ name: "Olive", colorCode: "#808000" },
+	{ name: "Burgundy", colorCode: "#800020" },
+	{ name: "Khaki", colorCode: "#F0E68C" },
 ];
 
 export function ColorsSelector({
@@ -98,7 +98,7 @@ export function ColorsSelector({
 	const form = useForm<FormValues>({
 		defaultValues: {
 			colorName: "",
-			colorHex: "#000000",
+			colorCode: "#000000",
 		},
 		resolver: async (data) => {
 			try {
@@ -122,20 +122,22 @@ export function ColorsSelector({
 
 	const addColor = (color: ColorsOption) => {
 		// Check if color is already selected to avoid duplicates
-		if (!selectedColors.some((c) => c.hex === color.hex)) {
+		if (!selectedColors.some((c) => c.colorCode === color.colorCode)) {
 			setSelectedColors([...selectedColors, color]);
 		}
 	};
 
 	const removeColor = (colorToRemove: ColorsOption) => {
 		setSelectedColors(
-			selectedColors.filter((color) => color.hex !== colorToRemove.hex)
+			selectedColors.filter(
+				(color) => color.colorCode !== colorToRemove.colorCode
+			)
 		);
 	};
 
 	const handleAddCustomColor = (values: FormValues) => {
-		addColor({ name: values.colorName, hex: values.colorHex });
-		form.reset({ colorName: "", colorHex: "#000000" });
+		addColor({ name: values.colorName, colorCode: values.colorCode });
+		form.reset({ colorName: "", colorCode: "#000000" });
 		setDialogOpen(false);
 	};
 
@@ -162,7 +164,7 @@ export function ColorsSelector({
 					<div key={index} className="flex flex-col items-center">
 						<div
 							className="relative group w-12 h-12 rounded-full border border-gray-300 shadow-sm cursor-pointer"
-							style={{ backgroundColor: color.hex }}
+							style={{ backgroundColor: color.colorCode }}
 						>
 							<TooltipProvider>
 								<Tooltip>
@@ -236,7 +238,7 @@ export function ColorsSelector({
 
 								<FormField
 									control={form.control}
-									name="colorHex"
+									name="colorCode"
 									render={({ field }) => (
 										<FormItem>
 											<FormLabel>Color Code</FormLabel>
@@ -272,7 +274,13 @@ export function ColorsSelector({
 											Cancel
 										</Button>
 									</DialogClose>
-									<Button size="md" type="submit">
+									<Button
+										size="md"
+										type="button"
+										onClick={form.handleSubmit(
+											handleAddCustomColor
+										)}
+									>
 										Add Color
 									</Button>
 								</DialogFooter>
@@ -291,7 +299,7 @@ export function ColorsSelector({
 					<div className="flex flex-wrap gap-3 mt-4">
 						{commonColors.map((color, index) => {
 							const isSelected = selectedColors.some(
-								(c) => c.hex === color.hex
+								(c) => c.colorCode === color.colorCode
 							);
 							return (
 								<TooltipProvider key={index}>
@@ -309,7 +317,8 @@ export function ColorsSelector({
 														: "border border-gray-200 hover:ring-2 hover:ring-gray-300"
 												}`}
 												style={{
-													backgroundColor: color.hex,
+													backgroundColor:
+														color.colorCode,
 												}}
 											>
 												{isSelected && (
@@ -317,7 +326,7 @@ export function ColorsSelector({
 														className="w-4 h-4"
 														style={{
 															color: getTextColor(
-																color.hex
+																color.colorCode
 															),
 														}}
 													/>

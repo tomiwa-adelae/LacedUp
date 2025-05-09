@@ -3,30 +3,57 @@
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerClose, DrawerContent } from "@/components/ui/drawer";
 
-import { Input } from "@/components/ui/input";
-
 import { toast } from "@/hooks/use-toast";
-import { createCategory } from "@/lib/actions/category.actions";
+import {
+	deleteProduct,
+	deleteProductImage,
+} from "@/lib/actions/product.actions";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export function AddNewCategoryForm({
+interface Props {
+	open: boolean;
+	closeModal: (updatedMedia?: any) => void;
+	productId: any;
+	userId: string;
+	image: any;
+}
+
+export function DeleteImageModal({
 	open,
 	closeModal,
-}: {
-	open: boolean;
-	closeModal: () => void;
-}) {
+	productId,
+	userId,
+	image,
+}: Props) {
+	const router = useRouter();
 	const [loading, setLoading] = useState(false);
-	const [value, setValue] = useState("");
 
 	const handleSubmit = async () => {
 		try {
 			setLoading(true);
 
-			const res = await createCategory({ name: value });
+			const res = await deleteProductImage({
+				productId,
+				userId,
+				imageId: image.id,
+			});
 
-			toast({ title: "Success!", description: res?.message });
-			closeModal();
+			if (res?.status == 400)
+				return toast({
+					title: "Error!",
+					description: res?.message,
+					variant: "destructive",
+				});
+
+			toast({
+				title: "Success!",
+				description: res?.message,
+			});
+			closeModal(res.updatedMedia);
+
+			// router.push("/products");
 		} catch (error) {
 			toast({
 				title: "Error!",
@@ -44,16 +71,22 @@ export function AddNewCategoryForm({
 				<div className="container">
 					<div className="mx-auto w-full sm:max-w-sm lg:max-w-lg py-10">
 						<h4 className="text-sm uppercase font-medium">
-							Add new category
+							Delete Image
 						</h4>
-						<div className="mt-2">
-							<Input
-								value={value}
-								onChange={(e) => setValue(e.target.value)}
-								placeholder={`Loafers`}
-							/>
-						</div>
-						{/* Action Buttons */}
+						<p className="text-sm mt-2 mb-4">
+							Are you sure you want to delete this image? This
+							action cannot be undone. Once deleted, all
+							associated data will be permanently removed.
+						</p>
+
+						<Image
+							src={image.url}
+							alt={`${image.alt}'s picture`}
+							width={1000}
+							height={1000}
+							className="size-full rounded-lg aspect-video object-cover"
+						/>
+
 						<div className="flex items-center container justify-between gap-4 mt-4 flex-col sm:flex-row w-full">
 							<DrawerClose asChild>
 								<Button
@@ -66,12 +99,13 @@ export function AddNewCategoryForm({
 								</Button>
 							</DrawerClose>
 							<Button
+								variant={"destructive"}
 								size="md"
 								onClick={handleSubmit}
 								disabled={loading}
-								className="w-full sm:w-auto"
+								className="w-full sm:w-auto text-xs"
 							>
-								{loading ? "Submitting..." : "Submit"}
+								{loading ? "Deleting..." : "Delete"}
 							</Button>
 						</div>
 					</div>

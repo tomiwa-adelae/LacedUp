@@ -72,6 +72,7 @@ export const updateUser = async ({
 		user.lastName = details.lastName || user.lastName;
 		user.phoneNumber = details.phoneNumber || user.phoneNumber;
 		user.picture = details.picture || user.picture;
+		user.pictureId = details.pictureId || user.pictureId;
 		user.bio = details.bio || user.bio;
 
 		await user.save();

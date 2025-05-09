@@ -1,6 +1,7 @@
 import { Header } from "./components/Header";
 import { AppNavbar } from "./components/AppNavbar";
 import Sidebar from "./components/Sidebar";
+import Footer from "./components/Footer";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
 	return (
@@ -12,7 +13,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
 					<Header />
 					<div className="min-h-screen pt-20 lg:pt-4">
 						<div className="container py-4 lg:py-0">{children}</div>
-						{/* <Footer /> */}
+						<Footer />
 					</div>
 				</div>
 			</div>

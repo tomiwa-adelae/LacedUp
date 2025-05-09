@@ -1,8 +1,22 @@
+import { currentUser } from "@clerk/nextjs/server";
 import { CustomerBox } from "../components/CustomerBox";
 import { DashboardBox } from "../components/DashboardBox";
 import { TopProducts } from "../components/TopProducts";
+import { getUserInfo } from "@/lib/actions/user.actions";
+import { getAdminProducts } from "@/lib/actions/product.actions";
+import { redirect } from "next/navigation";
 
-const page = () => {
+const page = async () => {
+	const clerkUser = await currentUser();
+
+	const user = await getUserInfo(clerkUser?.id!);
+
+	const products = await getAdminProducts({
+		userId: user.user._id,
+	});
+
+	if (products.status === 400) redirect("/not-found");
+
 	return (
 		<div>
 			<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -15,7 +29,7 @@ const page = () => {
 				/>
 				<DashboardBox
 					title={"Total Products"}
-					number={"45"}
+					number={products.products.length}
 					description={"Increase 133% this month"}
 					percentage={"7.83%"}
 					direction={"down"}

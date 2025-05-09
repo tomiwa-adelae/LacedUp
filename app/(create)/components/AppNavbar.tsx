@@ -11,10 +11,7 @@ export const AppNavbar = () => {
 				<h2 className="text-xl uppercase font-semibold">New Product</h2>
 				<div className="flex items-center justify-end gap-4">
 					<Theme />
-					<Button size="md" variant={"outline"}>
-						Discard
-					</Button>
-					<Button size="md">Create product</Button>
+					{/* <Button size="md">Create product</Button> */}
 				</div>
 			</div>
 		</div>

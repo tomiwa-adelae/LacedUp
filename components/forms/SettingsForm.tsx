@@ -16,6 +16,17 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
+import { useState } from "react";
+import { ProfileImageModal } from "../ProfileImageModal";
+
+interface Props {
+	userId: string;
+	firstName: string;
+	lastName: string;
+	email: string;
+	phoneNumber: string;
+	picture: string;
+}
 
 const FormSchema = z.object({
 	firstName: z.string().min(2, {
@@ -29,7 +40,16 @@ const FormSchema = z.object({
 		.email("Invalid email address."),
 });
 
-export function SettingsForm() {
+export function SettingsForm({
+	userId,
+	firstName,
+	lastName,
+	email,
+	phoneNumber,
+	picture,
+}: Props) {
+	const [openImageModal, setOpenImageModal] = useState<boolean>(false);
+
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
@@ -43,8 +63,8 @@ export function SettingsForm() {
 		<div>
 			<div className="flex items-center justify-start gap-4">
 				<Image
-					src={"/assets/images/user.jpeg"}
-					alt={"Tomiwa"}
+					src={picture}
+					alt={`${firstName} ${lastName}'s picture`}
 					width={1000}
 					height={1000}
 					className="rounded-full object-cover size-32"
@@ -58,6 +78,7 @@ export function SettingsForm() {
 						className="text-primary"
 						size="sm"
 						variant={"ghost"}
+						onClick={() => setOpenImageModal(true)}
 					>
 						Update
 					</Button>
@@ -129,6 +150,15 @@ export function SettingsForm() {
 					</form>
 				</Form>
 			</div>
+			{openImageModal && (
+				<ProfileImageModal
+					open={openImageModal}
+					closeModal={() => {
+						setOpenImageModal(false);
+					}}
+					userId={userId}
+				/>
+			)}
 		</div>
 	);
 }

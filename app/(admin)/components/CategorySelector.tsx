@@ -22,10 +22,10 @@ import { AddNewCategoryForm } from "./AddNewCategoryForm";
 
 export const CategorySelector = ({
 	form,
-	onCategorySelect,
-}: {
+}: // onCategorySelect,
+{
 	form: any;
-	onCategorySelect: (categoryId: string) => void;
+	// onCategorySelect: (categoryId: string) => void;
 }) => {
 	const [categories, setCategories] = useState<ICategory[]>([]);
 	const [openNewCategory, setOpenNewCategory] = useState<boolean>(false);
@@ -56,7 +56,7 @@ export const CategorySelector = ({
 								defaultValue={field.value}
 								onValueChange={(value) => {
 									field.onChange(value); // update the form state
-									onCategorySelect(value); // send value up to parent
+									// onCategorySelect(value); // send value up to parent
 								}}
 							>
 								<FormControl>

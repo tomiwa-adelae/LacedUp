@@ -1,10 +1,20 @@
 import { Footprints } from "lucide-react";
 import Link from "next/link";
 
-const Logo = ({ hide = false }: { hide?: boolean }) => {
+const Logo = ({
+	hide = false,
+	title = "Lacedup",
+	slug = "/",
+	fontSize = "text-3xl",
+}: {
+	hide?: boolean;
+	title?: string;
+	slug?: string;
+	fontSize?: string;
+}) => {
 	return (
 		<Link
-			href="/"
+			href={slug}
 			className="hover:text-primary transition-colors flex items-center justify-start"
 		>
 			<Footprints className="size-10 mr-2" />
@@ -12,9 +22,9 @@ const Logo = ({ hide = false }: { hide?: boolean }) => {
 				style={{ fontFamily: "ClashDisplay" }}
 				className={`${
 					hide && "hidden"
-				} md:block text-3xl uppercase font-semibold`}
+				} md:block ${fontSize} uppercase font-semibold`}
 			>
-				LacedUp
+				{title}
 			</h3>
 		</Link>
 	);

@@ -19,6 +19,7 @@ export interface IProduct extends Document {
 	category?: Types.ObjectId;
 	tags?: Types.ObjectId;
 	name: string;
+	description: string;
 	availableColors: IAvailableColor[];
 	media: IMedia[];
 	price: string;
@@ -84,6 +85,10 @@ const ProductSchema = new Schema<IProduct>(
 			default: [],
 		},
 		price: {
+			type: String,
+			required: true,
+		},
+		description: {
 			type: String,
 			required: true,
 		},

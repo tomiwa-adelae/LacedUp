@@ -1,20 +1,25 @@
 import { Button } from "@/components/ui/button";
-import { ListFilter, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import Link from "next/link";
 import React from "react";
-import { ShoeCard } from "../components/ShoeCard";
+import { currentUser } from "@clerk/nextjs/server";
+import { getUserInfo } from "@/lib/actions/user.actions";
+import { getAdminProducts } from "@/lib/actions/product.actions";
+import { ProductCard } from "../components/ProductCard";
+import { ProductsTable } from "../components/ProductsTable";
+import { redirect } from "next/navigation";
 
-const page = () => {
-	const shoes = [
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{}, // Mock shoe data; replace with actual shoe objects
-	];
-	const isEven = shoes.length % 2 === 0;
+const page = async () => {
+	const clerkUser = await currentUser();
+
+	const user = await getUserInfo(clerkUser?.id!);
+
+	const products = await getAdminProducts({
+		userId: user.user._id,
+	});
+
+	if (products.status === 400) redirect("/not-found");
+
 	return (
 		<div>
 			<div className="flex items-center justify-between gap-8">
@@ -32,9 +37,13 @@ const page = () => {
 					</Link>
 				</Button>
 			</div>
-			<div className="gap-4 grid grid-cols-2 lg:grid-cols-3 mt-4">
-				{shoes.map((_, index) => (
-					<ShoeCard key={index} />
+			<ProductsTable
+				products={products.products}
+				userId={user?.user._id}
+			/>
+			{/* <div className="gap-4 grid grid-cols-2 lg:grid-cols-3 mt-4">
+				{products.products.map(({ name, price, category }, index) => (
+					<ProductCard key={index} />
 				))}
 				<div
 					className={`flex flex-col items-center justify-center gap-4 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] aspect-auto w-full rounded-lg object-cover hover:bg-accent dark:hover:bg-accent/50 cursor-pointer ${
@@ -45,7 +54,7 @@ const page = () => {
 						Load more
 					</Button>
 				</div>
-			</div>
+			</div> */}
 		</div>
 	);
 };
