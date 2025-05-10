@@ -3,6 +3,8 @@ import { Document, Schema, model, models } from "mongoose";
 // Define the Category interface
 export interface ICategory extends Document {
 	name: string;
+	picture: string;
+	pictureId: string;
 	_id: string;
 }
 
@@ -12,6 +14,14 @@ const CategorySchema = new Schema<ICategory>({
 		type: String,
 		required: true,
 		unique: true,
+	},
+	picture: {
+		type: String,
+		required: true,
+	},
+	pictureId: {
+		type: String,
+		required: true,
 	},
 });
 

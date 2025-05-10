@@ -3,7 +3,7 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { Cart } from "./Cart";
 
-export const CartDetails = () => {
+export const CartDetails = ({ carts }: { carts: any }) => {
 	return (
 		<div className="dark:bg-black dark:text-white">
 			<div className="flex items-center justify-between gap-8">
@@ -22,10 +22,19 @@ export const CartDetails = () => {
 				</Button>
 			</div>
 			<div className="grid gap-4 mt-4">
-				<Cart />
-				<Cart />
-				<Cart />
-				<Cart />
+				{carts.map((cart: any, index: any) => (
+					<Cart
+						key={index}
+						name={cart.name}
+						category={cart.category}
+						color={cart.color}
+						id={cart.id}
+						image={cart.image}
+						price={cart.price}
+						quantity={cart.quantity}
+						size={cart.size}
+					/>
+				))}
 			</div>
 		</div>
 	);

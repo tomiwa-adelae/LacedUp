@@ -8,39 +8,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
-
-const items = [
-	{
-		id: "recents",
-		label: "Recents",
-	},
-	{
-		id: "home",
-		label: "Home",
-	},
-	{
-		id: "applications",
-		label: "Applications",
-	},
-	{
-		id: "desktop",
-		label: "Desktop",
-	},
-	{
-		id: "downloads",
-		label: "Downloads",
-	},
-	{
-		id: "documents",
-		label: "Documents",
-	},
-] as const;
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const FormSchema = z.object({
 	tags: z.array(z.string()).refine((value) => value.some((item) => item), {
@@ -48,15 +22,34 @@ const FormSchema = z.object({
 	}),
 });
 
-export function TagOptions() {
+export function TagOptions({ tags }: { tags: any }) {
+	const router = useRouter();
+	const searchParams = useSearchParams();
+
+	// Get tags from URL if available
+	const selectedTags = searchParams.get("tags")?.split(",") || [];
+
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
-			tags: ["recents", "home"],
+			tags: selectedTags,
 		},
 	});
 
-	function onSubmit(data: z.infer<typeof FormSchema>) {}
+	// Update URL when tags change
+	function updateUrlWithTags(updatedTags: string[]) {
+		const params = new URLSearchParams(window.location.search);
+		if (updatedTags.length > 0) {
+			params.set("tags", updatedTags.join(","));
+		} else {
+			params.delete("tags");
+		}
+		router.push(`?${params.toString()}`, { scroll: false });
+	}
+
+	function onSubmit(data: z.infer<typeof FormSchema>) {
+		updateUrlWithTags(data.tags);
+	}
 
 	return (
 		<Form {...form}>
@@ -66,52 +59,63 @@ export function TagOptions() {
 					name="tags"
 					render={() => (
 						<FormItem>
-							{items.map((item) => (
+							{tags.map((item: any) => (
 								<FormField
-									key={item.id}
+									key={item}
 									control={form.control}
 									name="tags"
 									render={({ field }) => {
+										const isChecked =
+											field.value?.includes(item);
 										return (
 											<FormItem
-												key={item.id}
+												key={item}
 												className="flex flex-row items-start space-x-1 space-y-2"
 											>
 												<FormControl>
 													<Checkbox
-														checked={field.value?.includes(
-															item.id
-														)}
+														checked={isChecked}
 														onCheckedChange={(
 															checked
 														) => {
-															return checked
-																? field.onChange(
-																		[
-																			...field.value,
-																			item.id,
-																		]
-																  )
-																: field.onChange(
-																		field.value?.filter(
-																			(
-																				value
-																			) =>
-																				value !==
-																				item.id
-																		)
-																  );
+															let updated: string[];
+															if (checked) {
+																updated = [
+																	...field.value,
+																	item,
+																];
+															} else {
+																updated =
+																	field.value.filter(
+																		(
+																			value
+																		) =>
+																			value !==
+																			item
+																	);
+															}
+															field.onChange(
+																updated
+															);
+															updateUrlWithTags(
+																updated
+															);
 														}}
 													/>
 												</FormControl>
 												<FormLabel className="font-medium">
-													{item.label}
+													{item}
 												</FormLabel>
 											</FormItem>
 										);
 									}}
 								/>
 							))}
+							{tags.length === 0 && (
+								<p className="italic text-sm text-center py-8">
+									No tags available
+								</p>
+							)}
 							<FormMessage />
 						</FormItem>
 					)}

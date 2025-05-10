@@ -5,34 +5,36 @@ import { Button } from "../ui/button";
 import { Minus, Plus } from "lucide-react";
 import { Input } from "../ui/input";
 
-export const SelectQuantity = () => {
-	// State for quantity
-	const [quantity, setQuantity] = useState(1);
+interface SelectQuantityProps {
+	quantity: number;
+	setQuantity: (val: number) => void;
+	inStock?: number;
+	minQuantity?: number;
+	maxQuantity?: number;
+}
 
-	// Min and max quantity limits
-	const minQuantity = 1;
-	const maxQuantity = 10;
-	const inStock = 8;
-
-	// Handle quantity increase
+export const SelectQuantity = ({
+	quantity,
+	setQuantity,
+	inStock = 8,
+	minQuantity = 1,
+	maxQuantity = 10,
+}: SelectQuantityProps) => {
 	const increaseQuantity = () => {
 		if (quantity < Math.min(maxQuantity, inStock)) {
 			setQuantity(quantity + 1);
 		}
 	};
 
-	// Handle quantity decrease
 	const decreaseQuantity = () => {
 		if (quantity > minQuantity) {
 			setQuantity(quantity - 1);
 		}
 	};
 
-	// Handle direct input of quantity
-	const handleQuantityChange = (e: any) => {
+	const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = parseInt(e.target.value);
 		if (!isNaN(value)) {
-			// Keep quantity within limits
 			const newQuantity = Math.max(
 				minQuantity,
 				Math.min(value, Math.min(maxQuantity, inStock))
@@ -52,11 +54,11 @@ export const SelectQuantity = () => {
 					size={"sm"}
 					onClick={decreaseQuantity}
 					disabled={quantity <= minQuantity}
-					className="h-14 rounded-none rounded-l-lg"
+					className="h-12 rounded-none rounded-l-lg"
 					aria-label="Decrease quantity"
 					variant={"outline"}
 				>
-					<Minus className="size-6" />
+					<Minus />
 				</Button>
 
 				{/* Quantity input */}
@@ -74,11 +76,11 @@ export const SelectQuantity = () => {
 					size={"sm"}
 					onClick={increaseQuantity}
 					disabled={quantity >= Math.min(maxQuantity, inStock)}
-					className="rounded-none rounded-r-lg h-14"
+					className="rounded-none rounded-r-lg h-12"
 					variant={"outline"}
 					aria-label="Increase quantity"
 				>
-					<Plus className="size-6" />
+					<Plus />
 				</Button>
 			</div>
 		</div>

@@ -18,6 +18,11 @@ import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { useState } from "react";
 import { ProfileImageModal } from "../ProfileImageModal";
+import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import { updateUser } from "@/lib/actions/user.actions";
+import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 interface Props {
 	userId: string;
@@ -38,6 +43,13 @@ const FormSchema = z.object({
 	email: z
 		.string({ required_error: "Email is required." })
 		.email("Invalid email address."),
+	phoneNumber: z
+		.string()
+		.regex(/^(\+?\d{10,15})$/, { message: "Enter a valid phone number." })
+		.refine(isValidPhoneNumber, {
+			message: "Invalid phone number",
+		})
+		.optional(),
 });
 
 export function SettingsForm({
@@ -48,16 +60,47 @@ export function SettingsForm({
 	phoneNumber,
 	picture,
 }: Props) {
+	const router = useRouter();
+
 	const [openImageModal, setOpenImageModal] = useState<boolean>(false);
 
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
-			firstName: "",
+			firstName: firstName || "",
+			lastName: lastName || "",
+			email: email || "",
+			phoneNumber: phoneNumber || "",
 		},
 	});
 
-	function onSubmit(data: z.infer<typeof FormSchema>) {}
+	async function onSubmit(data: z.infer<typeof FormSchema>) {
+		try {
+			const details = { ...data };
+
+			const res = await updateUser({ details, userId });
+
+			if (res?.status === 400)
+				return toast({
+					title: "Error!",
+					description: res?.message,
+					variant: "destructive",
+				});
+
+			toast({
+				title: "Success!",
+				description: res?.message,
+			});
+
+			router.push("/dashboard");
+		} catch (error) {
+			toast({
+				title: "Error!",
+				description: "An error occurred!",
+				variant: "destructive",
+			});
+		}
+	}
 
 	return (
 		<div>
@@ -102,7 +145,7 @@ export function SettingsForm({
 										<FormLabel>First name</FormLabel>
 										<FormControl>
 											<Input
-												placeholder="shadcn"
+												placeholder="Enter your first name"
 												{...field}
 											/>
 										</FormControl>
@@ -118,7 +161,7 @@ export function SettingsForm({
 										<FormLabel>Last name</FormLabel>
 										<FormControl>
 											<Input
-												placeholder="shadcn"
+												placeholder="Enter your last name"
 												{...field}
 											/>
 										</FormControl>
@@ -135,7 +178,8 @@ export function SettingsForm({
 										<FormControl>
 											<Input
 												type="email"
-												placeholder="shadcn"
+												disabled
+												placeholder="Enter your email"
 												{...field}
 											/>
 										</FormControl>
@@ -143,9 +187,36 @@ export function SettingsForm({
 									</FormItem>
 								)}
 							/>
+							<FormField
+								control={form.control}
+								name="phoneNumber"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Phone Number</FormLabel>
+										<FormControl>
+											<PhoneInput
+												placeholder="Enter phone number"
+												value={field.value}
+												defaultCountry="NG"
+												className="flex h-12 w-full rounded-md border border-input bg-background px-3 py-2 sm:text-sm text-base"
+												onChange={(phone) => {
+													field.onChange(phone);
+												}}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 						</div>
-						<Button size="lg" type="submit">
-							Submit
+						<Button
+							disabled={form.formState.isSubmitting}
+							size="lg"
+							type="submit"
+						>
+							{form.formState.isSubmitting
+								? "Updating..."
+								: "Update profile"}
 						</Button>
 					</form>
 				</Form>

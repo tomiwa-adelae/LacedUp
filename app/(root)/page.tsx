@@ -5,8 +5,14 @@ import { Showcase } from "@/components/shared/Showcase";
 import { ShopCategory } from "@/components/ShopCategory";
 import { ShopNew } from "@/components/ShopNew";
 import { Separator } from "@/components/ui/separator";
+import { getNewProducts } from "@/lib/actions/product.actions";
+import { redirect } from "next/navigation";
 
-const page = () => {
+const page = async () => {
+	const newProducts = await getNewProducts();
+
+	if (newProducts.status === 400) redirect("/not-found");
+
 	return (
 		<div>
 			<Showcase
@@ -25,7 +31,7 @@ const page = () => {
 			<div className="container">
 				<Separator />
 			</div>
-			<ShopNew />
+			<ShopNew products={newProducts.products} />
 			<div className="container">
 				<Separator />
 			</div>
@@ -33,11 +39,11 @@ const page = () => {
 			<div className="container">
 				<Separator />
 			</div>
-			<BestSellers />
+			{/* <BestSellers /> */}
 			<div className="container">
 				<Separator />
 			</div>
-			<PopularShoes />
+			{/* <PopularShoes /> */}
 			<JoinWaitlist />
 		</div>
 	);

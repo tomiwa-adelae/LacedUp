@@ -9,7 +9,17 @@ import {
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-export function ShoeBreadCrumbs() {
+interface Props {
+	categoryName: string;
+	categoryId: string;
+	productName: string;
+}
+
+export function ShoeBreadCrumbs({
+	categoryName,
+	categoryId,
+	productName,
+}: Props) {
 	return (
 		<div className="container">
 			<Breadcrumb>
@@ -22,18 +32,16 @@ export function ShoeBreadCrumbs() {
 					<BreadcrumbSeparator />
 					<BreadcrumbItem>
 						<BreadcrumbLink>
-							<Link href="/category/men-shoe">Men's shoe</Link>
+							<Link
+								href={`/category/${categoryId}?name=${categoryName}`}
+							>
+								{categoryName}
+							</Link>
 						</BreadcrumbLink>
 					</BreadcrumbItem>
 					<BreadcrumbSeparator />
 					<BreadcrumbItem>
-						<BreadcrumbLink>
-							<Link href="/category/loafers">Loafers</Link>
-						</BreadcrumbLink>
-					</BreadcrumbItem>
-					<BreadcrumbSeparator />
-					<BreadcrumbItem>
-						<BreadcrumbPage>Nike Cosmic Unity</BreadcrumbPage>
+						<BreadcrumbPage>{productName}</BreadcrumbPage>
 					</BreadcrumbItem>
 				</BreadcrumbList>
 			</Breadcrumb>

@@ -12,7 +12,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FileUpload } from "./ui/file-upload";
-import { uploadProfilePicture } from "@/lib/actions/upload.actions";
+import { uploadImage } from "@/lib/actions/upload.actions";
 import { updateUser } from "@/lib/actions/user.actions";
 
 interface Props {
@@ -31,9 +31,7 @@ export function ProfileImageModal({ open, closeModal, userId }: Props) {
 		try {
 			setLoading(true);
 
-			console.log(image);
-
-			const uploadResult = await uploadProfilePicture(image);
+			const uploadResult = await uploadImage(image);
 
 			if (uploadResult?.status === 400) {
 				toast({

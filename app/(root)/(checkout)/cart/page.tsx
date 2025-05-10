@@ -3,22 +3,22 @@ import { CartSummary } from "@/components/CartSummary";
 import { EmptyCart } from "@/components/EmptyCart";
 import { ShopNew } from "@/components/ShopNew";
 import { Separator } from "@/components/ui/separator";
+import { getNewProducts } from "@/lib/actions/product.actions";
+import { redirect } from "next/navigation";
+import { CartWrapper } from "../components/CartWrapper";
 
-const page = () => {
+const page = async () => {
+	const newProducts = await getNewProducts();
+
+	if (newProducts.status === 400) redirect("/not-found");
+
 	return (
 		<div className="relative">
-			<div className="container grid grid-cols-1 lg:grid-cols-3 gap-8 py-4">
-				<div className="col-span-2">
-					<CartDetails />
-				</div>
-				<div className="col-span-2 lg:col-span-1">
-					<CartSummary />
-				</div>
-			</div>
+			<CartWrapper />
 			<div className="container mt-8">
 				<Separator />
 			</div>
-			<ShopNew />
+			<ShopNew products={newProducts.products} />
 			<div className="container">
 				<Separator />
 			</div>

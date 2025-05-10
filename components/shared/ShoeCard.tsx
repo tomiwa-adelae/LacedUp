@@ -2,45 +2,89 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import Ratings from "./Ratings";
+import {
+	IAvailableColor,
+	IMedia,
+	ITags,
+} from "@/lib/database/models/product.model";
+import { cn, formatMoneyInput } from "@/lib/utils";
+import { DEFAULT_PRODUCT_IMAGE } from "@/constants";
 
 interface Props {
 	ratings?: boolean;
+	name: string;
+	price: string;
+	media: IMedia[];
+	tags: any;
+	availableColors: IAvailableColor[];
+	id: any;
+	category: any;
 }
 
-export const ShoeCard = ({ ratings }: Props) => {
+export const ShoeCard = ({
+	name,
+	id,
+	price,
+	availableColors,
+	tags,
+	media,
+	ratings,
+	category,
+}: Props) => {
 	return (
-		<Link href="/shoes/12345" className="group">
-			<Image
-				src={"/assets/images/sneakers.jpg"}
-				alt={"Shoes"}
-				width={1000}
-				height={1000}
-				className="aspect-square w-full h-[270px] lg:h-[320px] lg:w-[400px] rounded-lg object-cover"
-			/>
+		<div className="group">
+			<div className="relative group">
+				<Link href={`/shoes/${id}`}>
+					<Image
+						src={media[0].url || DEFAULT_PRODUCT_IMAGE}
+						alt={`${name}'s picture`}
+						width={1000}
+						height={1000}
+						className={cn(
+							"transition-all aspect-square w-full h-[270px] lg:h-[320px] lg:w-[400px] rounded-lg object-cover",
+							media.length > 1 && "group-hover:opacity-0 "
+						)}
+					/>
+					{media.length > 1 && (
+						<Image
+							src={media[1]?.url || DEFAULT_PRODUCT_IMAGE}
+							alt={`${name}'s picture`}
+							width={1000}
+							height={1000}
+							className="opacity-0 absolute top-0 left-0  group-hover:opacity-100 transition-all aspect-square w-full h-[270px] lg:h-[320px] lg:w-[400px] rounded-lg object-cover"
+						/>
+					)}
+				</Link>
+			</div>
 			<div className="mt-4 pb-8">
 				<Link
-					href="/shoes/12345"
+					href={`/shoes/${id}`}
 					className="text-lg font-medium mb-1 group-hover:text-primary transition-all"
 				>
-					Nike Cosmic Unity
+					{name}
 				</Link>
-				<div className="space-y-1">
-					<p className="text-sm text-muted-foreground">Men's Shoe</p>
-					<p className="text-sm text-muted-foreground">3 colors</p>
+				<div className="space-y-1 text-sm text-muted-foreground dark:text-gray-200">
+					<Link
+						href={`/category/${category._id}?name=${category.name}`}
+					>
+						{category.name}
+					</Link>
+					<p>{availableColors?.length} colors</p>
 				</div>
 				<div className="flex items-center justify-between gap-8 my-2">
-					<p className="text-lg font-medium">₦14,900</p>
+					<p className="text-lg font-medium">
+						₦{formatMoneyInput(price)}
+					</p>
 					<Button
 						className="text-xs hover:text-primary hover:underline"
 						variant={"ghost"}
-						asChild
 						size="sm"
 					>
-						<Link href="">Add to cart</Link>
+						Add to cart
 					</Button>
 				</div>
 				{ratings && <Ratings />}
 			</div>
-		</Link>
+		</div>
 	);
 };

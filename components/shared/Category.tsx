@@ -3,21 +3,22 @@ import Link from "next/link";
 
 interface Props {
 	image: string;
-	category: string;
+	name: string;
+	id: string;
 }
 
-const Category = ({ image, category }: Props) => {
+const Category = ({ id, image, name }: Props) => {
 	return (
-		<Link href="/category/men" className="group">
+		<Link href={`/category/${id}?name=${name}`} className="group">
 			<Image
 				src={image}
-				alt={category}
+				alt={name}
 				width={1000}
 				height={1000}
 				className="aspect-square size-[200px] lg:size-[250px] rounded-lg object-cover"
 			/>
 			<p className="mt-4 text-sm lg:text-base font-medium mb-1 group-hover:text-primary transition-all text-center">
-				{category}
+				{name}
 			</p>
 		</Link>
 	);

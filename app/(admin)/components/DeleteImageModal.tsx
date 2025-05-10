@@ -1,7 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Drawer, DrawerClose, DrawerContent } from "@/components/ui/drawer";
+import {
+	Drawer,
+	DrawerClose,
+	DrawerContent,
+	DrawerTitle,
+} from "@/components/ui/drawer";
 
 import { toast } from "@/hooks/use-toast";
 import {
@@ -18,6 +23,7 @@ interface Props {
 	productId: any;
 	userId: string;
 	image: any;
+	existingImages: any;
 }
 
 export function DeleteImageModal({
@@ -26,6 +32,7 @@ export function DeleteImageModal({
 	productId,
 	userId,
 	image,
+	existingImages,
 }: Props) {
 	const router = useRouter();
 	const [loading, setLoading] = useState(false);
@@ -70,9 +77,9 @@ export function DeleteImageModal({
 			<DrawerContent className="z-[1000] pointer-events-auto">
 				<div className="container">
 					<div className="mx-auto w-full sm:max-w-sm lg:max-w-lg py-10">
-						<h4 className="text-sm uppercase font-medium">
+						<DrawerTitle className="text-sm uppercase font-medium">
 							Delete Image
-						</h4>
+						</DrawerTitle>
 						<p className="text-sm mt-2 mb-4">
 							Are you sure you want to delete this image? This
 							action cannot be undone. Once deleted, all
@@ -91,7 +98,7 @@ export function DeleteImageModal({
 							<DrawerClose asChild>
 								<Button
 									size="md"
-									onClick={closeModal}
+									onClick={() => closeModal(existingImages)}
 									variant="outline"
 									className="w-full sm:w-auto"
 								>

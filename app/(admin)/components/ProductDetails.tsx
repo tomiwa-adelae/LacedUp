@@ -73,21 +73,16 @@ export const ProductDetails = ({
 					₦{formatMoneyInput(price)}
 				</h2>
 			</div>
-
 			<Separator className="my-6" />
-
 			<div>
 				<Label className="mb-3">Category: {category}</Label>
 			</div>
 
 			<Separator className="my-6" />
-
 			<div>
 				<AvailableColors colorOptions={availableColors} />
 			</div>
-
 			<Separator className="my-6" />
-
 			<div>
 				<ProductTags tags={tags} />
 			</div>

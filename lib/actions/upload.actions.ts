@@ -64,7 +64,7 @@ export const deleteImages = async (images: { id: string }[]) => {
 	}
 };
 
-export const uploadProfilePicture = async (image: any) => {
+export const uploadImage = async (image: any) => {
 	try {
 		if (
 			image.startsWith("data:application/pdf") ||

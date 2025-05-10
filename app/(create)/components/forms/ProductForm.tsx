@@ -18,8 +18,8 @@ import { FileUpload } from "@/components/ui/file-upload";
 import { RequiredAsterisk } from "@/components/shared/RequiredAsterisk";
 import { ColorsSelector } from "../ColorsManagement";
 import { toast } from "@/hooks/use-toast";
-import { formatMoneyInput, handleKeyDown } from "@/lib/utils";
-import React, { useState } from "react";
+import { formatMoneyInput, handleKeyDown, removeCommas } from "@/lib/utils";
+import React, { useEffect, useState } from "react";
 import { CategorySelector } from "@/app/(admin)/components/CategorySelector";
 import Image from "next/image";
 import TagsManagement, { Tag } from "../TagsManagement";
@@ -48,20 +48,19 @@ interface Props {
 export function ProductForm({ userId, product, edit }: Props) {
 	const router = useRouter();
 
-	const [price, setPrice] = useState(product.price || "");
+	const [price, setPrice] = useState(edit ? product?.price : "");
 	const [availableColors, setAvailableColors] = useState(
-		product.availableColors || null
+		edit ? product.availableColors : null
 	);
 	const [imageLoading, setImageLoading] = useState<boolean>(false);
 	const [images, setImages] = useState<string[]>([]);
 	const [existingImages, setExistingImages] = useState<IMedia[]>(
-		product?.media
+		edit ? product?.media : []
 	);
-	// const [images, setImages] = useState<IMedia[] || string[]>(product?.media || []);
 	const [imageError, setImageError] = useState<boolean | string>(false);
-	// const [productTags, setProductTags] = useState(product.tags || []);
+
 	const [productTags, setProductTags] = useState<Tag[]>(
-		Array.isArray(product.tags) ? product.tags : []
+		edit && Array.isArray(product?.tags) ? product.tags : []
 	);
 	const [openDeleteImageModal, setOpenDeleteImageModal] = useState(false);
 	const [openDeleteImage, setOpenDeleteImage] = useState();
@@ -69,10 +68,11 @@ export function ProductForm({ userId, product, edit }: Props) {
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
-			name: product.name || "",
-			description: product.description || "",
-			category: product?.category?._id.toString() || "",
-			price: product.price || "",
+			name: edit ? product.name : "",
+			description: edit ? product.description : "",
+			category: edit ? product?.category?._id.toString() : "",
+			price: edit ? product.price : "",
+			media: edit ? product?.media.map((m) => m.url) : [],
 		},
 	});
 
@@ -119,10 +119,12 @@ export function ProductForm({ userId, product, edit }: Props) {
 
 	async function onSubmit(data: z.infer<typeof FormSchema>) {
 		try {
+			const formattedPrice = removeCommas(data.price);
+
 			const details = {
 				name: data.name,
 				description: data.description,
-				price: data.price,
+				price: formattedPrice,
 				category: data.category,
 				tags: productTags,
 				userId,
@@ -141,7 +143,7 @@ export function ProductForm({ userId, product, edit }: Props) {
 
 			toast({
 				title: "Success!",
-				description: "Product created successfully!",
+				description: res.message,
 			});
 			router.push(
 				`/products/${res?.product._id}?${
@@ -164,7 +166,7 @@ export function ProductForm({ userId, product, edit }: Props) {
 					onSubmit={form.handleSubmit(onSubmit)}
 					className="space-y-6"
 				>
-					<div className="fixed w-[calc(100vw-16rem)] py-2 flex items-center justify-center h-16 min-w-screen lg:min-w-auto bg-white dark:bg-black">
+					<div className="fixed w-[calc(100vw-16rem)] py-2 flex items-center justify-center h-16 min-w-screen lg:min-w-auto bg-white dark:bg-black z-40">
 						<div className="container">
 							<div className="flex w-full items-center justify-between gap-4">
 								<Button
@@ -182,8 +184,12 @@ export function ProductForm({ userId, product, edit }: Props) {
 									className="hidden lg:block"
 								>
 									{form.formState.isSubmitting
-										? "Creating..."
-										: "Create product"}
+										? edit
+											? "Updating..."
+											: "Creating..."
+										: edit
+										? "Update"
+										: "Create"}
 								</Button>
 							</div>
 						</div>
@@ -477,7 +483,9 @@ export function ProductForm({ userId, product, edit }: Props) {
 										onColorsChange={(color: any) =>
 											setAvailableColors(color)
 										}
-										initialColors={product.availableColors}
+										initialColors={
+											edit ? product.availableColors : []
+										}
 									/>
 								</div>
 								<Button
@@ -487,8 +495,12 @@ export function ProductForm({ userId, product, edit }: Props) {
 									className="lg:hidden"
 								>
 									{form.formState.isSubmitting
-										? "Creating..."
-										: "Create product"}
+										? edit
+											? "Updating..."
+											: "Creating..."
+										: edit
+										? "Update"
+										: "Create"}
 								</Button>
 							</div>
 						</div>
@@ -505,6 +517,7 @@ export function ProductForm({ userId, product, edit }: Props) {
 							setExistingImages(updatedMedia);
 						}
 					}}
+					existingImages={existingImages}
 					image={openDeleteImage}
 					userId={userId}
 				/>

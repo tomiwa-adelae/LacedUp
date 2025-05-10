@@ -9,7 +9,11 @@ import {
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-export function CategoryBreadCrumbs() {
+export function CategoryBreadCrumbs({
+	categoryName,
+}: {
+	categoryName: string;
+}) {
 	return (
 		<div className="container">
 			<Breadcrumb>
@@ -21,9 +25,7 @@ export function CategoryBreadCrumbs() {
 					</BreadcrumbItem>
 					<BreadcrumbSeparator />
 					<BreadcrumbItem>
-						<BreadcrumbLink>
-							<Link href="/category/men-shoe">Men's shoe</Link>
-						</BreadcrumbLink>
+						<BreadcrumbPage>{categoryName}</BreadcrumbPage>
 					</BreadcrumbItem>
 				</BreadcrumbList>
 			</Breadcrumb>

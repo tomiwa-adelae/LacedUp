@@ -19,6 +19,7 @@ import { getAllCategories } from "@/lib/actions/category.actions";
 import { ICategory } from "@/lib/database/models/category.model";
 import { useEffect, useState } from "react";
 import { AddNewCategoryForm } from "./AddNewCategoryForm";
+import Image from "next/image";
 
 export const CategorySelector = ({
 	form,
@@ -60,13 +61,13 @@ export const CategorySelector = ({
 								}}
 							>
 								<FormControl>
-									<SelectTrigger>
+									<SelectTrigger className="pl-1">
 										<SelectValue placeholder="Select your category" />
 									</SelectTrigger>
 								</FormControl>
 								<SelectContent>
 									{categories.length === 0 && (
-										<p className="italic text-base text-center py-8">
+										<p className="italic text-sm text-center py-8">
 											No categories yet. Add new category
 										</p>
 									)}
@@ -75,8 +76,15 @@ export const CategorySelector = ({
 											<SelectItem
 												key={category._id}
 												value={category._id}
-												className="select-item p-regular-14"
+												className="select-item pl-1 p-regular-14"
 											>
+												<Image
+													src={category.picture}
+													alt={`${category.name}'s picture`}
+													width={1000}
+													height={1000}
+													className="size-10 object-cover rounded-lg"
+												/>
 												{category.name}
 											</SelectItem>
 										))}
@@ -86,7 +94,7 @@ export const CategorySelector = ({
 								type="button"
 								variant={"outline"}
 								size={"sm"}
-								className="rounded-md h-14"
+								className="rounded-md h-12"
 								onClick={() => setOpenNewCategory(true)}
 							>
 								Add

@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/context/ThemeProvider";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/toaster";
+import { CartProvider } from "@/context/CartProvider";
 
 const montserrat = Montserrat({
 	subsets: ["latin"],
@@ -27,7 +28,7 @@ export default function RootLayout({
 					className={`${montserrat.className} antialiased min-h-screen flex flex-col justify-between dark:bg-black dark:text-white`}
 				>
 					<ThemeProvider>
-						{children}
+						<CartProvider>{children}</CartProvider>
 						<Toaster />
 					</ThemeProvider>
 				</body>

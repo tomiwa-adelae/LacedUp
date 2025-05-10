@@ -266,3 +266,7 @@ export const suggestedTags = [
 	"Limited Edition",
 	"Sustainable",
 ];
+
+export const DEFAULT_PRODUCT_IMAGE = "/assets/icons/shoe.svg";
+export const DEFAULT_LIMIT = 2;
+export const DEFAULT_NEW_LIMITS = 10;

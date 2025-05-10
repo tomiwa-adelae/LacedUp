@@ -11,11 +11,11 @@ const page = async () => {
 
 	const user = await getUserInfo(clerkUser?.id!);
 
-	const products = await getAdminProducts({
-		userId: user.user._id,
-	});
+	// const products = await getAdminProducts({
+	// 	userId: user.user._id,
+	// });
 
-	if (products.status === 400) redirect("/not-found");
+	// if (products.status === 400) redirect("/not-found");
 
 	return (
 		<div>
@@ -29,7 +29,7 @@ const page = async () => {
 				/>
 				<DashboardBox
 					title={"Total Products"}
-					number={products.products.length}
+					number={20}
 					description={"Increase 133% this month"}
 					percentage={"7.83%"}
 					direction={"down"}

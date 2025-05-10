@@ -7,8 +7,13 @@ import Image from "next/image";
 import Category from "./shared/Category";
 import LoadMore from "./shared/LoadMore";
 import { shopByCategories } from "@/constants";
+import { getAllCategories } from "@/lib/actions/category.actions";
 
-export const ShopCategory = () => {
+export const ShopCategory = async () => {
+	const allCategories = await getAllCategories();
+
+	// if (newProducts.status === 400) redirect("/not-found");
+
 	return (
 		<div className="dark:bg-black dark:text-white py-8">
 			<div className="container">
@@ -24,13 +29,24 @@ export const ShopCategory = () => {
 				</div>
 				<ScrollArea className="">
 					<div className="flex w-max space-x-4 pt-4 pr-10 pb-8">
-						{shopByCategories.map((category, index) => (
-							<Category
-								key={index}
-								category={category.category}
-								image={category.image}
-							/>
-						))}
+						{allCategories.map(
+							({
+								name,
+								picture,
+								_id,
+							}: {
+								name: string;
+								picture: string;
+								_id: string;
+							}) => (
+								<Category
+									key={_id}
+									id={_id}
+									name={name}
+									image={picture}
+								/>
+							)
+						)}
 					</div>
 					<ScrollBar orientation="horizontal" />
 				</ScrollArea>

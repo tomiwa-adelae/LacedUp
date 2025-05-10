@@ -8,7 +8,7 @@ export const ProductImages = ({ images }: { images: any }) => {
 				alt={"Sneakers"}
 				width={1000}
 				height={1000}
-				className="size-auto aspect-auto rounded-lg"
+				className="size-full object-cover aspect-square rounded-lg"
 			/>
 		</div>
 	);

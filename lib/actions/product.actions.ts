@@ -8,6 +8,7 @@ import { handleError } from "../utils";
 import { deleteImages, uploadImages } from "./upload.actions";
 
 import { v2 as cloudinary } from "cloudinary";
+import { DEFAULT_LIMIT, DEFAULT_NEW_LIMITS } from "@/constants";
 cloudinary.config({
 	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
 	api_key: process.env.CLOUDINARY_API_KEY,
@@ -71,7 +72,7 @@ export const createNewProduct = async (details: CreateNewProductParams) => {
 	}
 };
 
-// Get product details
+// Get product details by admin
 export const getAdminProductDetails = async ({
 	productId,
 	userId,
@@ -203,6 +204,7 @@ export const deleteProduct = async ({
 	}
 };
 
+// Update a certain product by admin
 export const updateProduct = async ({
 	productId,
 	details,
@@ -404,7 +406,9 @@ export const getAdminProducts = async ({ userId }: { userId: string }) => {
 				message: "You are not authorized to get these products.",
 			};
 
-		const products = await Product.find().populate("category");
+		const products = await Product.find()
+			.populate("category")
+			.sort({ createdAt: -1 });
 
 		return {
 			status: 200,
@@ -417,6 +421,213 @@ export const getAdminProducts = async ({ userId }: { userId: string }) => {
 			message:
 				error?.message ||
 				"Oops! Couldn't get products! Try again later.",
+		};
+	}
+};
+
+// Get new products
+export const getNewProducts = async () => {
+	try {
+		await connectToDatabase();
+
+		const products = await Product.find()
+			.sort({ createdAt: -1 })
+			.populate("category")
+			.limit(DEFAULT_NEW_LIMITS);
+
+		return {
+			status: 200,
+			products: JSON.parse(JSON.stringify(products)),
+		};
+	} catch (error: any) {
+		handleError(error);
+		return {
+			status: error?.status || 400,
+			message:
+				error?.message ||
+				"Oops! Couldn't get new products! Try again later.",
+		};
+	}
+};
+
+// Get new products
+export const getCategoryProducts = async ({
+	category,
+	query,
+	limit = DEFAULT_LIMIT,
+	page,
+	tags,
+	minPrice,
+	maxPrice,
+}: {
+	category: string;
+	query: string;
+	limit: number;
+	page: string;
+	tags: any;
+	minPrice?: string;
+	maxPrice?: string;
+}) => {
+	try {
+		await connectToDatabase();
+
+		const tagArray = tags?.split(",") || [];
+
+		const keyword = query
+			? {
+					$or: [
+						{
+							name: {
+								$regex: query,
+								$options: "i",
+							},
+						},
+						{
+							description: {
+								$regex: query,
+								$options: "i",
+							},
+						},
+						{
+							price: {
+								$regex: query,
+								$options: "i",
+							},
+						},
+					],
+			  }
+			: {};
+
+		const tagFilter = tagArray.length
+			? {
+					tags: {
+						$elemMatch: {
+							name: { $in: tagArray },
+						},
+					},
+			  }
+			: {};
+
+		const priceConditions =
+			minPrice || maxPrice
+				? {
+						$expr: {
+							$and: [
+								...(minPrice
+									? [
+											{
+												$gte: [
+													{
+														$toDouble: {
+															$replaceAll: {
+																input: "$price",
+																find: ",",
+																replacement: "",
+															},
+														},
+													},
+													Number(minPrice),
+												],
+											},
+									  ]
+									: []),
+								...(maxPrice
+									? [
+											{
+												$lte: [
+													{
+														$toDouble: {
+															$replaceAll: {
+																input: "$price",
+																find: ",",
+																replacement: "",
+															},
+														},
+													},
+													Number(maxPrice),
+												],
+											},
+									  ]
+									: []),
+							],
+						},
+				  }
+				: {};
+
+		const skipAmount = (Number(page) - 1) * limit;
+
+		const products = await Product.find({
+			category,
+			...keyword,
+			...tagFilter,
+			...priceConditions,
+		})
+			.sort({
+				createdAt: -1,
+			})
+			.skip(skipAmount)
+			.limit(limit)
+			.populate("category");
+
+		const productCount = await Product.countDocuments({
+			category,
+			...keyword,
+			...tagFilter,
+			...priceConditions,
+		});
+
+		return {
+			status: 200,
+			products: JSON.parse(JSON.stringify(products)),
+			totalPages: Math.ceil(productCount / limit),
+		};
+	} catch (error: any) {
+		handleError(error);
+		return {
+			status: error?.status || 400,
+			message:
+				error?.message ||
+				"Oops! Couldn't get new products! Try again later.",
+		};
+	}
+};
+
+// Get product details
+export const getProductDetails = async ({
+	productId,
+}: {
+	productId: string;
+}) => {
+	try {
+		await connectToDatabase();
+
+		if (!productId) {
+			return {
+				status: 400,
+				message:
+					"Oops! ProductId can not be found. Please try again later",
+			};
+		}
+
+		const product = await Product.findById(productId).populate("category");
+
+		if (!product)
+			return {
+				status: 400,
+				message: "Oops! Product not found.",
+			};
+
+		return {
+			status: 200,
+			product: JSON.parse(JSON.stringify(product)),
+		};
+	} catch (error: any) {
+		handleError(error);
+		return {
+			status: error?.status || 400,
+			message:
+				error?.message ||
+				"Oops! Couldn't get product! Try again later.",
 		};
 	}
 };

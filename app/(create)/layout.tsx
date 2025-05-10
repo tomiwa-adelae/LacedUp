@@ -1,3 +1,4 @@
+import Footer from "../(admin)/components/Footer";
 import Sidebar from "../(admin)/components/Sidebar";
 import { AppNavbar } from "./components/AppNavbar";
 import { Header } from "./components/Header";
@@ -11,7 +12,10 @@ const layout = ({ children }: { children: React.ReactNode }) => {
 				<div className="lg:pt-16">
 					<Header />
 					<div className="min-h-screen pt-20 lg:pt-0">
-						<div className="">{children}</div>
+						<div className="">
+							{children}
+							<Footer />
+						</div>
 					</div>
 				</div>
 			</div>
