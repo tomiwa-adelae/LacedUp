@@ -446,7 +446,14 @@ export const getAdminTopProducts = async ({ userId }: { userId: string }) => {
 				message: "You are not authorized to get these products.",
 			};
 
-		console.log("TOP PRODUCTS");
+		const products = await Product.find()
+			.sort({ totalOrders: -1 })
+			.limit(10);
+
+		return {
+			status: 200,
+			products: JSON.parse(JSON.stringify(products)),
+		};
 	} catch (error: any) {
 		handleError(error);
 		return {
@@ -462,13 +469,6 @@ export const getAdminTopProducts = async ({ userId }: { userId: string }) => {
 export const getNewProducts = async () => {
 	try {
 		await connectToDatabase();
-
-		await Product.updateMany(
-			{ totalOrders: { $exists: 0 } }, // Find documents where field doesn't exist
-			{ $set: { totalOrders: 0 } } // Set the default value
-		);
-
-		console.log("Migration success");
 
 		const products = await Product.find()
 			// .populate("category")

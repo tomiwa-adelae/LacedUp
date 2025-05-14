@@ -22,7 +22,19 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-export const RecentActivity = () => {
+import { IOrder } from "@/lib/database/models/order.model";
+import { IUser } from "@/lib/database/models/user.model";
+import { IProduct } from "@/lib/database/models/product.model";
+import { formatMoneyInput } from "@/lib/utils";
+export const RecentActivity = ({
+	recentOrder,
+	newCustomer,
+	latestProduct,
+}: {
+	recentOrder: IOrder;
+	newCustomer: IUser;
+	latestProduct: IProduct;
+}) => {
 	return (
 		<div className="shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] p-4 rounded-lg dark:border space-y-6 mt-8">
 			<div className="flex justify-between">
@@ -40,7 +52,9 @@ export const RecentActivity = () => {
 				{[
 					{
 						action: "New order placed",
-						details: "Order #12345 - $243.85",
+						details: `Order-${
+							recentOrder._id
+						} - ₦${formatMoneyInput(recentOrder.totalPrice)}`,
 						time: "Just now",
 						icon: <ShoppingBag className="h-4 w-4" />,
 						status: "new",
@@ -54,7 +68,7 @@ export const RecentActivity = () => {
 					},
 					{
 						action: "New customer registered",
-						details: "John Doe (john@example.com)",
+						details: `${newCustomer.firstName} ${newCustomer.lastName} (${newCustomer.email})`,
 						time: "5 hours ago",
 						icon: <Users className="h-4 w-4" />,
 						status: "info",

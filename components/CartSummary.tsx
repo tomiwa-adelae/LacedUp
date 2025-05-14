@@ -77,8 +77,6 @@ export const CartSummary = ({
 				totalPrice: cartTotal,
 			};
 
-			console.log(details);
-
 			const res = await createOrder(details);
 
 			if (res?.status === 400)

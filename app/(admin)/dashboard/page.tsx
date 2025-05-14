@@ -23,8 +23,6 @@ const page = async () => {
 		userId: user.user._id,
 	});
 
-	// console.log(topProducts);
-
 	const customers = await getCustomers({ userId: user.user._id });
 
 	const orders = await getAllOrders(user.user._id);
@@ -64,7 +62,7 @@ const page = async () => {
 				</div>
 			</div>
 			<div className="grid-cols-1 grid gap-4 lg:grid-cols-3 pt-8">
-				<TopProducts />
+				<TopProducts products={topProducts?.products} />
 				<div className="col-span-2 md:col-span-1">
 					<CustomerBox
 						customers={customers?.customers?.slice(0, 5)}

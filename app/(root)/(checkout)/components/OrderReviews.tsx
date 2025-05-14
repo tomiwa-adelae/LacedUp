@@ -45,7 +45,7 @@ export const OrderReviews = ({
 	}, []);
 
 	return (
-		<div className="bg-white grid gap-4 dark:border dark:bg-black dark:text-white w-full">
+		<div className="bg-white grid gap-4 dark:bg-black dark:text-white w-full">
 			<div>
 				<h2 className="text-xl md:text-2xl uppercase font-semibold mb-2">
 					My orders

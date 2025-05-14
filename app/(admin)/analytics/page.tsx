@@ -5,8 +5,26 @@ import { CustomersTable } from "../components/CustomersTable";
 import { AnalyticBox } from "../components/AnalyticBox";
 import { AnalyticChart } from "../components/AnalyticChart";
 import { RecentActivity } from "../components/RecentActivty";
+import { currentUser } from "@clerk/nextjs/server";
+import { getCustomers, getUserInfo } from "@/lib/actions/user.actions";
+import { redirect } from "next/navigation";
+import { getAllOrders } from "@/lib/actions/order.actions";
+import { AnalyticBoxes } from "../components/AnalyticBoxes";
+import { getAdminProducts } from "@/lib/actions/product.actions";
 
-const page = () => {
+const page = async () => {
+	const clerkUser = await currentUser();
+
+	const user = await getUserInfo(clerkUser?.id!);
+
+	const orders = await getAllOrders(user.user._id);
+	const customers = await getCustomers({ userId: user.user._id });
+	const products = await getAdminProducts({
+		userId: user.user._id,
+	});
+
+	if (orders?.status === 400) redirect("/not-found");
+
 	return (
 		<div>
 			<div>
@@ -17,31 +35,20 @@ const page = () => {
 					Get insights into your store's performance and sales
 				</p>
 			</div>
-			<div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-				<AnalyticBox
-					title={"Total revenue"}
-					number={"1,435"}
-					description={"Total revenue from all transactions"}
-					percentage={"7.83%"}
-					direction={"up"}
-				/>
-				<AnalyticBox
-					title={"New customers"}
-					number={"1,435"}
-					description={"New customers in the month of May"}
-					percentage={"7.83%"}
-					direction={"up"}
-				/>
-				<AnalyticBox
-					title={"Total orders"}
-					number={"1,435"}
-					description={"Total orders of all-time"}
-					percentage={"7.83%"}
-					direction={"up"}
-				/>
-			</div>
-			<AnalyticChart />
-			<RecentActivity />
+			<AnalyticBoxes
+				customers={customers?.customers}
+				orders={orders?.orders}
+			/>
+			<AnalyticChart
+				orders={orders?.orders}
+				products={products?.products}
+				customers={customers?.customers}
+			/>
+			<RecentActivity
+				recentOrder={orders.orders[0]}
+				newCustomer={customers?.customers[0]}
+				latestProduct={products?.products[0]}
+			/>
 		</div>
 	);
 };

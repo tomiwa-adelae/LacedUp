@@ -12,6 +12,10 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
+import { IProduct } from "@/lib/database/models/product.model";
+import { DEFAULT_PRODUCT_IMAGE } from "@/constants";
+import { formatDate, formatMoneyInput } from "@/lib/utils";
+import Link from "next/link";
 
 const invoices = [
 	{
@@ -44,7 +48,7 @@ const invoices = [
 	},
 ];
 
-export const TopProducts = () => {
+export const TopProducts = ({ products }: { products: IProduct[] }) => {
 	return (
 		<div className="shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] p-4 rounded-lg dark:border col-span-2">
 			<div className="flex items-center justify-between gap-8">
@@ -72,28 +76,47 @@ export const TopProducts = () => {
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{invoices.map(
+						{products.map(
 							(
-								{ image, name, price, date, totalOrder },
+								{
+									media,
+									name,
+									price,
+									createdAt,
+									totalOrders,
+									_id,
+								},
 								index
 							) => (
 								<TableRow key={index}>
-									<TableCell className="font-medium flex items-center justify-start  gap-2">
-										<Image
-											src={image}
-											alt={name}
-											width={1000}
-											height={1000}
-											className="rounded-full object-cover size-10"
-										/>
-										<span className="line-clamp-2">
-											{name}
-										</span>
+									<TableCell>
+										<Link
+											href={`/products/${_id}`}
+											className="font-medium flex items-center justify-start hover:text-primary hover:underline gap-2 group"
+										>
+											<Image
+												src={
+													media[0].url ||
+													DEFAULT_PRODUCT_IMAGE
+												}
+												alt={`${name}'s picture`}
+												width={1000}
+												height={1000}
+												className="rounded-full object-cover size-10"
+											/>
+											<span className="line-clamp-2">
+												{name}
+											</span>
+										</Link>
 									</TableCell>
-									<TableCell>{date}</TableCell>
-									<TableCell>{price}</TableCell>
+									<TableCell>
+										{formatDate(createdAt)}
+									</TableCell>
+									<TableCell>
+										₦{formatMoneyInput(price)}
+									</TableCell>
 									<TableCell className="text-center">
-										{totalOrder}
+										{totalOrders}
 									</TableCell>
 									<TableCell>
 										<EllipsisVertical className="size-5" />

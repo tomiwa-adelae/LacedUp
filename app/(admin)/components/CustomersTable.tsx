@@ -55,7 +55,14 @@ export const CustomersTable = ({ customers }: { customers: IUser[] }) => {
 										{firstName} {lastName}
 									</span>
 								</TableCell>
-								<TableCell>{email}</TableCell>
+								<TableCell>
+									<a
+										href={`mailto:${email}`}
+										className="hover:text-primary hover:underline dark:text-gray-200"
+									>
+										{email}
+									</a>
+								</TableCell>
 								<TableCell>{phoneNumber}</TableCell>
 								<TableCell className="text-center">
 									{formatDate(createdAt)}
