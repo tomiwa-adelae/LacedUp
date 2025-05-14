@@ -1,3 +1,4 @@
+import { ProfileDropdown } from "@/components/shared/ProfileDropdown";
 import { Theme } from "@/components/shared/Theme";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,13 +18,7 @@ export const AppNavbar = () => {
 					<Button size={"icon"} variant={"outline"}>
 						<Bell className="size-5" />
 					</Button>
-					<Image
-						src={"/assets/images/user.jpeg"}
-						alt={"Tomiwa adelae"}
-						width={1000}
-						height={1000}
-						className="rounded-full object-cover size-10"
-					/>
+					<ProfileDropdown />
 				</div>
 			</div>
 		</div>

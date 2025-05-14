@@ -1,0 +1,113 @@
+"use client";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import { Button } from "@/components/ui/button";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { paymentMethods } from "@/constants";
+import { toast } from "@/hooks/use-toast";
+import { useState } from "react";
+import { InformationBox } from "@/app/(admin)/components/InformationBox";
+
+const FormSchema = z.object({
+	paymentMethod: z.string({
+		required_error: "You need to select a payment method.",
+	}),
+});
+
+export const PaymentMethod = () => {
+	const [success, setSuccess] = useState(false);
+	const form = useForm<z.infer<typeof FormSchema>>({
+		resolver: zodResolver(FormSchema),
+	});
+
+	async function onSubmit(data: z.infer<typeof FormSchema>) {
+		try {
+			const details = {
+				paymentMethod: data.paymentMethod,
+			};
+
+			localStorage.setItem("paymentMethod", JSON.stringify(details));
+
+			setSuccess(true);
+
+			toast({
+				title: "Success!",
+			});
+		} catch (error) {
+			toast({
+				title: "Error!",
+				description: "An error occurred!",
+				variant: "destructive",
+			});
+		}
+	}
+
+	return (
+		<div className="p-8 rounded-lg shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-40 bg-white dark:border dark:bg-black dark:text-white w-full">
+			<h2 className="text-xl md:text-2xl uppercase font-semibold mb-4">
+				Payment Method
+			</h2>
+			<Form {...form}>
+				<form
+					onSubmit={form.handleSubmit(onSubmit)}
+					className="space-y-6"
+				>
+					<FormField
+						control={form.control}
+						name="paymentMethod"
+						render={({ field }) => (
+							<FormItem className="space-y-3">
+								<FormControl>
+									<RadioGroup
+										onValueChange={field.onChange}
+										defaultValue={field.value}
+										className="flex flex-col space-y-1"
+									>
+										{paymentMethods.map(
+											({ label, value }, index) => (
+												<FormItem className="flex items-center space-x-3 space-y-0 rounded-md border p-4">
+													<FormControl>
+														<RadioGroupItem
+															value={value}
+														/>
+													</FormControl>
+													<FormLabel className="font-medium">
+														{label}
+													</FormLabel>
+												</FormItem>
+											)
+										)}
+									</RadioGroup>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					{success ? (
+						<InformationBox description="Your payment details is saved already." />
+					) : (
+						<Button
+							disabled={form.formState.isSubmitting}
+							type="submit"
+							size="lg"
+							className=""
+						>
+							{form.formState.isSubmitting ? "Saving..." : "Save"}
+						</Button>
+					)}
+				</form>
+			</Form>
+		</div>
+	);
+};

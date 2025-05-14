@@ -28,16 +28,19 @@ export const Showcase = ({
 					<p className="text-base text-muted-foreground dark:text-gray-200 mt-4">
 						{description}
 					</p>
-					{cta?.map(({ slug, label }, index) => (
-						<Button
-							className="w-full md:w-auto mt-6"
-							asChild
-							size={"lg"}
-							key={index}
-						>
-							<Link href={slug}>{label}</Link>
-						</Button>
-					))}
+					<div className="flex items-center justify-start gap-4">
+						{cta?.map(({ slug, label }, index) => (
+							<Button
+								className="w-full md:w-auto mt-6"
+								asChild
+								size={"lg"}
+								key={index}
+								variant={index === 0 ? "default" : "outline"}
+							>
+								<Link href={slug}>{label}</Link>
+							</Button>
+						))}
+					</div>
 				</div>
 				<div className="flex items-center justify-center">
 					<Image

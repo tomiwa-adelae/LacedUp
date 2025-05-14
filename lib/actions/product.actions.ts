@@ -9,6 +9,7 @@ import { deleteImages, uploadImages } from "./upload.actions";
 
 import { v2 as cloudinary } from "cloudinary";
 import { DEFAULT_LIMIT, DEFAULT_NEW_LIMITS } from "@/constants";
+import Order from "../database/models/order.model";
 cloudinary.config({
 	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
 	api_key: process.env.CLOUDINARY_API_KEY,
@@ -425,14 +426,53 @@ export const getAdminProducts = async ({ userId }: { userId: string }) => {
 	}
 };
 
+// Get all top products by admin
+export const getAdminTopProducts = async ({ userId }: { userId: string }) => {
+	try {
+		await connectToDatabase();
+
+		if (!userId) {
+			return {
+				status: 400,
+				message:
+					"Oops! UserId can not be found. Please try again later",
+			};
+		}
+		const user = await User.findById(userId);
+
+		if (!user && !user.isAdmin)
+			return {
+				status: 400,
+				message: "You are not authorized to get these products.",
+			};
+
+		console.log("TOP PRODUCTS");
+	} catch (error: any) {
+		handleError(error);
+		return {
+			status: error?.status || 400,
+			message:
+				error?.message ||
+				"Oops! Couldn't get products! Try again later.",
+		};
+	}
+};
+
 // Get new products
 export const getNewProducts = async () => {
 	try {
 		await connectToDatabase();
 
+		await Product.updateMany(
+			{ totalOrders: { $exists: 0 } }, // Find documents where field doesn't exist
+			{ $set: { totalOrders: 0 } } // Set the default value
+		);
+
+		console.log("Migration success");
+
 		const products = await Product.find()
+			// .populate("category")
 			.sort({ createdAt: -1 })
-			.populate("category")
 			.limit(DEFAULT_NEW_LIMITS);
 
 		return {

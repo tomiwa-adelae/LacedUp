@@ -2,8 +2,20 @@ import { Button } from "@/components/ui/button";
 import { Download, Printer } from "lucide-react";
 import Link from "next/link";
 import { OrdersTable } from "../components/OrdersTable";
+import { currentUser } from "@clerk/nextjs/server";
+import { getUserInfo } from "@/lib/actions/user.actions";
+import { redirect } from "next/navigation";
+import { getAllOrders } from "@/lib/actions/order.actions";
 
-const page = () => {
+const page = async () => {
+	const clerkUser = await currentUser();
+
+	const user = await getUserInfo(clerkUser?.id!);
+
+	const orders = await getAllOrders(user.user._id);
+
+	if (orders?.status === 400) redirect("/not-found");
+
 	return (
 		<div>
 			<div className="flex items-center justify-between gap-8">
@@ -25,7 +37,7 @@ const page = () => {
 					</Button>
 				</div>
 			</div>
-			<OrdersTable />
+			<OrdersTable orders={orders?.orders} />
 		</div>
 	);
 };

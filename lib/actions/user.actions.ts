@@ -90,3 +90,49 @@ export const updateUser = async ({
 		};
 	}
 };
+
+// Get all customers by admin
+export const getCustomers = async ({ userId }: { userId: string }) => {
+	try {
+		await connectToDatabase();
+
+		if (!userId) {
+			return {
+				status: 400,
+				message:
+					"Oops! UserId can not be found. Please try again later",
+			};
+		}
+
+		const user = await User.findById(userId);
+
+		if (!user)
+			return {
+				status: 400,
+				message: "Oops! User can not be found. Please try again later",
+			};
+
+		if (!user.isAdmin)
+			return {
+				status: 400,
+				message:
+					"Oops! You are not authorized to make this update. Please try again later",
+			};
+
+		const customers = await User.find({ _id: { $ne: userId } }).sort({
+			createdAt: -1,
+		});
+
+		return {
+			status: 200,
+			customers: JSON.parse(JSON.stringify(customers)),
+		};
+	} catch (error: any) {
+		handleError(error);
+		return {
+			status: error?.status || 400,
+			message:
+				error?.message || "Oops! Couldn't get user! Try again later.",
+		};
+	}
+};

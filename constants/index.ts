@@ -268,5 +268,22 @@ export const suggestedTags = [
 ];
 
 export const DEFAULT_PRODUCT_IMAGE = "/assets/icons/shoe.svg";
+export const DEFAULT_USER_IMAGE = "/assets/icons/shoe.svg";
 export const DEFAULT_LIMIT = 2;
 export const DEFAULT_NEW_LIMITS = 10;
+export const DEFAULT_SHIPPING_PRICE = 0;
+
+export const paymentMethods = [
+	{
+		label: "Pay on delivery via bank transfer",
+		value: "bank_transfer",
+	},
+	{
+		label: "Pay with cash on delivery",
+		value: "cash_on_delivery",
+	},
+	{
+		label: "Pay with card",
+		value: "card",
+	},
+];

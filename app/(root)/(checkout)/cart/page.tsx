@@ -10,7 +10,9 @@ import { CartWrapper } from "../components/CartWrapper";
 const page = async () => {
 	const newProducts = await getNewProducts();
 
-	if (newProducts.status === 400) redirect("/not-found");
+	// console.log("NEWPRODUCTS", newProducts);
+
+	// if (newProducts.status === 400) redirect("/not-found");
 
 	return (
 		<div className="relative">

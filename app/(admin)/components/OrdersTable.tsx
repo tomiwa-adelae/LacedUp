@@ -18,6 +18,9 @@ import {
 import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { IOrder } from "@/lib/database/models/order.model";
+import { formatDate, formatMoneyInput } from "@/lib/utils";
+import Link from "next/link";
 
 const invoices = [
 	{
@@ -50,7 +53,7 @@ const invoices = [
 	},
 ];
 
-export const OrdersTable = () => {
+export const OrdersTable = ({ orders }: { orders: IOrder[] }) => {
 	return (
 		<div className="mt-4">
 			<Tabs defaultValue="all" className="space-y-4">
@@ -83,35 +86,85 @@ export const OrdersTable = () => {
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{invoices.map(
+							{orders.map(
 								(
-									{ image, name, price, date, totalOrder },
+									{
+										_id,
+										shippingDetails,
+										createdAt,
+										totalPrice,
+										orderItems,
+										orderStatus,
+										paymentStatus,
+									}: any,
 									index
 								) => (
 									<TableRow key={index}>
-										<TableCell>ORD-35553</TableCell>
-										<TableCell>John Smith</TableCell>
-										<TableCell>May 4, 2025</TableCell>
-										<TableCell>₦14,900</TableCell>
-										<TableCell>4</TableCell>
+										<TableCell>
+											<Link
+												className="hover:underline hover:text-primary"
+												href={`/orders/${_id}`}
+											>
+												{
+													// @ts-ignore
+												}
+												ORD-{_id.slice(-6)}
+											</Link>
+										</TableCell>
+										<TableCell>
+											{shippingDetails.firstName}{" "}
+											{shippingDetails.lastName}
+										</TableCell>
+										<TableCell>
+											{formatDate(createdAt)}
+										</TableCell>
+										<TableCell>
+											₦{formatMoneyInput(totalPrice)}
+										</TableCell>
+										<TableCell>
+											{orderItems.length}{" "}
+											{orderItems.length > 1
+												? "items"
+												: "item"}
+										</TableCell>
 										<TableCell className="text-center">
 											<Badge
 												className="border-none bg-transparent"
-												variant={"success"}
+												variant={
+													orderStatus === "pending"
+														? "warning"
+														: orderStatus === "paid"
+														? "success"
+														: orderStatus ===
+														  "failed"
+														? "danger"
+														: "default"
+												}
 											>
-												<CircleCheckBig /> Delivered
+												<CircleCheckBig /> {orderStatus}
 											</Badge>
 										</TableCell>
 										<TableCell className="text-center">
 											<Badge
-												variant={"success"}
+												variant={
+													paymentStatus === "pending"
+														? "warning"
+														: orderStatus === "paid"
+														? "success"
+														: orderStatus ===
+														  "failed"
+														? "danger"
+														: "default"
+												}
 												className="inline-flex px-2 py-1 rounded-full text-xs"
 											>
-												Paid
+												{paymentStatus}
 											</Badge>
 										</TableCell>
 										<TableCell className="flex gap-2 items-center justify-end">
-											<Eye className="size-5 text-primary" />
+											<Link href={`/orders/${_id}`}>
+												<Eye className="size-5 text-primary" />
+											</Link>
 											<Edit className="size-5" />
 											<Trash className="size-5 text-destructive" />
 										</TableCell>

@@ -145,7 +145,9 @@ export const ShoeDetails = ({
 			</div>
 			<Separator className="my-6" />
 			<div>
-				<Label className="mb-3">Category: {category?.name}</Label>
+				<Label className="mb-3 capitalize">
+					Category: {category?.name}
+				</Label>
 			</div>
 			<Separator className="my-6" />
 			<ColorSelector

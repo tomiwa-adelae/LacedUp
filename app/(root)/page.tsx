@@ -11,7 +11,7 @@ import { redirect } from "next/navigation";
 const page = async () => {
 	const newProducts = await getNewProducts();
 
-	if (newProducts.status === 400) redirect("/not-found");
+	// if (newProducts.status === 400) redirect("/not-found");
 
 	return (
 		<div>

@@ -1,3 +1,4 @@
+"use client";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -13,7 +14,7 @@ import { useClerk, useUser } from "@clerk/nextjs";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { sidebarLinks } from "@/constants";
-import { LogOut } from "lucide-react";
+import { LogOut, Settings } from "lucide-react";
 
 export function ProfileDropdown() {
 	const { user } = useUser();
@@ -23,6 +24,7 @@ export function ProfileDropdown() {
 
 	const handleLogout = async () => {
 		await signOut();
+		localStorage.removeItem("cart");
 		router.push("/sign-in"); // Redirect to sign-in page after logout
 	};
 	return (
@@ -57,6 +59,15 @@ export function ProfileDropdown() {
 						</DropdownMenuGroup>
 					);
 				})}
+				<Link href={"/settings"}>
+					<DropdownMenuItem className="cursor-pointer">
+						<Settings className="size-5" />
+						<span className="uppercase text-xs font-medium">
+							Settings
+						</span>
+					</DropdownMenuItem>
+					<DropdownMenuSeparator />
+				</Link>
 				<DropdownMenuItem
 					onClick={handleLogout}
 					className="cursor-pointer"

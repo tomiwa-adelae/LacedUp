@@ -10,12 +10,20 @@ import { cn } from "@/lib/utils";
 import { useSidebar } from "@/components/ui/sidebar"; // 👈 Import
 import Logo from "@/components/shared/Logo";
 import { Info, LogOut, Settings } from "lucide-react";
+import { useClerk } from "@clerk/nextjs";
 
 const AppHeader = () => {
 	const router = useRouter();
-	// const { signOut } = useClerk();
+	const { signOut } = useClerk();
+
 	const pathname = usePathname();
 	const { isMobile, setOpenMobile } = useSidebar();
+
+	const handleLogout = async () => {
+		await signOut();
+		localStorage.removeItem("cart");
+		router.push("/sign-in"); // Redirect to sign-in page after logout
+	};
 
 	return (
 		<div className="container">
@@ -96,11 +104,7 @@ const AppHeader = () => {
 						className={cn(
 							"group flex items-center justify-start gap-2  group/sidebar py-2 hover:text-destructive"
 						)}
-						onClick={async () => {
-							if (isMobile) setOpenMobile(false);
-							// await signOut();
-							router.push("/sign-in");
-						}}
+						onClick={handleLogout}
 					>
 						<LogOut className="size-5" />
 						<span

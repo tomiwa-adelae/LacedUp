@@ -13,14 +13,14 @@ export const CartProgress = () => {
 				<Button variant={"outline"} size={"sm"}>
 					2
 				</Button>
-				<p className="font-medium text-sm">Address</p>
+				<p className="font-medium text-sm">Shipping</p>
 			</div>
 			<Separator className="flex-1 mt-4" />
 			<div className="flex items-center text-muted-foreground  dark:text-gray-200 justify-center gap-1 flex-col">
 				<Button variant={"outline"} size={"sm"}>
 					3
 				</Button>
-				<p className="font-medium text-sm">Payment</p>
+				<p className="font-medium text-sm">Review</p>
 			</div>
 		</div>
 	);

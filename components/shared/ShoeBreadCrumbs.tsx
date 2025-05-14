@@ -33,6 +33,7 @@ export function ShoeBreadCrumbs({
 					<BreadcrumbItem>
 						<BreadcrumbLink>
 							<Link
+								className="capitalize"
 								href={`/category/${categoryId}?name=${categoryName}`}
 							>
 								{categoryName}

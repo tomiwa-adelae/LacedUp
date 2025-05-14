@@ -16,6 +16,8 @@ const badgeVariants = cva(
 					"border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90",
 				success:
 					"inline-flex px-2 py-1 rounded-full text-xs bg-green-100 text-green-800 [a&]:hover:bg-green/90 rounded-full",
+				warning:
+					"inline-flex px-2 py-1 rounded-full text-xs bg-orange-100 text-orange-800 [a&]:hover:bg-orange/90 rounded-full",
 				danger: "inline-flex px-2 py-1 rounded-full text-xs bg-red-100 text-red-800 [a&]:hover:bg-green/90 rounded-full",
 				destructive:
 					"border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",

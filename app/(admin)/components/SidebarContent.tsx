@@ -4,6 +4,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { sidebarLinks } from "@/constants";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
+import { useClerk } from "@clerk/nextjs";
 import { Info, LogOut, Settings } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,11 +14,18 @@ export const SidebarContent = ({ setOpenMobile }: any) => {
 	const router = useRouter();
 	const pathname = usePathname();
 	const isMobile = useIsMobile(); // detect mobile
+	const { signOut } = useClerk();
 
 	const handleClick = () => {
 		if (isMobile && setOpenMobile) {
 			setOpenMobile(false);
 		}
+	};
+
+	const handleLogout = async () => {
+		await signOut();
+		localStorage.removeItem("cart");
+		router.push("/sign-in"); // Redirect to sign-in page after logout
 	};
 
 	return (
@@ -98,11 +106,7 @@ export const SidebarContent = ({ setOpenMobile }: any) => {
 							className={cn(
 								"group flex items-center justify-start gap-2  group/sidebar py-2 hover:text-destructive"
 							)}
-							onClick={async () => {
-								// if (isMobile) setOpenMobile(false);
-								// await signOut();
-								router.push("/sign-in");
-							}}
+							onClick={handleLogout}
 						>
 							<LogOut className="size-5" />
 							<span

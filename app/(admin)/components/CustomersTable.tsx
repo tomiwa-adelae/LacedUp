@@ -8,41 +8,13 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { DEFAULT_USER_IMAGE } from "@/constants";
+import { IUser } from "@/lib/database/models/user.model";
+import { formatDate } from "@/lib/utils";
 import { EllipsisVertical } from "lucide-react";
 import Image from "next/image";
 
-const invoices = [
-	{
-		image: "/assets/images/sneakers.jpg",
-		name: "Nike Cosmic Unity",
-		date: "December 12, 2025",
-		price: "₦14,900",
-		totalOrder: "35",
-	},
-	{
-		image: "/assets/images/sneakers.jpg",
-		name: "Nike Cosmic Unity",
-		date: "December 12, 2025",
-		price: "₦14,900",
-		totalOrder: "35",
-	},
-	{
-		image: "/assets/images/sneakers.jpg",
-		name: "Nike Cosmic Unity",
-		date: "December 12, 2025",
-		price: "₦14,900",
-		totalOrder: "35",
-	},
-	{
-		image: "/assets/images/sneakers.jpg",
-		name: "Nike Cosmic Unity",
-		date: "December 12, 2025",
-		price: "₦14,900",
-		totalOrder: "35",
-	},
-];
-
-export const CustomersTable = () => {
+export const CustomersTable = ({ customers }: { customers: IUser[] }) => {
 	return (
 		<div className="mt-4">
 			<Table>
@@ -58,23 +30,35 @@ export const CustomersTable = () => {
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{invoices.map(
-						({ image, name, price, date, totalOrder }, index) => (
+					{customers.map(
+						(
+							{
+								picture,
+								firstName,
+								lastName,
+								email,
+								phoneNumber,
+								createdAt,
+							},
+							index
+						) => (
 							<TableRow key={index}>
 								<TableCell className="font-medium flex items-center justify-start  gap-2">
 									<Image
-										src={image}
-										alt={name}
+										src={picture || DEFAULT_USER_IMAGE}
+										alt={`${firstName}'s picture`}
 										width={1000}
 										height={1000}
 										className="rounded-full object-cover size-10"
 									/>
-									<span className="line-clamp-2">{name}</span>
+									<span className="line-clamp-2">
+										{firstName} {lastName}
+									</span>
 								</TableCell>
-								<TableCell>{date}</TableCell>
-								<TableCell>{price}</TableCell>
+								<TableCell>{email}</TableCell>
+								<TableCell>{phoneNumber}</TableCell>
 								<TableCell className="text-center">
-									{totalOrder}
+									{formatDate(createdAt)}
 								</TableCell>
 								<TableCell>
 									<EllipsisVertical className="size-5" />

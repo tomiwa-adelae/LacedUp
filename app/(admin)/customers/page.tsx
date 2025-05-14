@@ -2,8 +2,19 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { CustomersTable } from "../components/CustomersTable";
+import { currentUser } from "@clerk/nextjs/server";
+import { getCustomers, getUserInfo } from "@/lib/actions/user.actions";
+import { redirect } from "next/navigation";
 
-const page = () => {
+const page = async () => {
+	const clerkUser = await currentUser();
+
+	const user = await getUserInfo(clerkUser?.id!);
+
+	const customers = await getCustomers({ userId: user.user._id });
+
+	if (customers?.status === 400) redirect("/not-found");
+
 	return (
 		<div>
 			<div className="flex items-center justify-between gap-8">
@@ -17,7 +28,7 @@ const page = () => {
 					</Link>
 				</Button>
 			</div>
-			<CustomersTable />
+			<CustomersTable customers={customers?.customers} />
 		</div>
 	);
 };

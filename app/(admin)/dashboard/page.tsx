@@ -2,34 +2,53 @@ import { currentUser } from "@clerk/nextjs/server";
 import { CustomerBox } from "../components/CustomerBox";
 import { DashboardBox } from "../components/DashboardBox";
 import { TopProducts } from "../components/TopProducts";
-import { getUserInfo } from "@/lib/actions/user.actions";
-import { getAdminProducts } from "@/lib/actions/product.actions";
+import { getCustomers, getUserInfo } from "@/lib/actions/user.actions";
+import {
+	getAdminProducts,
+	getAdminTopProducts,
+} from "@/lib/actions/product.actions";
 import { redirect } from "next/navigation";
+import { getAllOrders } from "@/lib/actions/order.actions";
 
 const page = async () => {
 	const clerkUser = await currentUser();
 
 	const user = await getUserInfo(clerkUser?.id!);
 
-	// const products = await getAdminProducts({
-	// 	userId: user.user._id,
-	// });
+	const products = await getAdminProducts({
+		userId: user.user._id,
+	});
 
-	// if (products.status === 400) redirect("/not-found");
+	const topProducts = await getAdminTopProducts({
+		userId: user.user._id,
+	});
+
+	// console.log(topProducts);
+
+	const customers = await getCustomers({ userId: user.user._id });
+
+	const orders = await getAllOrders(user.user._id);
+
+	if (
+		products?.status === 400 ||
+		customers?.status === 400 ||
+		orders.status === 400
+	)
+		redirect("/not-found");
 
 	return (
 		<div>
 			<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
 				<DashboardBox
 					title={"Total Order"}
-					number={"1,435"}
+					number={orders?.orders?.length}
 					description={"Increase 133% this month"}
 					percentage={"7.83%"}
 					direction={"up"}
 				/>
 				<DashboardBox
 					title={"Total Products"}
-					number={20}
+					number={products?.products?.length}
 					description={"Increase 133% this month"}
 					percentage={"7.83%"}
 					direction={"down"}
@@ -37,7 +56,7 @@ const page = async () => {
 				<div className="md:col-span-2 lg:col-span-1">
 					<DashboardBox
 						title={"Total Customers"}
-						number={"435"}
+						number={customers?.customers?.length}
 						description={"Increase 123% this month"}
 						percentage={"7.83%"}
 						direction={"down"}
@@ -47,7 +66,9 @@ const page = async () => {
 			<div className="grid-cols-1 grid gap-4 lg:grid-cols-3 pt-8">
 				<TopProducts />
 				<div className="col-span-2 md:col-span-1">
-					<CustomerBox />
+					<CustomerBox
+						customers={customers?.customers?.slice(0, 5)}
+					/>
 				</div>
 			</div>
 		</div>

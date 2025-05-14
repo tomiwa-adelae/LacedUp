@@ -23,6 +23,7 @@ export interface IProduct extends Document {
 	availableColors: IAvailableColor[];
 	media: IMedia[];
 	price: string;
+	totalOrders: number;
 	createdAt?: Date;
 	updatedAt?: Date;
 }
@@ -91,6 +92,11 @@ const ProductSchema = new Schema<IProduct>(
 		description: {
 			type: String,
 			required: true,
+		},
+		totalOrders: {
+			type: Number,
+			required: true,
+			default: 0,
 		},
 	},
 	{ timestamps: true } // Enables createdAt and updatedAt
