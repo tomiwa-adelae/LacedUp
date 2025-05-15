@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 // import Logo from "./Logo";
-import { sidebarLinks } from "@/constants";
+import { adminSidebarLinks } from "@/constants";
 import { usePathname, useRouter } from "next/navigation";
 // import { useClerk } from "@clerk/nextjs";
 import { useState } from "react";
@@ -30,7 +30,7 @@ const AppHeader = () => {
 			<div className="flex flex-1 flex-col overflow-x-hidden">
 				<Logo />
 				<div className="mt-8 flex flex-col gap-4">
-					{sidebarLinks.map((link, idx) => {
+					{adminSidebarLinks.map((link, idx) => {
 						const Icon = link.icon;
 						const isActive =
 							pathname === link.href ||

@@ -31,6 +31,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { formatDate, formatMoneyInput } from "@/lib/utils";
+import Image from "next/image";
 
 // Dashboard component for ecommerce analytics
 export function ProductsAnalysis({ productsData }: { productsData: any }) {
@@ -276,10 +277,21 @@ export function ProductsAnalysis({ productsData }: { productsData: any }) {
 								<TableRow key={product._id}>
 									<TableCell>
 										<Link
-											className="hover:underline hover:text-primary"
 											href={`/products/${product._id}`}
+											className="font-medium flex items-center justify-start  gap-2 group"
 										>
-											{product.name}
+											<Image
+												src={
+													product.media[0]?.url || ""
+												}
+												alt={`${product.name}'s picture`}
+												width={1000}
+												height={1000}
+												className="rounded-full object-cover size-10"
+											/>
+											<span className="line-clamp-2 group-hover:underline group-hover:text-primary transition-all">
+												{product.name}
+											</span>
 										</Link>
 									</TableCell>
 									<TableCell className="capitalize">

@@ -36,6 +36,7 @@ import { ProductsAnalysis } from "./ProductsAnalysis";
 import { IOrder } from "@/lib/database/models/order.model";
 import { IProduct } from "@/lib/database/models/product.model";
 import { CustomersAnalysis } from "./CustomersAnalysis";
+import { OverviewAnalysis} from "./OverviewAnalysis";
 import { IUser } from "@/lib/database/models/user.model";
 
 // Dashboard component for ecommerce analytics
@@ -58,6 +59,9 @@ export function AnalyticChart({
 					<TabsTrigger value="customers">Customers</TabsTrigger>
 				</TabsList>
 
+				<TabsContent value="overview" className="space-y-2">
+					<OverviewAnalysis ordersData={orders}productsData={products}customersData={customers} />
+				</TabsContent>
 				<TabsContent value="orders" className="space-y-2">
 					<OrdersAnalysis ordersData={orders} />
 				</TabsContent>

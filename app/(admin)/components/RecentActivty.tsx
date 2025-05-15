@@ -27,13 +27,11 @@ import { IUser } from "@/lib/database/models/user.model";
 import { IProduct } from "@/lib/database/models/product.model";
 import { formatMoneyInput } from "@/lib/utils";
 export const RecentActivity = ({
-	recentOrder,
-	newCustomer,
-	latestProduct,
+	order,
+	customer,
 }: {
-	recentOrder: IOrder;
-	newCustomer: IUser;
-	latestProduct: IProduct;
+	order: IOrder;
+	customer: IUser;
 }) => {
 	return (
 		<div className="shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] p-4 rounded-lg dark:border space-y-6 mt-8">
@@ -52,9 +50,9 @@ export const RecentActivity = ({
 				{[
 					{
 						action: "New order placed",
-						details: `Order-${
-							recentOrder._id
-						} - ₦${formatMoneyInput(recentOrder.totalPrice)}`,
+						details: `Order-${order?._id} - ₦${formatMoneyInput(
+							order?.totalPrice
+						)}`,
 						time: "Just now",
 						icon: <ShoppingBag className="h-4 w-4" />,
 						status: "new",
@@ -68,7 +66,7 @@ export const RecentActivity = ({
 					},
 					{
 						action: "New customer registered",
-						details: `${newCustomer.firstName} ${newCustomer.lastName} (${newCustomer.email})`,
+						details: `${customer?.firstName} ${customer?.lastName} (${customer?.email})`,
 						time: "5 hours ago",
 						icon: <Users className="h-4 w-4" />,
 						status: "info",

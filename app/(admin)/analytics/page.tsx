@@ -23,7 +23,12 @@ const page = async () => {
 		userId: user.user._id,
 	});
 
-	if (orders?.status === 400) redirect("/not-found");
+	if (
+		orders?.status === 400 ||
+		products.status === 400 ||
+		customers.status === 400
+	)
+		redirect("/not-found");
 
 	return (
 		<div>
@@ -45,9 +50,8 @@ const page = async () => {
 				customers={customers?.customers}
 			/>
 			<RecentActivity
-				recentOrder={orders.orders[0]}
-				newCustomer={customers?.customers[0]}
-				latestProduct={products?.products[0]}
+				order={orders?.orders[0]}
+				customer={customers?.customers[0]}
 			/>
 		</div>
 	);

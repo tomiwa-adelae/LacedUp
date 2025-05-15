@@ -13,7 +13,7 @@ import Link from "next/link";
 import { useClerk, useUser } from "@clerk/nextjs";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { sidebarLinks } from "@/constants";
+import { adminSidebarLinks } from "@/constants";
 import { LogOut, Settings } from "lucide-react";
 
 export function ProfileDropdown() {
@@ -43,7 +43,7 @@ export function ProfileDropdown() {
 					Your account
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator />
-				{sidebarLinks.map(({ label, icon, href }, index) => {
+				{adminSidebarLinks.map(({ label, icon, href }, index) => {
 					const Icon = icon;
 					return (
 						<DropdownMenuGroup key={index}>

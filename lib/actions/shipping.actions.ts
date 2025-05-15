@@ -68,6 +68,79 @@ export const saveShippingDetails = async ({
 	}
 };
 
+export const updateShippingDetails = async ({
+	userId,
+	details,
+}: {
+	userId: string;
+	details: {
+		firstName: string;
+		lastName: string;
+		email: string;
+		phoneNumber: string;
+		state: string;
+		city: string;
+		address: string;
+		postalCode: string;
+	};
+}) => {
+	try {
+		await connectToDatabase();
+
+		if (!userId) {
+			return {
+				status: 400,
+				message:
+					"Oops! UserId can not be found. Please try again later",
+			};
+		}
+
+		const user = await User.findById(userId);
+
+		if (!user)
+			return {
+				status: 400,
+				message: "User not found.",
+			};
+
+		const shippingDetails = await Shipping.findOne({ user: userId });
+
+		if (!shippingDetails) {
+			return {
+				status: 400,
+				message:
+					"Oops! Shipping details not found. Please try again later",
+			};
+		}
+
+		shippingDetails.firstName =
+			details.firstName || shippingDetails.firstName;
+		shippingDetails.lastName = details.lastName || shippingDetails.lastName;
+		shippingDetails.email = details.email || shippingDetails.email;
+		shippingDetails.phoneNumber =
+			details.phoneNumber || shippingDetails.phoneNumber;
+		shippingDetails.state = details.state || shippingDetails.state;
+		shippingDetails.city = details.city || shippingDetails.city;
+		shippingDetails.address = details.address || shippingDetails.address;
+		shippingDetails.postalCode =
+			details.postalCode || shippingDetails.postalCode;
+
+		await shippingDetails.save();
+
+		return {
+			status: 201,
+			message: "You have successfully updated your details.",
+		};
+	} catch (error: any) {
+		handleError(error);
+		return {
+			status: error?.status || 400,
+			message:
+				error?.message || "Oops! Couldn't get user! Try again later.",
+		};
+	}
+};
+
 export const getShippingDetails = async (userId: string) => {
 	try {
 		await connectToDatabase();

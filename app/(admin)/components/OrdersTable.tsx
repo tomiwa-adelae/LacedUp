@@ -22,37 +22,6 @@ import { IOrder } from "@/lib/database/models/order.model";
 import { formatDate, formatMoneyInput } from "@/lib/utils";
 import Link from "next/link";
 
-const invoices = [
-	{
-		image: "/assets/images/sneakers.jpg",
-		name: "Nike Cosmic Unity",
-		date: "December 12, 2025",
-		price: "₦14,900",
-		totalOrder: "35",
-	},
-	{
-		image: "/assets/images/sneakers.jpg",
-		name: "Nike Cosmic Unity",
-		date: "December 12, 2025",
-		price: "₦14,900",
-		totalOrder: "35",
-	},
-	{
-		image: "/assets/images/sneakers.jpg",
-		name: "Nike Cosmic Unity",
-		date: "December 12, 2025",
-		price: "₦14,900",
-		totalOrder: "35",
-	},
-	{
-		image: "/assets/images/sneakers.jpg",
-		name: "Nike Cosmic Unity",
-		date: "December 12, 2025",
-		price: "₦14,900",
-		totalOrder: "35",
-	},
-];
-
 export const OrdersTable = ({ orders }: { orders: IOrder[] }) => {
 	return (
 		<div className="mt-4">
@@ -129,11 +98,11 @@ export const OrdersTable = ({ orders }: { orders: IOrder[] }) => {
 										</TableCell>
 										<TableCell className="text-center">
 											<Badge
-												className="border-none bg-transparent"
 												variant={
 													orderStatus === "pending"
 														? "warning"
-														: orderStatus === "paid"
+														: orderStatus ===
+														  "delivered"
 														? "success"
 														: orderStatus ===
 														  "failed"
@@ -141,7 +110,10 @@ export const OrdersTable = ({ orders }: { orders: IOrder[] }) => {
 														: "default"
 												}
 											>
-												<CircleCheckBig /> {orderStatus}
+												<CircleCheckBig />{" "}
+												{orderStatus === "pending"
+													? "Undelivered"
+													: orderStatus}
 											</Badge>
 										</TableCell>
 										<TableCell className="text-center">
@@ -149,9 +121,10 @@ export const OrdersTable = ({ orders }: { orders: IOrder[] }) => {
 												variant={
 													paymentStatus === "pending"
 														? "warning"
-														: orderStatus === "paid"
+														: paymentStatus ===
+														  "paid"
 														? "success"
-														: orderStatus ===
+														: paymentStatus ===
 														  "failed"
 														? "danger"
 														: "default"

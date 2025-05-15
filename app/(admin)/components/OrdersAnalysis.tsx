@@ -165,38 +165,6 @@ export function OrdersAnalysis({ ordersData }: { ordersData: any }) {
 			</div>
 			<div>
 				<div className="shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] p-4 rounded-lg dark:border space-y-6">
-					{/* <div className="flex space-x-1">
-						<Button
-							variant={
-								timeframe === "daily" ? "default" : "outline"
-							}
-							size={"md"}
-							className={`rounded-lg`}
-							onClick={() => setTimeframe("daily")}
-						>
-							Daily
-						</Button>
-						<Button
-							size={"md"}
-							variant={
-								timeframe === "weekly" ? "default" : "outline"
-							}
-							className={`rounded-lg`}
-							onClick={() => setTimeframe("weekly")}
-						>
-							Weekly
-						</Button>
-						<Button
-							size={"md"}
-							variant={
-								timeframe === "monthly" ? "default" : "outline"
-							}
-							className={`rounded-lg`}
-							onClick={() => setTimeframe("monthly")}
-						>
-							Monthly
-						</Button>
-					</div> */}
 					<div className="h-80 mt-8">
 						<ResponsiveContainer width="100%" height="100%">
 							<LineChart

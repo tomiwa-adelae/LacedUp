@@ -28,8 +28,10 @@ export default function RootLayout({
 					className={`${montserrat.className} antialiased min-h-screen flex flex-col justify-between dark:bg-black dark:text-white`}
 				>
 					<ThemeProvider>
-						<CartProvider>{children}</CartProvider>
-						<Toaster />
+						<CartProvider>
+							{children}
+							<Toaster />
+						</CartProvider>
 					</ThemeProvider>
 				</body>
 			</html>

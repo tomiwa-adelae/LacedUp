@@ -28,7 +28,10 @@ import { nigerianStates } from "@/constants";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 import { toast } from "@/hooks/use-toast";
-import { saveShippingDetails } from "@/lib/actions/shipping.actions";
+import {
+	saveShippingDetails,
+	updateShippingDetails,
+} from "@/lib/actions/shipping.actions";
 import { useState } from "react";
 import { InformationBox } from "@/app/(admin)/components/InformationBox";
 
@@ -63,6 +66,11 @@ interface Props {
 	lastName: string;
 	email: string;
 	phoneNumber: string;
+	state: string;
+	city: string;
+	address: string;
+	postalCode: string;
+	shippingDetails: any;
 }
 
 export function ShippingForm({
@@ -71,6 +79,11 @@ export function ShippingForm({
 	lastName,
 	email,
 	phoneNumber,
+	state,
+	city,
+	address,
+	postalCode,
+	shippingDetails,
 }: Props) {
 	const [success, setSuccess] = useState(false);
 
@@ -81,6 +94,10 @@ export function ShippingForm({
 			lastName: lastName || "",
 			email: email || "",
 			phoneNumber: phoneNumber || "",
+			address: address || "",
+			city: city || "",
+			state: state || "",
+			postalCode: postalCode || "",
 		},
 	});
 
@@ -98,7 +115,13 @@ export function ShippingForm({
 				country: "Nigeria",
 			};
 
-			const res = await saveShippingDetails({ userId, details });
+			let res;
+
+			if (shippingDetails) {
+				res = await updateShippingDetails({ userId, details });
+			} else {
+				res = await saveShippingDetails({ userId, details });
+			}
 
 			if (res?.status === 400)
 				return toast({
@@ -111,7 +134,7 @@ export function ShippingForm({
 
 			toast({
 				title: "Success!",
-				// description: res.message,
+				description: res.message,
 			});
 		} catch (error) {
 			toast({

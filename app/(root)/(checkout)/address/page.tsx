@@ -15,11 +15,14 @@ const page = async () => {
 
 	const shippingDetails = await getShippingDetails(user?.user._id);
 
+	console.log(shippingDetails);
+
 	return (
 		<div className="relative">
 			<div className="container grid grid-cols-1 lg:grid-cols-3 gap-8 py-4">
 				<div className="col-span-2 grid gap-8">
 					<ShippingInformation
+						shippingDetails={shippingDetails.details}
 						userId={
 							shippingDetails.details === null
 								? user?.user._id
@@ -44,6 +47,26 @@ const page = async () => {
 							shippingDetails.details === null
 								? user?.user.phoneNumber
 								: shippingDetails?.details?.phoneNumber
+						}
+						state={
+							shippingDetails.details === null
+								? user?.user.state
+								: shippingDetails?.details?.state
+						}
+						address={
+							shippingDetails.details === null
+								? user?.user.address
+								: shippingDetails?.details?.address
+						}
+						city={
+							shippingDetails.details === null
+								? user?.user.city
+								: shippingDetails?.details?.city
+						}
+						postalCode={
+							shippingDetails.details === null
+								? user?.user.postalCode
+								: shippingDetails?.details?.postalCode
 						}
 					/>
 					<PaymentMethod />

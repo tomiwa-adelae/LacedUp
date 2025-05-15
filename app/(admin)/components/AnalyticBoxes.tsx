@@ -4,6 +4,16 @@ import { AnalyticBox } from "./AnalyticBox";
 import { useEffect, useState } from "react";
 import { IUser } from "@/lib/database/models/user.model";
 import { formatMoneyInput } from "@/lib/utils";
+import {
+	Wallet,
+	ShoppingBag,
+	Users,
+	TrendingUp,
+	Package,
+	Calendar,
+	ArrowUpRight,
+	ArrowDownRight,
+} from "lucide-react";
 
 export const AnalyticBoxes = ({
 	orders,
@@ -12,7 +22,7 @@ export const AnalyticBoxes = ({
 	orders: IOrder[];
 	customers: IUser[];
 }) => {
-	const [analytics, setAnalytics] = useState({
+	const [analytics, setAnalytics] = useState<any>({
 		totalOrders: 0,
 		newOrdersLastMonth: 0,
 		newOrdersPercentage: 0,
@@ -66,7 +76,7 @@ export const AnalyticBoxes = ({
 				  100;
 
 		// Payment method statistics
-		const paymentMethodStats = orders.reduce((stats, order) => {
+		const paymentMethodStats = orders.reduce((stats: any, order) => {
 			const method = order.paymentMethod.replace("*", "_");
 			stats[method] = (stats[method] || 0) + 1;
 			return stats;
@@ -77,9 +87,9 @@ export const AnalyticBoxes = ({
 		const isPaidPercentage = (paidOrders / orders.length) * 100;
 
 		// Group orders by date for chart
-		const ordersByDate = [];
-		const dateGroups = orders.reduce((groups, order) => {
-			const date = new Date(order.createdAt).toLocaleDateString();
+		const ordersByDate: any = [];
+		const dateGroups: any = orders.reduce((groups: any, order: any) => {
+			const date: any = new Date(order.createdAt).toLocaleDateString();
 			groups[date] = (groups[date] || 0) + 1;
 			return groups;
 		}, {});
@@ -90,10 +100,13 @@ export const AnalyticBoxes = ({
 		});
 
 		// Sort by date
-		ordersByDate.sort((a, b) => new Date(a.date) - new Date(b.date));
+		ordersByDate.sort(
+			// @ts-ignore
+			(a: any, b: any) => new Date(a.date) - new Date(b.date)
+		);
 
 		// Filter customers from the last month
-		const customersLastMonth = customers.filter((customer) => {
+		const customersLastMonth = customers.filter((customer: any) => {
 			const signupDate = new Date(customer.createdAt);
 			return signupDate >= oneMonthAgo;
 		});
@@ -109,7 +122,7 @@ export const AnalyticBoxes = ({
 		const adminPercentage = (adminUsers / customers.length) * 100;
 
 		// Group signups by date for chart
-		const signupsByDate = [];
+		const signupsByDate: any = [];
 
 		// Convert to chart format
 		Object.entries(dateGroups).forEach(([date, count]) => {
@@ -117,7 +130,10 @@ export const AnalyticBoxes = ({
 		});
 
 		// Sort by date
-		signupsByDate.sort((a, b) => new Date(a.date) - new Date(b.date));
+		signupsByDate.sort(
+			// @ts-ignore
+			(a: any, b: any) => new Date(a.date) - new Date(b.date)
+		);
 
 		// Calculate average daily signups for the last month
 		const daysInMonth =
@@ -165,9 +181,11 @@ export const AnalyticBoxes = ({
 				description="Revenue from all orders"
 				percentage={analytics.revenueGrowth}
 				direction={
+					// @ts-ignore
 					parseFloat(analytics?.revenueGrowth) >= 0 ? "up" : "down"
 				}
 				dateRange={formatDateRange()}
+				icon={Wallet}
 			/>
 			<AnalyticBox
 				title={"New customers"}
@@ -175,11 +193,13 @@ export const AnalyticBoxes = ({
 				description="New sign-ups in the last month"
 				percentage={analytics.newCustomersPercentage}
 				direction={
-					parseFloat(analytics.newCustomersPercentage) >= 0
+					// @ts-ignore
+					parseFloat(analytics?.newCustomersPercentage) >= 0
 						? "up"
 						: "down"
 				}
 				dateRange={formatDateRange()}
+				icon={Users}
 			/>
 			<AnalyticBox
 				title="New Orders"
@@ -187,11 +207,13 @@ export const AnalyticBoxes = ({
 				number={analytics.newOrdersLastMonth}
 				percentage={analytics.newOrdersPercentage}
 				direction={
+					// @ts-ignore
 					parseFloat(analytics.newOrdersPercentage) >= 0
 						? "up"
 						: "down"
 				}
 				dateRange={formatDateRange()}
+				icon={ShoppingBag}
 			/>
 		</div>
 	);

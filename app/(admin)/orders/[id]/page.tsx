@@ -11,6 +11,7 @@ import {
 import { currentUser } from "@clerk/nextjs/server";
 import {
 	Banknote,
+	CircleCheckBig,
 	CreditCard,
 	Dot,
 	Download,
@@ -51,9 +52,40 @@ const page = async ({ params }: { params: any }) => {
 						<h2 className="text-lg lg:text-3xl uppercase font-semibold">
 							Order-{order.order._id.slice(-6)}{" "}
 						</h2>
-						<div className="flex items-center justify-between gap-4">
-							<Badge variant="default">Payment pending</Badge>
-							<Badge variant="destructive">Undelivered</Badge>
+						<div className="flex items-center justify-between gap-2">
+							<Badge
+								variant={
+									order?.order?.paymentStatus === "pending"
+										? "warning"
+										: order.order.paymentStatus === "paid"
+										? "success"
+										: order.order.paymentStatus === "failed"
+										? "danger"
+										: "default"
+								}
+								className="inline-flex px-2 py-1 rounded-full text-xs"
+							>
+								{order.order.paymentStatus === "pending"
+									? "Unpaid"
+									: order?.order?.paymentStatus}
+							</Badge>
+							<Badge
+								variant={
+									order?.order?.orderStatus === "pending"
+										? "warning"
+										: order?.order?.orderStatus ===
+										  "delivered"
+										? "success"
+										: order?.order?.orderStatus === "failed"
+										? "danger"
+										: "default"
+								}
+							>
+								<CircleCheckBig />{" "}
+								{order?.order?.orderStatus === "pending"
+									? "Undelivered"
+									: order?.order?.orderStatus}
+							</Badge>
 						</div>
 					</div>
 					<p className="text-sm text-muted-foreground">
@@ -74,9 +106,9 @@ const page = async ({ params }: { params: any }) => {
 			<div>
 				<div className="grid-cols-1 grid gap-4 lg:grid-cols-3 pt-4">
 					<div className="col-span-2 grid gap-4">
-						<div>
+						<div className="flex flex-col gap-4">
 							<div>
-								<h4 className="mb-4 font-medium text-muted-foreground text-sm lg:text-base uppercase">
+								<h4 className="mb-2 font-medium text-muted-foreground text-sm lg:text-base uppercase">
 									Order items
 								</h4>
 								{order.order.orderItems.map(
@@ -215,7 +247,7 @@ const page = async ({ params }: { params: any }) => {
 								)}
 							</div>
 							<div>
-								<h4 className="mb-4 font-medium text-muted-foreground text-sm lg:text-base uppercase">
+								<h4 className="mb-2 font-medium text-muted-foreground text-sm lg:text-base uppercase">
 									Order summary
 								</h4>
 

@@ -222,7 +222,7 @@ export const nigerianStates = [
 	"FCT (Abuja)",
 ] as const;
 
-export const sidebarLinks = [
+export const adminSidebarLinks = [
 	{
 		label: "Dashboard",
 		href: "/dashboard",
@@ -247,6 +247,19 @@ export const sidebarLinks = [
 		label: "Analytics",
 		href: "/analytics",
 		icon: ChartSpline,
+	},
+];
+
+export const sidebarLinks = [
+	{
+		label: "Dashboard",
+		href: "/dashboard",
+		icon: LayoutDashboard,
+	},
+	{
+		label: "My orders",
+		href: "/orders",
+		icon: ShoppingCart,
 	},
 ];
 

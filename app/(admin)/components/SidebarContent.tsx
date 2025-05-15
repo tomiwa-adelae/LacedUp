@@ -1,8 +1,13 @@
 "use client";
 import Logo from "@/components/shared/Logo";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { sidebarLinks } from "@/constants";
+import {
+	adminSidebarLinks,
+	DEFAULT_USER_IMAGE,
+	sidebarLinks,
+} from "@/constants";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { IUser } from "@/lib/database/models/user.model";
 import { cn } from "@/lib/utils";
 import { useClerk } from "@clerk/nextjs";
 import { Info, LogOut, Settings } from "lucide-react";
@@ -10,7 +15,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
-export const SidebarContent = ({ setOpenMobile }: any) => {
+export const SidebarContent = ({
+	user,
+	setOpenMobile,
+}: {
+	user: IUser;
+	setOpenMobile?: any;
+}) => {
 	const router = useRouter();
 	const pathname = usePathname();
 	const isMobile = useIsMobile(); // detect mobile
@@ -34,32 +45,34 @@ export const SidebarContent = ({ setOpenMobile }: any) => {
 				<div className="flex flex-1 flex-col overflow-x-hidden">
 					<Logo />
 					<div className="mt-8 flex flex-col gap-4">
-						{sidebarLinks.map((link, idx) => {
-							const Icon = link.icon;
-							const isActive =
-								pathname === link.href ||
-								pathname.startsWith(`${link.href}/`);
-							return (
-								<Link
-									key={idx}
-									href={link.href}
-									className={`group flex items-center justify-start gap-2 group/sidebar py-2
+						{(user.isAdmin ? adminSidebarLinks : sidebarLinks).map(
+							(link, idx) => {
+								const Icon = link.icon;
+								const isActive =
+									pathname === link.href ||
+									pathname.startsWith(`${link.href}/`);
+								return (
+									<Link
+										key={idx}
+										href={link.href}
+										className={`group flex items-center justify-start gap-2 group/sidebar py-2
                             ${
 								isActive
 									? "text-primary"
 									: "text-black dark:text-white text-sm"
 							} hover:text-primary
                             `}
-									onClick={handleClick}
-								>
-									<Icon className="size-5" />
+										onClick={handleClick}
+									>
+										<Icon className="size-5" />
 
-									<span className="text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0 uppercase font-medium">
-										{link.label}
-									</span>
-								</Link>
-							);
-						})}
+										<span className="text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0 uppercase font-medium">
+											{link.label}
+										</span>
+									</Link>
+								);
+							}
+						)}
 					</div>
 				</div>
 				<div className="fixed bottom-0">
@@ -124,8 +137,8 @@ export const SidebarContent = ({ setOpenMobile }: any) => {
 						)}
 					>
 						<Image
-							src={"/assets/images/user.jpeg"}
-							alt={`Tomiwa's picture`}
+							src={user?.picture || DEFAULT_USER_IMAGE}
+							alt={`${user.firstName}'s picture`}
 							width={1000}
 							height={1000}
 							className="w-14 h-14 rounded-full object-cover"
@@ -136,7 +149,7 @@ export const SidebarContent = ({ setOpenMobile }: any) => {
 								"text-neutral-700 dark:text-gray-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0 uppercase font-medium group-hover:text-primary"
 							)}
 						>
-							Tomiwa Adelae
+							{user?.firstName} {user?.lastName}
 						</span>
 					</div>
 				</div>

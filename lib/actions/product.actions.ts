@@ -411,6 +411,8 @@ export const getAdminProducts = async ({ userId }: { userId: string }) => {
 			.populate("category")
 			.sort({ createdAt: -1 });
 
+		console.log(products);
+
 		return {
 			status: 200,
 			products: JSON.parse(JSON.stringify(products)),

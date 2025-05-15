@@ -23,6 +23,15 @@ import "react-phone-number-input/style.css";
 import { updateUser } from "@/lib/actions/user.actions";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { nigerianStates } from "@/constants";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "../ui/select";
+import { Separator } from "../ui/separator";
 
 interface Props {
 	userId: string;
@@ -50,6 +59,9 @@ const FormSchema = z.object({
 			message: "Invalid phone number",
 		})
 		.optional(),
+	state: z.string().min(2, { message: "Your state is required." }),
+	city: z.string().min(2, { message: "Your city is required." }),
+	address: z.string().min(2, { message: "Your address is required." }),
 });
 
 export function SettingsForm({
@@ -127,6 +139,7 @@ export function SettingsForm({
 					</Button>
 				</div>
 			</div>
+			<Separator className="my-8" />
 			<div className="mt-8">
 				<h4 className="font-medium text-muted-foreground text-sm lg:text-base uppercase">
 					Details
@@ -169,39 +182,111 @@ export function SettingsForm({
 									</FormItem>
 								)}
 							/>
+						</div>
+						<FormField
+							control={form.control}
+							name="email"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Email address</FormLabel>
+									<FormControl>
+										<Input
+											type="email"
+											disabled
+											placeholder="Enter your email"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="phoneNumber"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Phone Number</FormLabel>
+									<FormControl>
+										<PhoneInput
+											placeholder="Enter phone number"
+											value={field.value}
+											defaultCountry="NG"
+											className="flex h-12 w-full rounded-md border border-input bg-background px-3 py-2 sm:text-sm text-base"
+											onChange={(phone) => {
+												field.onChange(phone);
+											}}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<Separator className="my-8" />
+						<h4 className="font-medium text-muted-foreground text-sm lg:text-base uppercase">
+							Shipping details
+						</h4>
+						<FormField
+							control={form.control}
+							name="address"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Home address</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="Enter your home address"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 							<FormField
 								control={form.control}
-								name="email"
+								name="state"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Email address</FormLabel>
-										<FormControl>
-											<Input
-												type="email"
-												disabled
-												placeholder="Enter your email"
-												{...field}
-											/>
-										</FormControl>
+										<FormLabel>State</FormLabel>
+										<Select
+											onValueChange={(value) => {
+												field.onChange(value);
+											}}
+											defaultValue={field.value}
+										>
+											<FormControl>
+												<SelectTrigger>
+													<SelectValue placeholder="Select your state" />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												{nigerianStates.map(
+													(state, index) => (
+														<SelectItem
+															key={index}
+															value={state}
+														>
+															{state}
+														</SelectItem>
+													)
+												)}
+											</SelectContent>
+										</Select>
 										<FormMessage />
 									</FormItem>
 								)}
 							/>
 							<FormField
 								control={form.control}
-								name="phoneNumber"
+								name="city"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Phone Number</FormLabel>
+										<FormLabel>City</FormLabel>
 										<FormControl>
-											<PhoneInput
-												placeholder="Enter phone number"
-												value={field.value}
-												defaultCountry="NG"
-												className="flex h-12 w-full rounded-md border border-input bg-background px-3 py-2 sm:text-sm text-base"
-												onChange={(phone) => {
-													field.onChange(phone);
-												}}
+											<Input
+												placeholder="Enter your city"
+												{...field}
 											/>
 										</FormControl>
 										<FormMessage />
@@ -219,6 +304,17 @@ export function SettingsForm({
 								: "Update profile"}
 						</Button>
 					</form>
+				</Form>
+			</div>
+			<div className="mt-8">
+				<h4 className="font-medium text-muted-foreground text-sm lg:text-base uppercase">
+					Shipping details
+				</h4>
+				<Form {...form}>
+					<form
+						onSubmit={form.handleSubmit(onSubmit)}
+						className="space-y-6 mt-8"
+					></form>
 				</Form>
 			</div>
 			{openImageModal && (
