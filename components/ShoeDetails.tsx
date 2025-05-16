@@ -40,12 +40,6 @@ export const ShoeDetails = ({
 	const buttonRef = useRef<HTMLDivElement | null>(null);
 	const [showFixedButton, setShowFixedButton] = useState(true);
 
-	// const [quantity, setQuantity] = useState(1);
-	// const [selectedSize, setSelectedSize] = useState("38");
-	// const [selectedColor, setSelectedColor] = useState<IAvailableColor>(
-	// 	availableColors[0]
-	// );
-
 	useEffect(() => {
 		const observer = new IntersectionObserver(
 			(entries) => {
@@ -68,46 +62,6 @@ export const ShoeDetails = ({
 			}
 		};
 	}, []);
-
-	const addToCart = () => {
-		if (!quantity)
-			return toast({
-				title: "Error!",
-				variant: "destructive",
-				description: "Please select a quantity",
-			});
-		if (!selectedSize)
-			return toast({
-				title: "Error!",
-				variant: "destructive",
-				description: "Please select a size",
-			});
-		if (!selectedColor)
-			return toast({
-				title: "Error!",
-				variant: "destructive",
-				description: "Please select a color",
-			});
-
-		router.push(
-			`/cart?id=${id}&color=${selectedColor}&size=${selectedSize}`
-		);
-	};
-
-	// const {
-	// 	quantity,
-	// 	setQuantity,
-	// 	selectedSize,
-	// 	setSelectedSize,
-	// 	selectedColor,
-	// 	setSelectedColor,
-	// 	handleAddToCart,
-	// } = useAddToCart({
-	// 	id: id,
-	// 	name: name,
-	// 	price: price,
-	// 	image: media[0].url,
-	// });
 
 	// Get cart functionality from our custom hook
 	const {

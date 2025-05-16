@@ -6,7 +6,7 @@ import { Showcase } from "@/components/shared/Showcase";
 import { ShopNew } from "@/components/ShopNew";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { DEFAULT_LIMIT } from "@/constants";
+import { DEFAULT_LIMIT, DEFAULT_PRODUCT_IMAGE } from "@/constants";
 import { getCategoryDetails } from "@/lib/actions/category.actions";
 import {
 	getCategoryProducts,
@@ -24,11 +24,7 @@ const page = async ({
 }) => {
 	const { query, page, tags, minPrice, maxPrice } = await searchParams;
 
-	const { category } = await params;
-
-	const newProducts = await getNewProducts({});
-	const categoryProducts = await getCategoryProducts({
-		category,
+	const newProducts = await getNewProducts({
 		query,
 		page,
 		limit: DEFAULT_LIMIT,
@@ -36,13 +32,12 @@ const page = async ({
 		minPrice: minPrice || "",
 		maxPrice: maxPrice || "",
 	});
-	const categoryDetails = await getCategoryDetails(category);
 
 	if (newProducts.status === 400) redirect("/not-found");
 
 	const categoryTags = [
 		...new Set(
-			categoryProducts?.products?.flatMap((product: any) =>
+			newProducts?.products?.flatMap((product: any) =>
 				product?.tags.map((t: any) => t.name)
 			)
 		),
@@ -50,29 +45,24 @@ const page = async ({
 
 	return (
 		<div className="bg-white dark:bg-black py-4 relative">
-			<CategoryBreadCrumbs
-				categoryName={categoryDetails?.category.name}
-			/>
+			<CategoryBreadCrumbs categoryName={"New arrivals"} />
 			<Showcase
-				title={categoryDetails?.category.name}
-				image={categoryDetails?.category.picture}
+				title={"New Arrivals"}
+				image={
+					newProducts?.products[0]?.media[0]?.url ||
+					DEFAULT_PRODUCT_IMAGE
+				}
 			/>
 			<div className="container">
 				<Separator />
 			</div>
 			<div className="container grid grid-cols-1 lg:grid-cols-3 gap-8 py-8">
 				<div className="col-span-2 lg:col-span-1">
-					<Filter
-						categoryName={categoryDetails?.category.name}
-						tags={categoryTags}
-					/>
-					<FilterModal
-						categoryName={categoryDetails?.category.name}
-						tags={categoryTags}
-					/>
+					<Filter categoryName={"/new"} tags={categoryTags} />
+					<FilterModal categoryName={"/new"} tags={categoryTags} />
 				</div>
 				<div className="col-span-2 gap-4 grid grid-cols-2">
-					{categoryProducts?.products?.map(
+					{newProducts?.products?.map(
 						({
 							name,
 							_id,
@@ -94,7 +84,7 @@ const page = async ({
 							/>
 						)
 					)}
-					{categoryProducts?.products?.length > DEFAULT_LIMIT && (
+					{newProducts?.products?.length > DEFAULT_LIMIT && (
 						<div
 							className={`flex flex-col items-center justify-center gap-4 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] aspect-auto w-full rounded-lg object-cover hover:bg-accent dark:hover:bg-accent/50 cursor-pointer`}
 						>
@@ -108,7 +98,7 @@ const page = async ({
 			<div className="container">
 				<Separator />
 			</div>
-			<ShopNew products={newProducts?.products} />
+			{/* <ShopNew products={newProducts?.products} /> */}
 			<div className="container">
 				<Separator />
 			</div>

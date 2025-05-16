@@ -5,7 +5,7 @@ import { TopProducts } from "../components/TopProducts";
 import { getCustomers, getUserInfo } from "@/lib/actions/user.actions";
 import {
 	getAdminProducts,
-	getAdminTopProducts,
+	getTopProducts,
 } from "@/lib/actions/product.actions";
 import { redirect } from "next/navigation";
 import { getAllOrders } from "@/lib/actions/order.actions";
@@ -19,9 +19,7 @@ const page = async () => {
 		userId: user.user._id,
 	});
 
-	const topProducts = await getAdminTopProducts({
-		userId: user.user._id,
-	});
+	const topProducts = await getTopProducts();
 
 	const customers = await getCustomers({ userId: user.user._id });
 

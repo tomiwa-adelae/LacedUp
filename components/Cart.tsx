@@ -156,13 +156,17 @@ export const Cart = ({
 								{category}
 							</span>
 						</Link>
-						<Dot className="text-black dark:text-white size-5" />
-						<p>
-							Color:{" "}
-							<span className="text-black dark:text-white">
-								{color}
-							</span>
-						</p>
+						{color && (
+							<>
+								<Dot className="text-black dark:text-white size-5" />
+								<p>
+									Color:{" "}
+									<span className="text-black dark:text-white">
+										{color}
+									</span>
+								</p>
+							</>
+						)}
 						<Dot className="text-black dark:text-white size-5" />
 						<p>
 							Size:{" "}

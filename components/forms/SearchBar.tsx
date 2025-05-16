@@ -34,7 +34,7 @@ export function SearchBar() {
 	}, [query, searchParams, router]);
 
 	return (
-		<div className="relative w-full">
+		<div className="hidden md:block relative w-full max-w-lg">
 			<Search className="absolute top-[50%] left-3 translate-y-[-50%] text-muted-foreground size-5" />
 			<Input
 				className="pl-8 rounded-full dark:border-white border-2"

@@ -411,8 +411,6 @@ export const getAdminProducts = async ({ userId }: { userId: string }) => {
 			.populate("category")
 			.sort({ createdAt: -1 });
 
-		console.log(products);
-
 		return {
 			status: 200,
 			products: JSON.parse(JSON.stringify(products)),
@@ -429,28 +427,14 @@ export const getAdminProducts = async ({ userId }: { userId: string }) => {
 };
 
 // Get all top products by admin
-export const getAdminTopProducts = async ({ userId }: { userId: string }) => {
+export const getTopProducts = async () => {
 	try {
 		await connectToDatabase();
 
-		if (!userId) {
-			return {
-				status: 400,
-				message:
-					"Oops! UserId can not be found. Please try again later",
-			};
-		}
-		const user = await User.findById(userId);
-
-		if (!user && !user.isAdmin)
-			return {
-				status: 400,
-				message: "You are not authorized to get these products.",
-			};
-
 		const products = await Product.find()
 			.sort({ totalOrders: -1 })
-			.limit(10);
+			.limit(10)
+			.populate("category");
 
 		return {
 			status: 200,
@@ -468,12 +452,113 @@ export const getAdminTopProducts = async ({ userId }: { userId: string }) => {
 };
 
 // Get new products
-export const getNewProducts = async () => {
+export const getNewProducts = async ({
+	query,
+	limit = DEFAULT_LIMIT,
+	page,
+	tags,
+	minPrice,
+	maxPrice,
+}: {
+	query?: string;
+	limit?: number;
+	page?: string;
+	tags?: any;
+	minPrice?: string;
+	maxPrice?: string;
+}) => {
 	try {
 		await connectToDatabase();
 
-		const products = await Product.find()
-			// .populate("category")
+		const tagArray = tags?.split(",") || [];
+
+		const keyword = query
+			? {
+					$or: [
+						{
+							name: {
+								$regex: query,
+								$options: "i",
+							},
+						},
+						{
+							description: {
+								$regex: query,
+								$options: "i",
+							},
+						},
+						{
+							price: {
+								$regex: query,
+								$options: "i",
+							},
+						},
+					],
+			  }
+			: {};
+
+		const tagFilter = tagArray.length
+			? {
+					tags: {
+						$elemMatch: {
+							name: { $in: tagArray },
+						},
+					},
+			  }
+			: {};
+
+		const priceConditions =
+			minPrice || maxPrice
+				? {
+						$expr: {
+							$and: [
+								...(minPrice
+									? [
+											{
+												$gte: [
+													{
+														$toDouble: {
+															$replaceAll: {
+																input: "$price",
+																find: ",",
+																replacement: "",
+															},
+														},
+													},
+													Number(minPrice),
+												],
+											},
+									  ]
+									: []),
+								...(maxPrice
+									? [
+											{
+												$lte: [
+													{
+														$toDouble: {
+															$replaceAll: {
+																input: "$price",
+																find: ",",
+																replacement: "",
+															},
+														},
+													},
+													Number(maxPrice),
+												],
+											},
+									  ]
+									: []),
+							],
+						},
+				  }
+				: {};
+
+		const products = await Product.find({
+			...keyword,
+			...tagFilter,
+			...priceConditions,
+		})
+			.populate("category")
 			.sort({ createdAt: -1 })
 			.limit(DEFAULT_NEW_LIMITS);
 

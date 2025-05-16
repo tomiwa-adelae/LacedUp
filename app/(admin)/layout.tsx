@@ -10,15 +10,13 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
 
 	const user = await getUserInfo(clerkUser?.id!);
 
-	console.log(user);
-
 	return (
 		<div>
 			<Sidebar user={user?.user} />
 			<div className="lg:ml-[16rem]">
-				<AppNavbar />
+				<AppNavbar user={user?.user} />
 				<div className="lg:pt-16">
-					<Header />
+					<Header user={user?.user} />
 					<div className="min-h-screen pt-20 lg:pt-4">
 						<div className="container py-4 lg:py-0">{children}</div>
 						<Footer />

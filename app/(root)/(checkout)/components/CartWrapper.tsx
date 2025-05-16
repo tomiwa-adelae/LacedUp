@@ -2,16 +2,12 @@
 import { CartDetails } from "@/components/CartDetails";
 import { CartSummary } from "@/components/CartSummary";
 import { EmptyCart } from "@/components/EmptyCart";
-import { Filter } from "@/components/shared/Filter";
-import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartProvider";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 export const CartWrapper = () => {
-	const { cart, updateQuantity, removeFromCart, clearCart, cartTotal } =
-		useCart();
+	const { cart } = useCart();
 	const searchParams = useSearchParams();
 
 	useEffect(() => {

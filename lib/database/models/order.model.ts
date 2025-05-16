@@ -36,7 +36,7 @@ export interface IOrder extends Document {
 		price: number;
 		quantity: number;
 		size: string;
-		color: string;
+		color?: string;
 		image: string;
 	}[];
 	shippingDetails: {

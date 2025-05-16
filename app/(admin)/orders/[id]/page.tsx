@@ -245,6 +245,11 @@ const page = async ({ params }: { params: any }) => {
 										</div>
 									)
 								)}
+								{order?.order?.orderStatus === "delivered" && (
+									<InformationBox
+										description={`Order has been ${order?.order?.orderStatus}`}
+									/>
+								)}
 							</div>
 							<div>
 								<h4 className="mb-2 font-medium text-muted-foreground text-sm lg:text-base uppercase">
@@ -298,6 +303,13 @@ const page = async ({ params }: { params: any }) => {
 										</Button>
 									)} */}
 								</div>
+								{!user?.user.isAdmin &&
+									order?.order.paymentStatus ===
+										"pending" && (
+										<InformationBox
+											description={`Payment is still ${order?.order?.paymentStatus}`}
+										/>
+									)}
 							</div>
 						</div>
 					</div>
@@ -396,23 +408,13 @@ const page = async ({ params }: { params: any }) => {
 										}
 									</span>
 								</p>
-								{order?.order?.orderStatus === "delivered" && (
-									<InformationBox
-										description={`Order has been ${order?.order?.orderStatus}`}
-									/>
-								)}
+
 								{user?.user?.isAdmin &&
 									order?.order?.isPaid &&
 									order.order.orderStatus !== "delivered" && (
 										<MarkAsDeliveredButton
 											userId={user?.user._id}
 											orderId={order?.order?._id}
-										/>
-									)}
-								{!user?.user.isAdmin &&
-									order?.order.orderStatus === "pending" && (
-										<InformationBox
-											description={`Order is still ${order?.order?.paymentStatus}`}
 										/>
 									)}
 							</div>
@@ -440,13 +442,6 @@ const page = async ({ params }: { params: any }) => {
 										}
 									</span>
 								</p>
-								{!user?.user.isAdmin &&
-									order?.order.paymentStatus ===
-										"pending" && (
-										<InformationBox
-											description={`Payment is still ${order?.order?.paymentStatus}`}
-										/>
-									)}
 								{!user?.user?.isAdmin &&
 									!order?.order?.isPaid &&
 									order.order.paymentMethod === "card" && (
@@ -461,11 +456,6 @@ const page = async ({ params }: { params: any }) => {
 											orderId={order?.order?._id}
 										/>
 									)}
-								{order?.order?.paymentStatus === "paid" && (
-									<InformationBox
-										description={`Order has been ${order?.order?.paymentStatus}`}
-									/>
-								)}
 							</div>
 						</div>
 					</div>

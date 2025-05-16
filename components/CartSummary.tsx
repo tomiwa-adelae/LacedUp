@@ -24,8 +24,7 @@ export const CartSummary = ({
 	userId,
 	shippingDetails,
 }: Props) => {
-	const { cart, updateQuantity, removeFromCart, clearCart, cartTotal } =
-		useCart();
+	const { cart, cartTotal } = useCart();
 
 	const [loading, setLoading] = useState(false);
 

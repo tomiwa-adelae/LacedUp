@@ -5,8 +5,9 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { MenuIcon } from "lucide-react";
 import { SidebarContent } from "./SidebarContent";
 import { useState } from "react";
+import { IUser } from "@/lib/database/models/user.model";
 
-export function MobileNavbar() {
+export function MobileNavbar({ user }: { user: IUser }) {
 	const [openMobile, setOpenMobile] = useState(false); // <-- add state
 
 	return (
@@ -21,7 +22,7 @@ export function MobileNavbar() {
 				</Button>
 			</SheetTrigger>
 			<SheetContent className="h-screen py-4" side={"left"}>
-				<SidebarContent setOpenMobile={setOpenMobile} />
+				<SidebarContent user={user} setOpenMobile={setOpenMobile} />
 			</SheetContent>
 		</Sheet>
 	);

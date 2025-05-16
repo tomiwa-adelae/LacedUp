@@ -1,6 +1,3 @@
-import { CartDetails } from "@/components/CartDetails";
-import { CartSummary } from "@/components/CartSummary";
-import { EmptyCart } from "@/components/EmptyCart";
 import { ShopNew } from "@/components/ShopNew";
 import { Separator } from "@/components/ui/separator";
 import { getNewProducts } from "@/lib/actions/product.actions";
@@ -8,7 +5,9 @@ import { redirect } from "next/navigation";
 import { CartWrapper } from "../components/CartWrapper";
 
 const page = async () => {
-	const newProducts = await getNewProducts();
+	const newProducts = await getNewProducts({});
+
+	if (newProducts.status === 400) redirect("/not-found");
 
 	return (
 		<div className="relative">
@@ -20,7 +19,6 @@ const page = async () => {
 			<div className="container">
 				<Separator />
 			</div>
-			{/* <EmptyCart /> */}
 		</div>
 	);
 };

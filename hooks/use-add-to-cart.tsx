@@ -1,85 +1,3 @@
-// // hooks/useAddToCart.ts
-// "use client";
-
-// import { useState } from "react";
-// import { useRouter } from "next/navigation";
-// import { toast } from "@/hooks/use-toast";
-// import { useCart, CartItem } from "@/context/CartProvider";
-
-// type ProductDetails = {
-// 	id: string;
-// 	name: string;
-// 	price: number;
-// 	image: string;
-// };
-
-// export const useAddToCart = (product: ProductDetails) => {
-// 	const { id, name, price, image } = product;
-// 	const [quantity, setQuantity] = useState(1);
-// 	const [selectedSize, setSelectedSize] = useState("");
-// 	const [selectedColor, setSelectedColor] = useState("");
-// 	const { addToCart } = useCart();
-// 	const router = useRouter();
-
-// 	const handleAddToCart = () => {
-// 		// Validate product options
-// 		if (!quantity) {
-// 			toast({
-// 				title: "Error!",
-// 				variant: "destructive",
-// 				description: "Please select a quantity",
-// 			});
-// 			return;
-// 		}
-
-// 		if (!selectedSize) {
-// 			toast({
-// 				title: "Error!",
-// 				variant: "destructive",
-// 				description: "Please select a size",
-// 			});
-// 			return;
-// 		}
-
-// 		if (!selectedColor) {
-// 			toast({
-// 				title: "Error!",
-// 				variant: "destructive",
-// 				description: "Please select a color",
-// 			});
-// 			return;
-// 		}
-
-// 		// Create the cart item
-// 		const cartItem: CartItem = {
-// 			id,
-// 			name,
-// 			price,
-// 			image,
-// 			quantity,
-// 			color: selectedColor,
-// 			size: selectedSize,
-// 		};
-
-// 		// Add the item to the cart
-// 		addToCart(cartItem);
-
-// 		// Optionally redirect to the cart page
-// 		router.push(`/cart`);
-// 	};
-
-// 	return {
-// 		quantity,
-// 		setQuantity,
-// 		selectedSize,
-// 		setSelectedSize,
-// 		selectedColor,
-// 		setSelectedColor,
-// 		handleAddToCart,
-// 	};
-// };
-
-// hooks/use-add-to-cart.ts
 "use client";
 
 import { useState } from "react";
@@ -99,7 +17,7 @@ type ProductDetails = {
 export const useAddToCart = (product: ProductDetails) => {
 	const { id, name, price, image, category } = product;
 	const [quantity, setQuantity] = useState(1);
-	const [selectedSize, setSelectedSize] = useState("");
+	const [selectedSize, setSelectedSize] = useState("38");
 	const [selectedColor, setSelectedColor] = useState<
 		string | IAvailableColor
 	>("");
@@ -126,14 +44,14 @@ export const useAddToCart = (product: ProductDetails) => {
 			return;
 		}
 
-		if (!selectedColor) {
-			toast({
-				title: "Error!",
-				variant: "destructive",
-				description: "Please select a color",
-			});
-			return;
-		}
+		// if (!selectedColor) {
+		// 	toast({
+		// 		title: "Error!",
+		// 		variant: "destructive",
+		// 		description: "Please select a color",
+		// 	});
+		// 	return;
+		// }
 
 		// Extract color value if it's an IAvailableColor object
 		const colorValue =

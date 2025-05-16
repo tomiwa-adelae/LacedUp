@@ -19,13 +19,13 @@ export const ShopNew = ({ products = [] }: Props) => {
 					<h2 className="text-xl md:text-2xl uppercase font-semibold">
 						New Arrivals
 					</h2>
-					{products.length > DEFAULT_LIMIT && (
-						<Button asChild size="md" variant={"ghost"}>
-							<Link href="/new">
-								View all <ChevronRight />
-							</Link>
-						</Button>
-					)}
+					{/* {products.length > DEFAULT_LIMIT && ( */}
+					<Button asChild size="md" variant={"ghost"}>
+						<Link href="/category/new">
+							View all <ChevronRight />
+						</Link>
+					</Button>
+					{/* )} */}
 				</div>
 				<ScrollArea className="">
 					<div className="flex w-max space-x-4 pt-4 pr-10 pb-4">

@@ -15,8 +15,6 @@ const page = async () => {
 
 	const shippingDetails = await getShippingDetails(user?.user._id);
 
-	console.log(shippingDetails);
-
 	return (
 		<div className="relative">
 			<div className="container grid grid-cols-1 lg:grid-cols-3 gap-8 py-4">

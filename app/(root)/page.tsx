@@ -5,13 +5,14 @@ import { Showcase } from "@/components/shared/Showcase";
 import { ShopCategory } from "@/components/ShopCategory";
 import { ShopNew } from "@/components/ShopNew";
 import { Separator } from "@/components/ui/separator";
-import { getNewProducts } from "@/lib/actions/product.actions";
+import { getNewProducts, getTopProducts } from "@/lib/actions/product.actions";
 import { redirect } from "next/navigation";
 
 const page = async () => {
-	const newProducts = await getNewProducts();
+	const newProducts = await getNewProducts({});
+	const topProducts = await getTopProducts();
 
-	// if (newProducts.status === 400) redirect("/not-found");
+	if (newProducts.status === 400) redirect("/not-found");
 
 	return (
 		<div>
@@ -39,7 +40,7 @@ const page = async () => {
 			<div className="container">
 				<Separator />
 			</div>
-			{/* <BestSellers /> */}
+			<BestSellers products={topProducts.products} />
 			<div className="container">
 				<Separator />
 			</div>

@@ -2,10 +2,11 @@ import { ProfileDropdown } from "@/components/shared/ProfileDropdown";
 import { Theme } from "@/components/shared/Theme";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { IUser } from "@/lib/database/models/user.model";
 import { Bell } from "lucide-react";
 import Image from "next/image";
 
-export const AppNavbar = () => {
+export const AppNavbar = ({ user }: { user: IUser }) => {
 	return (
 		<div className="hidden h-16 border-b lg:flex items-center justify-center bg-white dark:bg-black w-[calc(100vw-16rem)] fixed top-0 left-[16rem] z-50">
 			<div className="container flex items-center justify-between">
@@ -18,7 +19,7 @@ export const AppNavbar = () => {
 					<Button size={"icon"} variant={"outline"}>
 						<Bell className="size-5" />
 					</Button>
-					<ProfileDropdown />
+					<ProfileDropdown user={user} />
 				</div>
 			</div>
 		</div>

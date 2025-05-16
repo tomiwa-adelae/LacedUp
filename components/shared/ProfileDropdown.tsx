@@ -13,11 +13,12 @@ import Link from "next/link";
 import { useClerk, useUser } from "@clerk/nextjs";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { adminSidebarLinks } from "@/constants";
+import { adminSidebarLinks, sidebarLinks } from "@/constants";
 import { LogOut, Settings } from "lucide-react";
+import { IUser } from "@/lib/database/models/user.model";
 
-export function ProfileDropdown() {
-	const { user } = useUser();
+export function ProfileDropdown({ user }: { user: IUser }) {
+	// const { user } = useUser();
 	const { signOut } = useClerk();
 
 	const router = useRouter();
@@ -31,7 +32,7 @@ export function ProfileDropdown() {
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
 				<Image
-					src={user?.imageUrl!}
+					src={user?.picture!}
 					alt={`${user?.firstName} ${user?.lastName}`}
 					width={1000}
 					height={1000}
@@ -43,22 +44,24 @@ export function ProfileDropdown() {
 					Your account
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator />
-				{adminSidebarLinks.map(({ label, icon, href }, index) => {
-					const Icon = icon;
-					return (
-						<DropdownMenuGroup key={index}>
-							<Link href={href}>
-								<DropdownMenuItem className="cursor-pointer">
-									<Icon className="size-5" />
-									<span className="uppercase text-xs font-medium">
-										{label}
-									</span>
-								</DropdownMenuItem>
-							</Link>
-							<DropdownMenuSeparator />
-						</DropdownMenuGroup>
-					);
-				})}
+				{(user?.isAdmin ? adminSidebarLinks : sidebarLinks).map(
+					({ label, icon, href }, index) => {
+						const Icon = icon;
+						return (
+							<DropdownMenuGroup key={index}>
+								<Link href={href}>
+									<DropdownMenuItem className="cursor-pointer">
+										<Icon className="size-5" />
+										<span className="uppercase text-xs font-medium">
+											{label}
+										</span>
+									</DropdownMenuItem>
+								</Link>
+								<DropdownMenuSeparator />
+							</DropdownMenuGroup>
+						);
+					}
+				)}
 				<Link href={"/settings"}>
 					<DropdownMenuItem className="cursor-pointer">
 						<Settings className="size-5" />

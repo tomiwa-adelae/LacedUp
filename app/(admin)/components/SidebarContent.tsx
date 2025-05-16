@@ -45,7 +45,7 @@ export const SidebarContent = ({
 				<div className="flex flex-1 flex-col overflow-x-hidden">
 					<Logo />
 					<div className="mt-8 flex flex-col gap-4">
-						{(user.isAdmin ? adminSidebarLinks : sidebarLinks).map(
+						{(user?.isAdmin ? adminSidebarLinks : sidebarLinks).map(
 							(link, idx) => {
 								const Icon = link.icon;
 								const isActive =
@@ -138,7 +138,7 @@ export const SidebarContent = ({
 					>
 						<Image
 							src={user?.picture || DEFAULT_USER_IMAGE}
-							alt={`${user.firstName}'s picture`}
+							alt={`${user?.firstName}'s picture`}
 							width={1000}
 							height={1000}
 							className="w-14 h-14 rounded-full object-cover"

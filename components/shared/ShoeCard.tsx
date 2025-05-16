@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import Link from "next/link";
@@ -9,6 +10,7 @@ import {
 } from "@/lib/database/models/product.model";
 import { cn, formatMoneyInput } from "@/lib/utils";
 import { DEFAULT_PRODUCT_IMAGE } from "@/constants";
+import { useAddToCart } from "@/hooks/use-add-to-cart";
 
 interface Props {
 	ratings?: boolean;
@@ -31,6 +33,14 @@ export const ShoeCard = ({
 	ratings,
 	category,
 }: Props) => {
+	const { handleAddToCart } = useAddToCart({
+		id: id,
+		name: name,
+		price: parseFloat(price), // Convert price string to number
+		image: media[0]?.url || DEFAULT_PRODUCT_IMAGE, // Add fallback for empty media
+		category: category.name,
+	});
+
 	return (
 		<div className="group">
 			<div className="relative group">
@@ -79,6 +89,7 @@ export const ShoeCard = ({
 						className="text-xs hover:text-primary hover:underline"
 						variant={"ghost"}
 						size="sm"
+						onClick={handleAddToCart}
 					>
 						Add to cart
 					</Button>
