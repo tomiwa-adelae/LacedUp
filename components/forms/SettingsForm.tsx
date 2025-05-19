@@ -40,6 +40,10 @@ interface Props {
 	email: string;
 	phoneNumber: string;
 	picture: string;
+	state: string;
+	address: string;
+	city: string;
+	country: string;
 }
 
 const FormSchema = z.object({
@@ -59,9 +63,9 @@ const FormSchema = z.object({
 			message: "Invalid phone number",
 		})
 		.optional(),
-	state: z.string().min(2, { message: "Your state is required." }),
-	city: z.string().min(2, { message: "Your city is required." }),
-	address: z.string().min(2, { message: "Your address is required." }),
+	state: z.string().optional(),
+	city: z.string().optional(),
+	address: z.string().optional(),
 });
 
 export function SettingsForm({
@@ -71,6 +75,10 @@ export function SettingsForm({
 	email,
 	phoneNumber,
 	picture,
+	city,
+	address,
+	state,
+	country,
 }: Props) {
 	const router = useRouter();
 
@@ -83,12 +91,15 @@ export function SettingsForm({
 			lastName: lastName || "",
 			email: email || "",
 			phoneNumber: phoneNumber || "",
+			address: address || "",
+			state: state || "",
+			city: city || "",
 		},
 	});
 
 	async function onSubmit(data: z.infer<typeof FormSchema>) {
 		try {
-			const details = { ...data };
+			const details = { ...data, country: "Nigeria" };
 
 			const res = await updateUser({ details, userId });
 

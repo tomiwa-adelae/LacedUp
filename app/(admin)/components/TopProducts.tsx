@@ -16,6 +16,7 @@ import { IProduct } from "@/lib/database/models/product.model";
 import { DEFAULT_PRODUCT_IMAGE } from "@/constants";
 import { formatDate, formatMoneyInput } from "@/lib/utils";
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 
 const invoices = [
 	{
@@ -69,10 +70,9 @@ export const TopProducts = ({ products }: { products: IProduct[] }) => {
 					<TableHeader>
 						<TableRow>
 							<TableHead>Product name</TableHead>
-							<TableHead>Date added</TableHead>
+							<TableHead>Category</TableHead>
 							<TableHead>Price</TableHead>
 							<TableHead>Total orders</TableHead>
-							<TableHead></TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
@@ -84,6 +84,7 @@ export const TopProducts = ({ products }: { products: IProduct[] }) => {
 									price,
 									createdAt,
 									totalOrders,
+									category,
 									_id,
 								},
 								index
@@ -109,17 +110,21 @@ export const TopProducts = ({ products }: { products: IProduct[] }) => {
 											</span>
 										</Link>
 									</TableCell>
-									<TableCell>
-										{formatDate(createdAt)}
-									</TableCell>
+									{/* @ts-ignore */}
+									<TableCell>{category?.name}</TableCell>
 									<TableCell>
 										₦{formatMoneyInput(price)}
 									</TableCell>
 									<TableCell className="text-center">
-										{totalOrders}
-									</TableCell>
-									<TableCell>
-										<EllipsisVertical className="size-5" />
+										<Badge
+											variant={
+												totalOrders > 0
+													? "delivered"
+													: "pending"
+											}
+										>
+											{totalOrders}
+										</Badge>
 									</TableCell>
 								</TableRow>
 							)

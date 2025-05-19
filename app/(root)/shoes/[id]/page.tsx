@@ -17,7 +17,7 @@ const page = async ({ params }: { params: any }) => {
 	const product = await getProductDetails({
 		productId: id,
 	});
-	const newProducts = await getNewProducts();
+	const newProducts = await getNewProducts({});
 
 	if (newProducts.status === 400 || product.status === 400)
 		redirect("/not-found");

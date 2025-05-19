@@ -259,3 +259,82 @@ export const adminUpdateOrderDetails = async ({
 		};
 	}
 };
+
+// Update order details
+export const updateOrder = async ({
+	userId,
+	orderId,
+	details,
+}: {
+	userId: string;
+	orderId: string;
+	details: {
+		id?: string;
+		status?: string;
+		update_time?: string;
+		email_address?: string;
+	};
+}) => {
+	try {
+		await connectToDatabase();
+
+		if (!userId) {
+			return {
+				status: 400,
+				message:
+					"Oops! UserId can not be found. Please try again later",
+			};
+		}
+
+		if (!orderId) {
+			return {
+				status: 400,
+				message:
+					"Oops! UserId can not be found. Please try again later",
+			};
+		}
+
+		const user = await User.findById(userId);
+
+		if (!user)
+			return {
+				status: 400,
+				message: "Oops! User can not be found. Please try again later",
+			};
+
+		const order = await Order.findById(orderId);
+
+		if (!order)
+			return {
+				status: 400,
+				message: "Oops! Order can not be found. Please try again later",
+			};
+
+		// Update payment details
+		order.paymentResult = {
+			id: details.id,
+			status: details.status,
+			update_time: details.update_time,
+			email_address: details.email_address,
+		};
+
+		order.isPaid = true;
+		order.paidAt = new Date();
+		order.paymentStatus = PaymentStatus.PAID; // Or use PaymentStatus.PAID if you're importing the enum
+
+		const updatedOrder = await order.save();
+		revalidatePath(`/order/${orderId}`);
+		return {
+			status: 200,
+			message: "Order payment updated successfully.",
+			order: JSON.parse(JSON.stringify(updatedOrder)),
+		};
+	} catch (error: any) {
+		handleError(error);
+		return {
+			status: error?.status || 400,
+			message:
+				error?.message || "Oops! Couldn't get order! Try again later.",
+		};
+	}
+};

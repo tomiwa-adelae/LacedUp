@@ -28,6 +28,10 @@ const page = async () => {
 				email={user?.user.email}
 				phoneNumber={user?.user.phoneNumber}
 				picture={user?.user.picture}
+				state={user?.user.state}
+				address={user?.user.address}
+				city={user?.user.city}
+				country={user?.user.country}
 			/>
 		</div>
 	);

@@ -252,8 +252,8 @@ export const adminSidebarLinks = [
 
 export const sidebarLinks = [
 	{
-		label: "Dashboard",
-		href: "/dashboard",
+		label: "My Account",
+		href: "/my-account",
 		icon: LayoutDashboard,
 	},
 	{
@@ -300,3 +300,6 @@ export const paymentMethods = [
 		value: "card",
 	},
 ];
+
+export const DEFAULT_LOGO =
+	"https://res.cloudinary.com/dh0rc6p1c/image/upload/v1747658722/lacedup/cloud/footprints_qwtcbt.svg";

@@ -11,7 +11,9 @@ import {
 import { currentUser } from "@clerk/nextjs/server";
 import {
 	Banknote,
+	Check,
 	CircleCheckBig,
+	CircleDashed,
 	CreditCard,
 	Dot,
 	Download,
@@ -242,13 +244,28 @@ const page = async ({ params }: { params: any }) => {
 													</h3>
 												</div>
 											</div>
+											<div className="mt-4">
+												{order?.order?.orderStatus ===
+													"delivered" && (
+													<InformationBox
+														description={`Orders are delivered already.`}
+														icon={CircleDashed}
+														title="Orders delivered"
+														variant="success"
+													/>
+												)}
+												{order?.order?.orderStatus ===
+													"pending" && (
+													<InformationBox
+														description={`Orders are yet to be delivered.`}
+														icon={CircleDashed}
+														title="Orders pending"
+														variant="pending"
+													/>
+												)}
+											</div>
 										</div>
 									)
-								)}
-								{order?.order?.orderStatus === "delivered" && (
-									<InformationBox
-										description={`Order has been ${order?.order?.orderStatus}`}
-									/>
 								)}
 							</div>
 							<div>
@@ -302,14 +319,36 @@ const page = async ({ params }: { params: any }) => {
 											Mark as paid
 										</Button>
 									)} */}
+									{!user?.user.isAdmin &&
+										order?.order.paymentStatus ===
+											"pending" && (
+											<InformationBox
+												description={`You are yet to make payment`}
+												icon={CircleDashed}
+												title="Payment pending"
+												variant="pending"
+											/>
+										)}
+									{!user?.user.isAdmin &&
+										order?.order.paymentStatus ===
+											"paid" && (
+											<InformationBox
+												description={`You have successfully made payment`}
+												icon={Check}
+												title="Payment success"
+												variant="success"
+											/>
+										)}
+									{user?.user.isAdmin &&
+										order?.order.paymentStatus ===
+											"paid" && (
+											<InformationBox
+												icon={Check}
+												title="Payment success"
+												variant="success"
+											/>
+										)}
 								</div>
-								{!user?.user.isAdmin &&
-									order?.order.paymentStatus ===
-										"pending" && (
-										<InformationBox
-											description={`Payment is still ${order?.order?.paymentStatus}`}
-										/>
-									)}
 							</div>
 						</div>
 					</div>
@@ -445,7 +484,22 @@ const page = async ({ params }: { params: any }) => {
 								{!user?.user?.isAdmin &&
 									!order?.order?.isPaid &&
 									order.order.paymentMethod === "card" && (
-										<PaymentButton />
+										<PaymentButton
+											title={`Order-${order.order._id}`}
+											description={`Payment for Order-${order.order._id}`}
+											name={`${order?.order?.shippingDetails?.firstName} ${order?.order?.shippingDetails?.lastName}`}
+											email={
+												order?.order?.shippingDetails
+													?.email
+											}
+											phoneNumber={
+												order?.order?.shippingDetails
+													?.phoneNumber
+											}
+											amount={order?.order?.totalPrice}
+											userId={user?.user._id}
+											orderId={order?.order._id}
+										/>
 									)}
 								{user?.user?.isAdmin &&
 									order.order.paymentMethod ===

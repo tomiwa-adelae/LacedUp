@@ -10,6 +10,10 @@ export interface IUser extends Document {
 	picture?: string;
 	pictureId?: string;
 	bio?: string;
+	address?: string;
+	city?: string;
+	state?: string;
+	country?: string;
 	createdAt?: Date;
 	updatedAt?: Date;
 	isAdmin?: boolean;
@@ -46,6 +50,18 @@ const UserSchema = new Schema<IUser>(
 			type: String,
 		},
 		bio: {
+			type: String,
+		},
+		address: {
+			type: String,
+		},
+		state: {
+			type: String,
+		},
+		city: {
+			type: String,
+		},
+		country: {
 			type: String,
 		},
 		isAdmin: {

@@ -74,6 +74,10 @@ export const updateUser = async ({
 		user.picture = details.picture || user.picture;
 		user.pictureId = details.pictureId || user.pictureId;
 		user.bio = details.bio || user.bio;
+		user.address = details.address || user.address;
+		user.state = details.state || user.state;
+		user.city = details.city || user.city;
+		user.country = details.country || user.country;
 
 		await user.save();
 

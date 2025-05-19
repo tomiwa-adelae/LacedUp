@@ -1,15 +1,33 @@
-import { Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-export const InformationBox = ({ description }: { description: string }) => {
+interface Props {
+	description?: string;
+	title: string;
+	icon: any;
+	variant: string;
+}
+
+export const InformationBox = ({
+	description,
+	title,
+	icon,
+	variant,
+}: Props) => {
+	const Icon = icon;
 	return (
-		<div className="py-4 text-sm px-4 rounded-lg bg-green-100 border-green-400 border text-black font-medium">
+		<div
+			className={cn(
+				"py-4 text-sm px-4 rounded-lg  border text-black font-medium",
+				variant === "success" && "bg-green-100 border-green-400",
+				variant === "pending" && "bg-yellow-100 border-yellow-400",
+				variant === "delivered" && "bg-blue-100 border-blue-400"
+			)}
+		>
 			<div className="flex items-center justify-start gap-2">
-				<Check />
-				<div className="space-y-2">
-					<h4 className="text-base font-semibold">Payment success</h4>
-					<p className="text-sm">
-						You have successfully made the payment
-					</p>
+				<Icon className="size-4" />
+				<div>
+					<h4 className="text-sm font-semibold">{title}</h4>
+					<p className="text-xs">{description}</p>
 				</div>
 			</div>
 		</div>

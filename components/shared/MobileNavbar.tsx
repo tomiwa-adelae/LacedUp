@@ -66,7 +66,7 @@ export function MobileNavbar({
 						<div className="flex flex-1 flex-col overflow-x-hidden">
 							<Logo />
 							<div className="mt-8 flex flex-col gap-4">
-								{(user.isAdmin
+								{(user?.isAdmin
 									? adminSidebarLinks
 									: sidebarLinks
 								).map((link, idx) => {
