@@ -1,16 +1,12 @@
+import { AllCategoryBox } from "@/components/AllCategoryBox";
 import { CategoryBreadCrumbs } from "@/components/CategoryBreadCrumbs";
-import { Filter } from "@/components/shared/Filter";
 import { ShoeCard } from "@/components/shared/ShoeCard";
 import { Showcase } from "@/components/shared/Showcase";
-import { ShopNew } from "@/components/ShopNew";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { DEFAULT_LIMIT } from "@/constants";
-import { getCategoryDetails } from "@/lib/actions/category.actions";
-import {
-	getCategoryProducts,
-	getNewProducts,
-} from "@/lib/actions/product.actions";
+import { getAllCategories } from "@/lib/actions/category.actions";
+import { getAllProducts } from "@/lib/actions/product.actions";
 import { IProduct } from "@/lib/database/models/product.model";
 import { redirect } from "next/navigation";
 
@@ -23,51 +19,24 @@ const page = async ({
 }) => {
 	const { query, page, tags, minPrice, maxPrice } = await searchParams;
 
-	const { category } = await params;
+	const products = await getAllProducts({});
+	const categoryList = await getAllCategories();
 
-	const newProducts = await getNewProducts({});
-	const categoryProducts = await getCategoryProducts({
-		category,
-		query,
-		page,
-		limit: DEFAULT_LIMIT,
-		tags,
-		minPrice: minPrice || "",
-		maxPrice: maxPrice || "",
-	});
-	const categoryDetails = await getCategoryDetails(category);
-
-	if (newProducts.status === 400) redirect("/not-found");
-
-	const categoryTags = [
-		...new Set(
-			categoryProducts?.products?.flatMap((product: any) =>
-				product?.tags.map((t: any) => t.name)
-			)
-		),
-	];
+	if (products.status === 400) redirect("/not-found");
 
 	return (
 		<div className="bg-white dark:bg-black py-4 relative">
-			<CategoryBreadCrumbs
-				categoryName={categoryDetails?.category.name}
-			/>
-			<Showcase
-				title={categoryDetails?.category.name}
-				image={categoryDetails?.category.picture}
-			/>
+			<CategoryBreadCrumbs categoryName={"New arrivals"} />
+			<Showcase title={"All products"} />
 			<div className="container">
 				<Separator />
 			</div>
 			<div className="container grid grid-cols-1 lg:grid-cols-3 gap-8 py-8">
 				<div className="col-span-2 lg:col-span-1">
-					<Filter
-						categoryName={categoryDetails?.category.name}
-						tags={categoryTags}
-					/>
+					<AllCategoryBox categories={categoryList} />
 				</div>
 				<div className="col-span-2 gap-4 grid grid-cols-2">
-					{categoryProducts?.products?.map(
+					{products?.products?.map(
 						({
 							name,
 							_id,
@@ -89,7 +58,7 @@ const page = async ({
 							/>
 						)
 					)}
-					{categoryProducts?.products?.length > DEFAULT_LIMIT && (
+					{products?.products?.length > DEFAULT_LIMIT && (
 						<div
 							className={`flex flex-col items-center justify-center gap-4 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] aspect-auto w-full rounded-lg object-cover hover:bg-accent dark:hover:bg-accent/50 cursor-pointer`}
 						>
@@ -100,10 +69,6 @@ const page = async ({
 					)}
 				</div>
 			</div>
-			<div className="container">
-				<Separator />
-			</div>
-			<ShopNew products={newProducts?.products} />
 			<div className="container">
 				<Separator />
 			</div>

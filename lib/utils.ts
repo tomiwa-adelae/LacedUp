@@ -109,3 +109,9 @@ export const formattedPaymentMethod: Record<string, string> = {
 	cash_on_delivery: "Cash on delivery",
 	card: "Card",
 };
+
+export function extractNameFromEmail(email: string) {
+	const username = email.split("@")[0]; // e.g., "adelaetomiwa6"
+	const nameGuess = username.replace(/[0-9]/g, ""); // Remove numbers
+	return nameGuess.charAt(0).toUpperCase() + nameGuess.slice(1);
+}

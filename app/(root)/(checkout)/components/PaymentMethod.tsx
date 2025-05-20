@@ -18,20 +18,16 @@ import { paymentMethods } from "@/constants";
 import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { InformationBox } from "@/app/(admin)/components/InformationBox";
-
-const FormSchema = z.object({
-	paymentMethod: z.string({
-		required_error: "You need to select a payment method.",
-	}),
-});
+import { Check } from "lucide-react";
+import { PaymentFormSchema } from "@/lib/validations";
 
 export const PaymentMethod = () => {
 	const [success, setSuccess] = useState(false);
-	const form = useForm<z.infer<typeof FormSchema>>({
-		resolver: zodResolver(FormSchema),
+	const form = useForm<z.infer<typeof PaymentFormSchema>>({
+		resolver: zodResolver(PaymentFormSchema),
 	});
 
-	async function onSubmit(data: z.infer<typeof FormSchema>) {
+	async function onSubmit(data: z.infer<typeof PaymentFormSchema>) {
 		try {
 			const details = {
 				paymentMethod: data.paymentMethod,
@@ -76,7 +72,10 @@ export const PaymentMethod = () => {
 									>
 										{paymentMethods.map(
 											({ label, value }, index) => (
-												<FormItem className="flex items-center space-x-3 space-y-0 rounded-md border p-4">
+												<FormItem
+													key={index}
+													className="flex items-center space-x-3 space-y-0 rounded-md border p-4"
+												>
 													<FormControl>
 														<RadioGroupItem
 															value={value}
@@ -95,7 +94,11 @@ export const PaymentMethod = () => {
 						)}
 					/>
 					{success ? (
-						<InformationBox description="Your payment details is saved already." />
+						<InformationBox
+							icon={Check}
+							variant="success"
+							title="Payment method saved"
+						/>
 					) : (
 						<Button
 							disabled={form.formState.isSubmitting}

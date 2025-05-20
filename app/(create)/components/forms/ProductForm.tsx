@@ -19,7 +19,7 @@ import { RequiredAsterisk } from "@/components/shared/RequiredAsterisk";
 import { ColorsSelector } from "../ColorsManagement";
 import { toast } from "@/hooks/use-toast";
 import { formatMoneyInput, handleKeyDown, removeCommas } from "@/lib/utils";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { CategorySelector } from "@/app/(admin)/components/CategorySelector";
 import Image from "next/image";
 import TagsManagement, { Tag } from "../TagsManagement";
@@ -28,16 +28,7 @@ import { useRouter } from "next/navigation";
 import { IMedia, IProduct } from "@/lib/database/models/product.model";
 import { X } from "lucide-react";
 import { DeleteImageModal } from "@/app/(admin)/components/DeleteImageModal";
-
-const FormSchema = z.object({
-	name: z.string().min(2, { message: "Name is required." }),
-	description: z.string().min(10, { message: "Description is required." }),
-	category: z.string().min(2, { message: "Category is required." }),
-	price: z.string().min(2, { message: "Price is required." }),
-	media: z
-		.array(z.string().url("Each media must be a valid URL"))
-		.nonempty("At least one media item is required"),
-});
+import { ProductFormSchema } from "@/lib/validations";
 
 interface Props {
 	userId: string;
@@ -65,8 +56,8 @@ export function ProductForm({ userId, product, edit }: Props) {
 	const [openDeleteImageModal, setOpenDeleteImageModal] = useState(false);
 	const [openDeleteImage, setOpenDeleteImage] = useState();
 
-	const form = useForm<z.infer<typeof FormSchema>>({
-		resolver: zodResolver(FormSchema),
+	const form = useForm<z.infer<typeof ProductFormSchema>>({
+		resolver: zodResolver(ProductFormSchema),
 		defaultValues: {
 			name: edit ? product.name : "",
 			description: edit ? product.description : "",
@@ -75,10 +66,6 @@ export function ProductForm({ userId, product, edit }: Props) {
 			media: edit ? product?.media.map((m) => m.url) : [],
 		},
 	});
-
-	// const updateFormTags = (newTags: any) => {
-	// 	setProductTags(newTags);
-	// };
 
 	const handleChange = (
 		e: React.ChangeEvent<HTMLInputElement>,
@@ -117,7 +104,7 @@ export function ProductForm({ userId, product, edit }: Props) {
 		}
 	};
 
-	async function onSubmit(data: z.infer<typeof FormSchema>) {
+	async function onSubmit(data: z.infer<typeof ProductFormSchema>) {
 		try {
 			const formattedPrice = removeCommas(data.price);
 
@@ -140,6 +127,13 @@ export function ProductForm({ userId, product, edit }: Props) {
 			} else {
 				res = await createNewProduct(details);
 			}
+
+			if (res?.status === 400)
+				return toast({
+					title: "Error!",
+					description: res?.message,
+					variant: "destructive",
+				});
 
 			toast({
 				title: "Success!",

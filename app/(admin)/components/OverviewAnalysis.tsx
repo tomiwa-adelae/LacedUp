@@ -17,16 +17,6 @@ import {
 	Line,
 	Bar,
 } from "recharts";
-import {
-	Wallet,
-	ShoppingBag,
-	Users,
-	TrendingUp,
-	Package,
-	Calendar,
-	ArrowUpRight,
-	ArrowDownRight,
-} from "lucide-react";
 import _ from "lodash";
 import { CardDescription, CardTitle, Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";

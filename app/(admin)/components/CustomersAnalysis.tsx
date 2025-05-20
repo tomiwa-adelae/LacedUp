@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import {
-	BarChart,
 	PieChart,
 	Pie,
 	Cell,
@@ -13,9 +12,7 @@ import {
 	YAxis,
 	Tooltip,
 	Legend,
-	Bar,
 } from "recharts";
-import { Users, Calendar, UserCheck, ShoppingBag } from "lucide-react";
 import _ from "lodash";
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -32,9 +29,7 @@ import { formatDate } from "@/lib/utils";
 import { IUser } from "@/lib/database/models/user.model";
 import Image from "next/image";
 import { DEFAULT_USER_IMAGE } from "@/constants";
-import { IOrder } from "@/lib/database/models/order.model";
 
-// Dashboard component for customer analytics
 export function CustomersAnalysis({
 	customersData,
 	ordersData,
@@ -270,7 +265,9 @@ export function CustomersAnalysis({
 						{customers
 							.sort(
 								(a: any, b: any) =>
+									// @ts-ignore
 									new Date(b.createdAt) -
+									// @ts-ignore
 									new Date(a.createdAt)
 							)
 							.map((customer: any) => (

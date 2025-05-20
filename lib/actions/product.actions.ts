@@ -10,6 +10,9 @@ import { deleteImages, uploadImages } from "./upload.actions";
 import { v2 as cloudinary } from "cloudinary";
 import { DEFAULT_LIMIT, DEFAULT_NEW_LIMITS } from "@/constants";
 import Order from "../database/models/order.model";
+import "../database/models"; // Ensures all schemas are registered
+import mongoose from "mongoose";
+
 cloudinary.config({
 	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
 	api_key: process.env.CLOUDINARY_API_KEY,
@@ -388,7 +391,17 @@ export const deleteProductImage = async ({
 };
 
 // Get all the products by admin
-export const getAdminProducts = async ({ userId }: { userId: string }) => {
+export const getAdminProducts = async ({
+	query,
+	limit = DEFAULT_LIMIT,
+	page,
+	userId,
+}: {
+	query: string;
+	limit: number;
+	page: string;
+	userId: string;
+}) => {
 	try {
 		await connectToDatabase();
 
@@ -407,13 +420,165 @@ export const getAdminProducts = async ({ userId }: { userId: string }) => {
 				message: "You are not authorized to get these products.",
 			};
 
-		const products = await Product.find()
-			.populate("category")
-			.sort({ createdAt: -1 });
+		const skipAmount = (Number(page) || 1 - 1) * limit;
+
+		const keywordMatch = query
+			? {
+					$or: [
+						{ name: { $regex: query, $options: "i" } },
+						{ description: { $regex: query, $options: "i" } },
+						{ price: { $regex: query, $options: "i" } },
+						{ "category.name": { $regex: query, $options: "i" } }, // category name
+					],
+			  }
+			: {};
+
+		// Use aggregation pipeline to search on populated category name
+		const pipeline: mongoose.PipelineStage[] = [
+			{
+				$lookup: {
+					from: "categories", // collection name in DB (check actual name if different)
+					localField: "category",
+					foreignField: "_id",
+					as: "category",
+				},
+			},
+			{
+				$unwind: {
+					path: "$category",
+					preserveNullAndEmptyArrays: true,
+				},
+			},
+			{
+				$match: keywordMatch,
+			},
+			{
+				$sort: {
+					createdAt: -1,
+				},
+			},
+			{
+				$skip: skipAmount,
+			},
+			{
+				$limit: limit,
+			},
+		];
+
+		const products = await Product.aggregate(pipeline);
+
+		const countPipeline = [
+			{
+				$lookup: {
+					from: "categories",
+					localField: "category",
+					foreignField: "_id",
+					as: "category",
+				},
+			},
+			{
+				$unwind: {
+					path: "$category",
+					preserveNullAndEmptyArrays: true,
+				},
+			},
+			{
+				$match: keywordMatch,
+			},
+			{
+				$count: "totalCount",
+			},
+		];
+
+		const countResult = await Product.aggregate(countPipeline);
+		const totalCount = countResult[0]?.totalCount || 0;
+
+		// const skipAmount = (Number(page) - 1) * limit;
+
+		// const products = await Product.find({ ...keyword })
+		// 	.populate("category")
+		// 	.sort({ createdAt: -1 })
+		// 	.skip(skipAmount);
+
+		// const productCount = await Product.countDocuments({
+		// 	...keyword,
+		// });
+
+		// return {
+		// 	status: 200,
+		// 	products: JSON.parse(JSON.stringify(products)),
+		// 	totalPages: Math.ceil(productCount / limit),
+		// };
 
 		return {
 			status: 200,
 			products: JSON.parse(JSON.stringify(products)),
+			totalPages: Math.ceil(totalCount / limit),
+		};
+	} catch (error: any) {
+		handleError(error);
+		return {
+			status: error?.status || 400,
+			message:
+				error?.message ||
+				"Oops! Couldn't get products! Try again later.",
+		};
+	}
+};
+
+// Get all the products
+export const getAllProducts = async ({
+	query,
+	limit = DEFAULT_LIMIT,
+	page,
+}: {
+	query?: string;
+	limit?: number;
+	page?: string;
+}) => {
+	try {
+		await connectToDatabase();
+
+		const keyword = query
+			? {
+					$or: [
+						{
+							name: {
+								$regex: query,
+								$options: "i",
+							},
+						},
+						{
+							description: {
+								$regex: query,
+								$options: "i",
+							},
+						},
+						{
+							price: {
+								$regex: query,
+								$options: "i",
+							},
+						},
+					],
+			  }
+			: {};
+
+		const skipAmount = (Number(page) - 1) * limit;
+
+		const products = await Product.find({ ...keyword })
+			.populate("category")
+			.sort({ createdAt: -1 })
+			.skip(skipAmount);
+
+		const productCount = await Product.countDocuments({
+			...keyword,
+		});
+
+		return {
+			status: 200,
+			products: JSON.parse(JSON.stringify(products)),
+			totalPages: Math.ceil(productCount / limit),
 		};
 	} catch (error: any) {
 		handleError(error);

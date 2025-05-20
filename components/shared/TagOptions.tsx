@@ -15,12 +15,7 @@ import {
 } from "@/components/ui/form";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-
-const FormSchema = z.object({
-	tags: z.array(z.string()).refine((value) => value.some((item) => item), {
-		message: "You have to select at least one item.",
-	}),
-});
+import { TagsFormSchema } from "@/lib/validations";
 
 export function TagOptions({ tags }: { tags: any }) {
 	const router = useRouter();
@@ -29,8 +24,8 @@ export function TagOptions({ tags }: { tags: any }) {
 	// Get tags from URL if available
 	const selectedTags = searchParams.get("tags")?.split(",") || [];
 
-	const form = useForm<z.infer<typeof FormSchema>>({
-		resolver: zodResolver(FormSchema),
+	const form = useForm<z.infer<typeof TagsFormSchema>>({
+		resolver: zodResolver(TagsFormSchema),
 		defaultValues: {
 			tags: selectedTags,
 		},
@@ -47,7 +42,7 @@ export function TagOptions({ tags }: { tags: any }) {
 		router.push(`?${params.toString()}`, { scroll: false });
 	}
 
-	function onSubmit(data: z.infer<typeof FormSchema>) {
+	function onSubmit(data: z.infer<typeof TagsFormSchema>) {
 		updateUrlWithTags(data.tags);
 	}
 

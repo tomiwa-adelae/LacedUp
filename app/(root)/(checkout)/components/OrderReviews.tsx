@@ -1,8 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartProvider";
-import { IShipping } from "@/lib/database/models/shipping.model";
 import { formatMoneyInput, formattedPaymentMethod } from "@/lib/utils";
 import { Dot } from "lucide-react";
 import Image from "next/image";
@@ -32,8 +30,7 @@ export const OrderReviews = ({
 	country,
 	postalCode,
 }: Props) => {
-	const { cart, updateQuantity, removeFromCart, clearCart, cartTotal } =
-		useCart();
+	const { cart } = useCart();
 
 	const [payment, setPayment] = useState<any>();
 

@@ -22,13 +22,25 @@ export const ShopCategory = async () => {
 						Shop by category
 					</h2>
 					<Button asChild size="md" variant={"ghost"}>
-						<Link href="/new">
+						<Link href="/category/all">
 							View all <ChevronRight />
 						</Link>
 					</Button>
 				</div>
 				<ScrollArea className="">
 					<div className="flex w-max space-x-4 pt-4 pr-10 pb-8">
+						<Link href={`/category/all`} className="group">
+							<Image
+								src={"/assets/images/showcase-img.png"}
+								alt={"LacedUP Shoes"}
+								width={1000}
+								height={1000}
+								className="aspect-square size-[200px] lg:size-[250px] rounded-lg object-cover"
+							/>
+							<p className="mt-4 text-sm lg:text-base font-medium mb-1 group-hover:text-primary transition-all text-center">
+								All
+							</p>
+						</Link>
 						{allCategories.map(
 							({
 								name,

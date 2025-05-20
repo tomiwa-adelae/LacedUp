@@ -32,6 +32,7 @@ import {
 	SelectValue,
 } from "../ui/select";
 import { Separator } from "../ui/separator";
+import { SettingsFormSchema } from "@/lib/validations";
 
 interface Props {
 	userId: string;
@@ -45,28 +46,6 @@ interface Props {
 	city: string;
 	country: string;
 }
-
-const FormSchema = z.object({
-	firstName: z.string().min(2, {
-		message: "First name must be at least 2 characters.",
-	}),
-	lastName: z.string().min(2, {
-		message: "Last name must be at least 2 characters.",
-	}),
-	email: z
-		.string({ required_error: "Email is required." })
-		.email("Invalid email address."),
-	phoneNumber: z
-		.string()
-		.regex(/^(\+?\d{10,15})$/, { message: "Enter a valid phone number." })
-		.refine(isValidPhoneNumber, {
-			message: "Invalid phone number",
-		})
-		.optional(),
-	state: z.string().optional(),
-	city: z.string().optional(),
-	address: z.string().optional(),
-});
 
 export function SettingsForm({
 	userId,
@@ -84,8 +63,8 @@ export function SettingsForm({
 
 	const [openImageModal, setOpenImageModal] = useState<boolean>(false);
 
-	const form = useForm<z.infer<typeof FormSchema>>({
-		resolver: zodResolver(FormSchema),
+	const form = useForm<z.infer<typeof SettingsFormSchema>>({
+		resolver: zodResolver(SettingsFormSchema),
 		defaultValues: {
 			firstName: firstName || "",
 			lastName: lastName || "",
@@ -97,7 +76,7 @@ export function SettingsForm({
 		},
 	});
 
-	async function onSubmit(data: z.infer<typeof FormSchema>) {
+	async function onSubmit(data: z.infer<typeof SettingsFormSchema>) {
 		try {
 			const details = { ...data, country: "Nigeria" };
 

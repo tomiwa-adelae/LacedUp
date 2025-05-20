@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "../database";
 import User from "../database/models/user.model";
 import { handleError } from "../utils";
+import { DEFAULT_LIMIT } from "@/constants";
 
 // Register user
 export const createUser = async (user: CreateUserParams) => {
@@ -96,9 +97,68 @@ export const updateUser = async ({
 };
 
 // Get all customers by admin
-export const getCustomers = async ({ userId }: { userId: string }) => {
+export const getCustomers = async ({
+	query,
+	limit = DEFAULT_LIMIT,
+	page,
+	userId,
+}: {
+	query?: string;
+	limit?: number;
+	page?: string;
+	userId: string;
+}) => {
 	try {
 		await connectToDatabase();
+
+		const keyword = query
+			? {
+					$or: [
+						{
+							firstName: {
+								$regex: query,
+								$options: "i",
+							},
+						},
+						{
+							lastName: {
+								$regex: query,
+								$options: "i",
+							},
+						},
+						{
+							email: {
+								$regex: query,
+								$options: "i",
+							},
+						},
+						{
+							phoneNumber: {
+								$regex: query,
+								$options: "i",
+							},
+						},
+						{
+							address: {
+								$regex: query,
+								$options: "i",
+							},
+						},
+						{
+							state: {
+								$regex: query,
+								$options: "i",
+							},
+						},
+						{
+							city: {
+								$regex: query,
+								$options: "i",
+							},
+						},
+					],
+			  }
+			: {};
 
 		if (!userId) {
 			return {
@@ -107,6 +167,8 @@ export const getCustomers = async ({ userId }: { userId: string }) => {
 					"Oops! UserId can not be found. Please try again later",
 			};
 		}
+
+		const skipAmount = (Number(page) - 1) * limit;
 
 		const user = await User.findById(userId);
 
@@ -123,13 +185,21 @@ export const getCustomers = async ({ userId }: { userId: string }) => {
 					"Oops! You are not authorized to make this update. Please try again later",
 			};
 
-		const customers = await User.find({ _id: { $ne: userId } }).sort({
-			createdAt: -1,
+		const customers = await User.find({ _id: { $ne: userId }, ...keyword })
+			.sort({
+				createdAt: -1,
+			})
+			.skip(skipAmount);
+
+		const userCount = await User.countDocuments({
+			_id: { $ne: userId },
+			...keyword,
 		});
 
 		return {
 			status: 200,
 			customers: JSON.parse(JSON.stringify(customers)),
+			totalPages: Math.ceil(userCount / limit),
 		};
 	} catch (error: any) {
 		handleError(error);

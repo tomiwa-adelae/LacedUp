@@ -1,4 +1,3 @@
-// ColorsSelector.tsx
 import React, { useState, useEffect } from "react";
 import { X, Plus, Check } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -14,13 +13,6 @@ import {
 	FormLabel,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
 import {
 	Dialog,
 	DialogContent,
@@ -343,14 +335,6 @@ export function ColorsSelector({
 					</div>
 				</ScrollArea>
 			</div>
-
-			{/* Inventory note */}
-			{/* {selectedColors.length > 0 && (
-				<p className="mt-6 text-sm text-muted-foreground">
-					Note: You'll need to specify inventory levels for each color
-					variant in the inventory section.
-				</p>
-			)} */}
 		</div>
 	);
 }

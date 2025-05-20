@@ -2,36 +2,63 @@
 import { Input } from "@/components/ui/input";
 import { formUrlQuery, removeKeysFromQuery } from "@/lib/utils";
 import { Search } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export function SearchBar() {
-	const [query, setQuery] = useState("");
-
 	const router = useRouter();
+	const pathname = usePathname();
 	const searchParams = useSearchParams();
 
+	const initialQuery = searchParams.get("query") || "";
+	const [query, setQuery] = useState("");
+
+	// Load the current query param into state on first render or when searchParams changes
+	useEffect(() => {
+		const urlQuery = searchParams.get("query") || "";
+		setQuery(urlQuery);
+	}, [searchParams]);
+
+	// useEffect(() => {
+	// 	const delayDebounceFn = setTimeout(() => {
+	// 		let newUrl = "";
+
+	// 		if (query) {
+	// 			newUrl = formUrlQuery({
+	// 				params: searchParams.toString(),
+	// 				key: "query",
+	// 				value: query,
+	// 			});
+	// 		} else {
+	// 			newUrl = removeKeysFromQuery({
+	// 				params: searchParams.toString(),
+	// 				keysToRemove: ["query"],
+	// 			});
+	// 		}
+
+	// 		router.push(newUrl, { scroll: false });
+	// 	}, 3000);
+	// 	return () => clearTimeout(delayDebounceFn);
+	// }, [query, searchParams, router]);
+
+	// Debounced update to URL when query changes
 	useEffect(() => {
 		const delayDebounceFn = setTimeout(() => {
-			let newUrl = "";
+			const params = new URLSearchParams(searchParams.toString());
 
 			if (query) {
-				newUrl = formUrlQuery({
-					params: searchParams.toString(),
-					key: "query",
-					value: query,
-				});
+				params.set("query", query);
 			} else {
-				newUrl = removeKeysFromQuery({
-					params: searchParams.toString(),
-					keysToRemove: ["query"],
-				});
+				params.delete("query");
 			}
 
+			// Build a clean URL with pathname + query string
+			const newUrl = `${pathname}?${params.toString()}`;
 			router.push(newUrl, { scroll: false });
-		}, 3000);
+		}, 500);
+
 		return () => clearTimeout(delayDebounceFn);
-	}, [query, searchParams, router]);
+	}, [query]);
 
 	return (
 		<div className="hidden md:block relative w-full max-w-lg">

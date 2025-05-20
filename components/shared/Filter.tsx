@@ -1,12 +1,19 @@
 "use client";
 import { useEffect, useState } from "react";
-import { ChevronDown, ChevronUp, Minus } from "lucide-react";
+import { ChevronDown, ChevronUp, ListFilter, Minus } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
 import { TagOptions } from "./TagOptions";
 import { useRouter, useSearchParams } from "next/navigation";
 import { formatMoneyInput, handleKeyDown, removeCommas } from "@/lib/utils";
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogFooter,
+	DialogTrigger,
+} from "@/components/ui/dialog";
 
 export const Filter = ({
 	tags,
@@ -23,29 +30,78 @@ export const Filter = ({
 	};
 
 	return (
-		<div className="sticky top-21 hidden lg:block p-8 rounded-lg shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-40 bg-white dark:bg-black dark:border">
-			<div className="flex items-center justify-between gap-8 mb-4">
-				<h2 className="text-xl md:text-2xl uppercase font-semibold">
-					Filter
-				</h2>
-				<Button
-					className="text-xs hover:text-primary hover:underline"
-					variant={"ghost"}
-					size="sm"
-					onClick={handleClearFilters}
-				>
-					Clear
-				</Button>
+		<>
+			<div className="sticky top-21 hidden lg:block p-8 rounded-lg shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-40 bg-white dark:bg-black dark:border">
+				<div className="flex items-center justify-between gap-8 mb-4">
+					<h2 className="text-xl md:text-2xl uppercase font-semibold">
+						Filter
+					</h2>
+					<Button
+						className="text-xs hover:text-primary hover:underline"
+						variant={"ghost"}
+						size="sm"
+						onClick={handleClearFilters}
+					>
+						Clear
+					</Button>
+				</div>
+				<Separator />
+				<FilterComponent title="Price">
+					<PriceFilter />
+				</FilterComponent>
+				<Separator className="my-4" />
+				<FilterComponent title="tags">
+					<TagOptions tags={tags} />
+				</FilterComponent>
 			</div>
-			<Separator />
-			<FilterComponent title="Price">
-				<PriceFilter />
-			</FilterComponent>
-			<Separator className="my-4" />
-			<FilterComponent title="tags">
-				<TagOptions tags={tags} />
-			</FilterComponent>
-		</div>
+			<Dialog>
+				<DialogTrigger className="w-full">
+					<Button
+						size={"md"}
+						className="w-full lg:hidden"
+						variant="outline"
+					>
+						Filter <ListFilter />
+					</Button>
+				</DialogTrigger>
+				<DialogContent className="sm:max-w-[425px]">
+					<div>
+						<div className="flex items-center justify-between gap-8 mb-4">
+							<h2 className="text-xl md:text-2xl uppercase font-semibold">
+								Filter
+							</h2>
+						</div>
+						<Separator />
+						<FilterComponent title="Price">
+							<PriceFilter />
+						</FilterComponent>
+						<Separator className="my-4" />
+						<FilterComponent title="tags">
+							<TagOptions tags={tags} />
+						</FilterComponent>
+					</div>
+					<Separator className="my-4" />
+					<DialogFooter>
+						<DialogClose>
+							<Button
+								className="w-full md:w-auto"
+								onClick={handleClearFilters}
+								variant={"outline"}
+								size={"md"}
+							>
+								Reset
+							</Button>
+						</DialogClose>
+
+						<DialogClose>
+							<Button className="w-full md:w-auto" size={"md"}>
+								Apply
+							</Button>
+						</DialogClose>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
+		</>
 	);
 };
 

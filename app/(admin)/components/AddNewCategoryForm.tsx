@@ -7,7 +7,6 @@ import { FileUpload } from "@/components/ui/file-upload";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { toast } from "@/hooks/use-toast";
 import { createCategory } from "@/lib/actions/category.actions";

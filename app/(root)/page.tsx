@@ -1,16 +1,21 @@
+import { AllProducts } from "@/components/AllProducts";
 import { BestSellers } from "@/components/BestSellers";
-import { PopularShoes } from "@/components/PopularShoes";
 import JoinWaitlist from "@/components/shared/JoinWaitlist";
 import { Showcase } from "@/components/shared/Showcase";
 import { ShopCategory } from "@/components/ShopCategory";
 import { ShopNew } from "@/components/ShopNew";
 import { Separator } from "@/components/ui/separator";
-import { getNewProducts, getTopProducts } from "@/lib/actions/product.actions";
+import {
+	getAllProducts,
+	getNewProducts,
+	getTopProducts,
+} from "@/lib/actions/product.actions";
 import { redirect } from "next/navigation";
 
 const page = async () => {
 	const newProducts = await getNewProducts({});
 	const topProducts = await getTopProducts();
+	const products = await getAllProducts({});
 
 	if (newProducts.status === 400) redirect("/not-found");
 
@@ -44,7 +49,10 @@ const page = async () => {
 			<div className="container">
 				<Separator />
 			</div>
-			{/* <PopularShoes /> */}
+			<AllProducts products={products.products} />
+			<div className="container">
+				<Separator />
+			</div>
 			<JoinWaitlist />
 		</div>
 	);

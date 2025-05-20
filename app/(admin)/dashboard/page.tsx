@@ -9,24 +9,35 @@ import {
 } from "@/lib/actions/product.actions";
 import { redirect } from "next/navigation";
 import { getAllOrders } from "@/lib/actions/order.actions";
+import { DEFAULT_LIMIT } from "@/constants";
 
-const page = async () => {
+const page = async ({ searchParams }: { searchParams: any }) => {
+	const { query, page } = await searchParams;
+
 	const clerkUser = await currentUser();
 
 	const user = await getUserInfo(clerkUser?.id!);
 
 	const products = await getAdminProducts({
 		userId: user.user._id,
+		query,
+		page,
+		limit: DEFAULT_LIMIT,
 	});
 
 	const topProducts = await getTopProducts();
 
 	const customers = await getCustomers({ userId: user.user._id });
 
-	const orders = await getAllOrders(user.user._id);
+	const orders = await getAllOrders({
+		userId: user.user._id,
+		query,
+		page,
+		limit: DEFAULT_LIMIT,
+	});
 
 	if (
-		products?.status === 400 ||
+		// products?.status === 400 ||
 		customers?.status === 400 ||
 		orders.status === 400
 	)

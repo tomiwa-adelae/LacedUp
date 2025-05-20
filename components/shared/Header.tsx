@@ -1,5 +1,4 @@
 "use client";
-import { navLinks } from "@/constants";
 import Link from "next/link";
 import { SearchBar } from "../forms/SearchBar";
 import Logo from "./Logo";
@@ -8,8 +7,6 @@ import { Theme } from "./Theme";
 import { MobileNavbar } from "./MobileNavbar";
 import { ProfileDropdown } from "./ProfileDropdown";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
-import { ShoppingCart } from "lucide-react";
-import { useCart } from "@/context/CartProvider";
 import { CartCount } from "./CartCount";
 import { IUser } from "@/lib/database/models/user.model";
 
@@ -34,6 +31,7 @@ export const Header = ({ user }: { user: IUser }) => {
 					</nav> */}
 				</div>
 				<div className="flex items-center justify-end gap-4">
+					<Theme />
 					<CartCount />
 					<SignedIn>
 						<ProfileDropdown user={user} />

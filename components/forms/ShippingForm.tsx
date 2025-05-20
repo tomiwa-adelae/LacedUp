@@ -34,31 +34,8 @@ import {
 } from "@/lib/actions/shipping.actions";
 import { useState } from "react";
 import { InformationBox } from "@/app/(admin)/components/InformationBox";
-
-const FormSchema = z.object({
-	firstName: z.string().min(2, {
-		message: "First name must be at least 2 characters.",
-	}),
-	lastName: z.string().min(2, {
-		message: "last name must be at least 2 characters.",
-	}),
-	email: z.string().email().min(2, {
-		message: "Name must be at least 2 characters.",
-	}),
-	phoneNumber: z
-		.string()
-		.regex(/^(\+?\d{10,15})$/, { message: "Enter a valid phone number." })
-		.refine(isValidPhoneNumber, {
-			message: "Invalid phone number",
-		}),
-	state: z.string().min(2, { message: "Your state is required." }),
-	city: z.string().min(2, { message: "Your city is required." }),
-	address: z.string().min(2, { message: "Your address is required." }),
-	postalCode: z.string().min(2, { message: "Your postal code is required." }),
-	// termsAndCondition: z.boolean().refine((val) => val === true, {
-	// 	message: "You must agree to the terms and conditions.",
-	// }),
-});
+import { ShippingFormSchema } from "@/lib/validations";
+import { Check } from "lucide-react";
 
 interface Props {
 	userId: string;
@@ -87,8 +64,8 @@ export function ShippingForm({
 }: Props) {
 	const [success, setSuccess] = useState(false);
 
-	const form = useForm<z.infer<typeof FormSchema>>({
-		resolver: zodResolver(FormSchema),
+	const form = useForm<z.infer<typeof ShippingFormSchema>>({
+		resolver: zodResolver(ShippingFormSchema),
 		defaultValues: {
 			firstName: firstName || "",
 			lastName: lastName || "",
@@ -101,7 +78,7 @@ export function ShippingForm({
 		},
 	});
 
-	async function onSubmit(data: z.infer<typeof FormSchema>) {
+	async function onSubmit(data: z.infer<typeof ShippingFormSchema>) {
 		try {
 			const details = {
 				firstName: data.firstName,
@@ -321,7 +298,11 @@ export function ShippingForm({
 						)}
 					/>
 					{success ? (
-						<InformationBox description="Your shipping details is saved already." />
+						<InformationBox
+							icon={Check}
+							variant="success"
+							title="Shipping details saved"
+						/>
 					) : (
 						<Button
 							disabled={form.formState.isSubmitting}

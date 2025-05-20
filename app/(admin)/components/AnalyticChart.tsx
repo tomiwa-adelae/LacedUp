@@ -1,42 +1,13 @@
 "use client";
-import { useState, useEffect } from "react";
-import {
-	LineChart,
-	BarChart,
-	PieChart,
-	Pie,
-	Cell,
-	ResponsiveContainer,
-	CartesianGrid,
-	XAxis,
-	YAxis,
-	Tooltip,
-	Legend,
-	Line,
-	Bar,
-} from "recharts";
-import { CircleCheckBig, OctagonPause } from "lucide-react";
+
 import _ from "lodash";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CardDescription, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import Link from "next/link";
-import { formatDate, formatMoneyInput } from "@/lib/utils";
 import { OrdersAnalysis } from "./OrdersAnalysis";
 import { ProductsAnalysis } from "./ProductsAnalysis";
 import { IOrder } from "@/lib/database/models/order.model";
 import { IProduct } from "@/lib/database/models/product.model";
 import { CustomersAnalysis } from "./CustomersAnalysis";
-import { OverviewAnalysis} from "./OverviewAnalysis";
+import { OverviewAnalysis } from "./OverviewAnalysis";
 import { IUser } from "@/lib/database/models/user.model";
 
 // Dashboard component for ecommerce analytics
@@ -60,7 +31,11 @@ export function AnalyticChart({
 				</TabsList>
 
 				<TabsContent value="overview" className="space-y-2">
-					<OverviewAnalysis ordersData={orders}productsData={products}customersData={customers} />
+					<OverviewAnalysis
+						ordersData={orders}
+						productsData={products}
+						customersData={customers}
+					/>
 				</TabsContent>
 				<TabsContent value="orders" className="space-y-2">
 					<OrdersAnalysis ordersData={orders} />

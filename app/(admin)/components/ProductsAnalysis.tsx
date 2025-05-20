@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { formatDate, formatMoneyInput } from "@/lib/utils";
+import { formatMoneyInput } from "@/lib/utils";
 import Image from "next/image";
 
 // Dashboard component for ecommerce analytics

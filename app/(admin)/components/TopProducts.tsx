@@ -1,12 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { EllipsisVertical, ListFilter } from "lucide-react";
+import { ListFilter } from "lucide-react";
 
 import {
 	Table,
 	TableBody,
-	TableCaption,
 	TableCell,
-	TableFooter,
 	TableHead,
 	TableHeader,
 	TableRow,
@@ -14,40 +12,9 @@ import {
 import Image from "next/image";
 import { IProduct } from "@/lib/database/models/product.model";
 import { DEFAULT_PRODUCT_IMAGE } from "@/constants";
-import { formatDate, formatMoneyInput } from "@/lib/utils";
+import { formatMoneyInput } from "@/lib/utils";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-
-const invoices = [
-	{
-		image: "/assets/images/sneakers.jpg",
-		name: "Nike Cosmic Unity",
-		date: "December 12, 2025",
-		price: "₦14,900",
-		totalOrder: "35",
-	},
-	{
-		image: "/assets/images/sneakers.jpg",
-		name: "Nike Cosmic Unity",
-		date: "December 12, 2025",
-		price: "₦14,900",
-		totalOrder: "35",
-	},
-	{
-		image: "/assets/images/sneakers.jpg",
-		name: "Nike Cosmic Unity",
-		date: "December 12, 2025",
-		price: "₦14,900",
-		totalOrder: "35",
-	},
-	{
-		image: "/assets/images/sneakers.jpg",
-		name: "Nike Cosmic Unity",
-		date: "December 12, 2025",
-		price: "₦14,900",
-		totalOrder: "35",
-	},
-];
 
 export const TopProducts = ({ products }: { products: IProduct[] }) => {
 	return (

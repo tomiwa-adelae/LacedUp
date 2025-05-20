@@ -1,10 +1,7 @@
 "use client";
 import Image from "next/image";
-// import Logo from "./Logo";
 import { adminSidebarLinks } from "@/constants";
 import { usePathname, useRouter } from "next/navigation";
-// import { useClerk } from "@clerk/nextjs";
-import { useState } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useSidebar } from "@/components/ui/sidebar"; // 👈 Import

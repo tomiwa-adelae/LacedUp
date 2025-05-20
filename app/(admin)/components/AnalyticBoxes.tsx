@@ -4,16 +4,7 @@ import { AnalyticBox } from "./AnalyticBox";
 import { useEffect, useState } from "react";
 import { IUser } from "@/lib/database/models/user.model";
 import { formatMoneyInput } from "@/lib/utils";
-import {
-	Wallet,
-	ShoppingBag,
-	Users,
-	TrendingUp,
-	Package,
-	Calendar,
-	ArrowUpRight,
-	ArrowDownRight,
-} from "lucide-react";
+import { Wallet, ShoppingBag, Users } from "lucide-react";
 
 export const AnalyticBoxes = ({
 	orders,

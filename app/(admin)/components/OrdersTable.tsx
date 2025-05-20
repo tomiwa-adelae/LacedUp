@@ -1,153 +1,228 @@
+"use client";
 import {
 	Table,
 	TableBody,
-	TableCaption,
 	TableCell,
-	TableFooter,
 	TableHead,
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import {
-	CircleCheckBig,
-	Edit,
-	EllipsisVertical,
-	Eye,
-	Trash,
-} from "lucide-react";
-import Image from "next/image";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Ban, CircleCheckBig, CircleDashed, Eye } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { IOrder } from "@/lib/database/models/order.model";
-import { formatDate, formatMoneyInput } from "@/lib/utils";
+import { formatDate, formatMoneyInput, formUrlQuery } from "@/lib/utils";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { CancelOrderModal } from "./CancelOrderModal";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export const OrdersTable = ({ orders }: { orders: IOrder[] }) => {
+export const OrdersTable = ({
+	userId,
+	isAdmin,
+	orders,
+}: {
+	userId: string;
+	isAdmin: boolean;
+	orders: IOrder[];
+}) => {
+	const [openCancelModal, setOpenCancelModal] = useState(false);
+	const [orderId, setOrderId] = useState("");
+
+	const router = useRouter();
+	const searchParams = useSearchParams();
+
+	const filterSearch = async (type: string) => {
+		try {
+			let newUrl = "";
+			newUrl = formUrlQuery({
+				params: searchParams.toString(),
+				key: "query",
+				value: type,
+			});
+
+			router.push(newUrl, { scroll: false });
+		} catch (error) {}
+	};
+
 	return (
 		<div className="mt-4">
 			<Tabs defaultValue="all" className="space-y-4">
 				<TabsList>
-					<TabsTrigger value="all">All orders</TabsTrigger>
-					<TabsTrigger value="processing">Processing</TabsTrigger>
-					<TabsTrigger value="shipped">Shipped</TabsTrigger>
-					<TabsTrigger value="delivered">Delivered</TabsTrigger>
-					<TabsTrigger value="canceled">Canceled</TabsTrigger>
+					<TabsTrigger onClick={() => filterSearch("")} value="all">
+						All orders
+					</TabsTrigger>
+					<TabsTrigger
+						onClick={() => filterSearch("processing")}
+						value="processing"
+					>
+						Processing
+					</TabsTrigger>
+					<TabsTrigger
+						onClick={() => filterSearch("delivered")}
+						value="delivered"
+					>
+						Delivered
+					</TabsTrigger>
+					<TabsTrigger
+						onClick={() => filterSearch("cancelled")}
+						value="cancelled"
+					>
+						Cancelled
+					</TabsTrigger>
+					<TabsTrigger
+						onClick={() => filterSearch("failed")}
+						value="failed"
+					>
+						Failed
+					</TabsTrigger>
 				</TabsList>
-				<TabsContent value="all" className="space-y-4">
-					<Table>
-						<TableHeader>
-							<TableRow>
-								<TableHead>OrderID</TableHead>
-								<TableHead>Customer</TableHead>
-								<TableHead>Date</TableHead>
-								<TableHead>Price</TableHead>
-								<TableHead>Items</TableHead>
-								<TableHead className="text-center">
-									Status
-								</TableHead>
-								<TableHead className="text-center">
-									Payment
-								</TableHead>
+				<Table>
+					<TableHeader>
+						<TableRow>
+							<TableHead>OrderID</TableHead>
+							{isAdmin && <TableHead>Customer</TableHead>}
+							<TableHead>Date</TableHead>
+							<TableHead>Price</TableHead>
+							<TableHead>Items</TableHead>
+							<TableHead>Status</TableHead>
+							<TableHead>Payment</TableHead>
 
-								<TableHead className="text-right">
-									Actions
-								</TableHead>
-							</TableRow>
-						</TableHeader>
-						<TableBody>
-							{orders.map(
-								(
-									{
-										_id,
-										shippingDetails,
-										createdAt,
-										totalPrice,
-										orderItems,
-										orderStatus,
-										paymentStatus,
-									}: any,
-									index
-								) => (
-									<TableRow key={index}>
-										<TableCell>
-											<Link
-												className="hover:underline hover:text-primary"
-												href={`/orders/${_id}`}
-											>
-												{
-													// @ts-ignore
-												}
-												ORD-{_id.slice(-6)}
-											</Link>
-										</TableCell>
+							<TableHead className="text-right">
+								Actions
+							</TableHead>
+						</TableRow>
+					</TableHeader>
+					<TableBody>
+						{orders.map(
+							(
+								{
+									_id,
+									shippingDetails,
+									createdAt,
+									totalPrice,
+									orderItems,
+									orderStatus,
+									paymentStatus,
+								}: any,
+								index
+							) => (
+								<TableRow key={index}>
+									<TableCell>
+										<Link
+											className="hover:underline hover:text-primary"
+											href={`/orders/${_id}`}
+										>
+											{
+												// @ts-ignore
+											}
+											ORD-{_id.slice(-6)}
+										</Link>
+									</TableCell>
+									{isAdmin && (
 										<TableCell>
 											{shippingDetails.firstName}{" "}
 											{shippingDetails.lastName}
 										</TableCell>
-										<TableCell>
-											{formatDate(createdAt)}
-										</TableCell>
-										<TableCell>
-											₦{formatMoneyInput(totalPrice)}
-										</TableCell>
-										<TableCell>
-											{orderItems.length}{" "}
-											{orderItems.length > 1
-												? "items"
-												: "item"}
-										</TableCell>
-										<TableCell className="text-center">
-											<Badge
-												variant={
-													orderStatus === "pending"
-														? "warning"
-														: orderStatus ===
-														  "delivered"
-														? "success"
-														: orderStatus ===
-														  "failed"
-														? "danger"
-														: "default"
-												}
-											>
-												<CircleCheckBig />{" "}
-												{orderStatus === "pending"
-													? "Undelivered"
-													: orderStatus}
-											</Badge>
-										</TableCell>
-										<TableCell className="text-center">
-											<Badge
-												variant={
-													paymentStatus === "pending"
-														? "warning"
-														: paymentStatus ===
-														  "paid"
-														? "success"
-														: paymentStatus ===
-														  "failed"
-														? "danger"
-														: "default"
-												}
-												className="inline-flex px-2 py-1 rounded-full text-xs"
-											>
-												{paymentStatus}
-											</Badge>
-										</TableCell>
-										<TableCell className="flex gap-2 items-center justify-end">
+									)}
+									<TableCell>
+										{formatDate(createdAt)}
+									</TableCell>
+									<TableCell>
+										₦{formatMoneyInput(totalPrice)}
+									</TableCell>
+									<TableCell>
+										{orderItems.length}{" "}
+										{orderItems.length > 1
+											? "items"
+											: "item"}
+									</TableCell>
+									<TableCell>
+										<Badge
+											variant={
+												orderStatus === "pending"
+													? "warning"
+													: orderStatus ===
+													  "delivered"
+													? "success"
+													: orderStatus === "failed"
+													? "danger"
+													: orderStatus ===
+													  "cancelled"
+													? "danger"
+													: "default"
+											}
+										>
+											{orderStatus === "cancelled" && (
+												<Ban />
+											)}
+											{orderStatus === "delivered" && (
+												<CircleCheckBig />
+											)}
+											{orderStatus === "pending" && (
+												<CircleDashed />
+											)}
+											{orderStatus === "pending"
+												? "Undelivered"
+												: orderStatus}
+										</Badge>
+									</TableCell>
+									<TableCell>
+										<Badge
+											variant={
+												paymentStatus === "pending"
+													? "warning"
+													: paymentStatus === "paid"
+													? "success"
+													: paymentStatus === "failed"
+													? "danger"
+													: "default"
+											}
+										>
+											{paymentStatus}
+										</Badge>
+									</TableCell>
+									<TableCell className="flex gap-1 items-center justify-end">
+										<Button
+											size="icon"
+											variant={"ghost"}
+											asChild
+										>
 											<Link href={`/orders/${_id}`}>
 												<Eye className="size-5 text-primary" />
 											</Link>
-											<Edit className="size-5" />
-											<Trash className="size-5 text-destructive" />
-										</TableCell>
-									</TableRow>
-								)
-							)}
-						</TableBody>
-					</Table>
-				</TabsContent>
+										</Button>
+										<Button
+											onClick={() => {
+												setOpenCancelModal(true);
+												setOrderId(_id);
+											}}
+											size="icon"
+											variant={"ghost"}
+											disabled={
+												orderStatus === "cancelled"
+											}
+										>
+											<Ban />
+										</Button>
+									</TableCell>
+								</TableRow>
+							)
+						)}
+					</TableBody>
+				</Table>
 			</Tabs>
+			{openCancelModal && (
+				<CancelOrderModal
+					orderId={orderId}
+					open={openCancelModal}
+					closeModal={() => {
+						setOpenCancelModal(false);
+					}}
+					userId={userId}
+				/>
+			)}
 		</div>
 	);
 };

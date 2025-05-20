@@ -17,9 +17,7 @@ import {
 } from "recharts";
 import { CircleCheckBig, OctagonPause } from "lucide-react";
 import _ from "lodash";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CardDescription, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import {
 	Table,
 	TableBody,

@@ -1,7 +1,7 @@
 "use client";
-import { ChartSpline, TrendingDown } from "lucide-react";
+import { TrendingDown } from "lucide-react";
 import { TrendingUp } from "lucide-react";
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
+import { CartesianGrid, Line, LineChart } from "recharts";
 import {
 	ChartConfig,
 	ChartContainer,
@@ -77,13 +77,6 @@ export const DashboardBox = ({
 							}}
 						>
 							<CartesianGrid vertical={false} />
-							{/* <XAxis
-								dataKey="month"
-								tickLine={false}
-								axisLine={false}
-								tickMargin={8}
-								tickFormatter={(value) => value.slice(0, 3)}
-							/> */}
 							<ChartTooltip
 								cursor={false}
 								content={<ChartTooltipContent hideLabel />}

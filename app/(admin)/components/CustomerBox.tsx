@@ -22,13 +22,16 @@ export const CustomerBox = ({ customers }: { customers: IUser[] }) => {
 			</div>
 			<div className="grid gap-4 mt-4">
 				{customers.map(
-					({ firstName, lastName, email, picture, _id }, index) => (
+					(
+						{ firstName, lastName, email, picture, phoneNumber },
+						index
+					) => (
 						<Customer
 							picture={picture}
 							firstName={firstName}
 							lastName={lastName}
 							email={email}
-							id={_id}
+							phoneNumber={phoneNumber}
 							key={index}
 						/>
 					)

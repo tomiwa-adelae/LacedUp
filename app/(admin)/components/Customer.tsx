@@ -8,8 +8,7 @@ interface Props {
 	lastName: string;
 	email: string;
 	picture: any;
-	phoneNumber: string;
-	_id: string;
+	phoneNumber: any;
 }
 
 export const Customer = ({

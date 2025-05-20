@@ -1,28 +1,5 @@
 "use client";
-import { ChartSpline, TrendingDown, TrendingUp } from "lucide-react";
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
-import {
-	ChartConfig,
-	ChartContainer,
-	ChartTooltip,
-	ChartTooltipContent,
-} from "@/components/ui/chart";
-
-const chartData = [
-	{ month: "January", desktop: 186 },
-	{ month: "February", desktop: 305 },
-	{ month: "March", desktop: 237 },
-	{ month: "April", desktop: 73 },
-	{ month: "May", desktop: 209 },
-	{ month: "June", desktop: 214 },
-];
-
-const chartConfig = {
-	desktop: {
-		label: "Desktop",
-		color: "hsl(var(--chart-1))",
-	},
-} satisfies ChartConfig;
+import { TrendingDown, TrendingUp } from "lucide-react";
 
 interface Props {
 	title: string;

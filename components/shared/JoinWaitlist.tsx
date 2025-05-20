@@ -3,7 +3,7 @@ import WaitlistForm from "../forms/WaitlistForm";
 
 const JoinWaitlist = () => {
 	return (
-		<div className="bg-primary/20 dark:bg-primary/10 py-10">
+		<div className="bg-black text-white py-16">
 			<div className="container">
 				<div className="flex items-center justify-between gap-8">
 					<div>

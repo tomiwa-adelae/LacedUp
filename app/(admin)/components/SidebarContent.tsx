@@ -86,9 +86,6 @@ export const SidebarContent = ({
 									: "text-black dark:text-white text-sm"
 							} hover:text-primary
                             `}
-							onClick={() => {
-								// if (isMobile) setOpenMobile(false);
-							}}
 						>
 							<Info className="size-5" />
 
@@ -105,9 +102,6 @@ export const SidebarContent = ({
 									: "text-black dark:text-white text-sm"
 							} hover:text-primary
                             `}
-							onClick={() => {
-								// if (isMobile) setOpenMobile(false);
-							}}
 						>
 							<Settings className="size-5" />
 

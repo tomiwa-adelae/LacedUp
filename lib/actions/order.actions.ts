@@ -9,6 +9,7 @@ import Order, {
 import User from "../database/models/user.model";
 import { handleError } from "../utils";
 import Product from "../database/models/product.model";
+import { DEFAULT_LIMIT } from "@/constants";
 
 export const createOrder = async (details: any) => {
 	try {
@@ -140,7 +141,17 @@ export const getOrderDetails = async ({
 	}
 };
 
-export const getAllOrders = async (userId: string) => {
+export const getAllOrders = async ({
+	query,
+	limit = DEFAULT_LIMIT,
+	page,
+	userId,
+}: {
+	query: string;
+	limit: number;
+	page: string;
+	userId: string;
+}) => {
 	try {
 		await connectToDatabase();
 
@@ -160,20 +171,63 @@ export const getAllOrders = async (userId: string) => {
 				message: "Oops! User can not be found. Please try again later",
 			};
 
-		let orders;
+		const regexQuery = new RegExp(query, "i");
 
-		if (user.isAdmin) {
-			orders = await Order.find()
-				.sort({ createdAt: -1 })
-				.populate("user");
-		} else {
-			orders = await Order.find({ user: userId })
-				.sort({ createdAt: -1 })
-				.populate("user");
-		}
+		const keyword: any = user.isAdmin
+			? {
+					$or: [
+						{ "shippingDetails.firstName": regexQuery },
+						{ "shippingDetails.lastName": regexQuery },
+						{ "shippingDetails.email": regexQuery },
+						{ "shippingDetails.phoneNumber": regexQuery },
+						{ "orderItems.name": regexQuery },
+						{ orderStatus: regexQuery },
+						{ paymentStatus: regexQuery },
+					],
+			  }
+			: {
+					user: userId,
+					$or: [
+						{ "shippingDetails.firstName": regexQuery },
+						{ "shippingDetails.lastName": regexQuery },
+						{ "shippingDetails.email": regexQuery },
+						{ "shippingDetails.phoneNumber": regexQuery },
+						{ "orderItems.name": regexQuery },
+						{ orderStatus: regexQuery },
+						{ paymentStatus: regexQuery },
+					],
+			  };
+
+		const skip = (parseInt(page || "1") - 1) * limit;
+
+		// let orders;
+
+		// if (user.isAdmin) {
+		// 	orders = await Order.find()
+		// 		.sort({ createdAt: -1 })
+		// 		.populate("user");
+		// } else {
+		// 	orders = await Order.find({ user: userId })
+		// 		.sort({ createdAt: -1 })
+		// 		.populate("user");
+		// }
+		// return {
+		// 	status: 200,
+		// 	orders: JSON.parse(JSON.stringify(orders)),
+		// };
+
+		const orders = await Order.find({ ...keyword })
+			.sort({ createdAt: -1 })
+			.skip(skip)
+			.limit(limit)
+			.populate("user", "name email");
+
+		const orderCount = await Order.countDocuments({ ...keyword });
+
 		return {
 			status: 200,
 			orders: JSON.parse(JSON.stringify(orders)),
+			totalPages: Math.ceil(orderCount / limit),
 		};
 	} catch (error: any) {
 		handleError(error);
@@ -290,7 +344,7 @@ export const updateOrder = async ({
 			return {
 				status: 400,
 				message:
-					"Oops! UserId can not be found. Please try again later",
+					"Oops! OrderId can not be found. Please try again later",
 			};
 		}
 
@@ -322,12 +376,76 @@ export const updateOrder = async ({
 		order.paidAt = new Date();
 		order.paymentStatus = PaymentStatus.PAID; // Or use PaymentStatus.PAID if you're importing the enum
 
-		const updatedOrder = await order.save();
-		revalidatePath(`/order/${orderId}`);
+		await order.save();
+		revalidatePath(`/orders/${orderId}`);
+		revalidatePath(`/orders`);
 		return {
 			status: 200,
 			message: "Order payment updated successfully.",
-			order: JSON.parse(JSON.stringify(updatedOrder)),
+		};
+	} catch (error: any) {
+		handleError(error);
+		return {
+			status: error?.status || 400,
+			message:
+				error?.message || "Oops! Couldn't get order! Try again later.",
+		};
+	}
+};
+
+// Cancel order
+export const cancelOrder = async ({
+	userId,
+	orderId,
+}: {
+	userId: string;
+	orderId: string;
+}) => {
+	try {
+		await connectToDatabase();
+
+		if (!userId) {
+			return {
+				status: 400,
+				message:
+					"Oops! UserId can not be found. Please try again later",
+			};
+		}
+
+		if (!orderId) {
+			return {
+				status: 400,
+				message:
+					"Oops! OrderId can not be found. Please try again later",
+			};
+		}
+
+		const user = await User.findById(userId);
+
+		if (!user)
+			return {
+				status: 400,
+				message: "Oops! User can not be found. Please try again later",
+			};
+
+		const order = await Order.findById(orderId);
+
+		if (!order)
+			return {
+				status: 400,
+				message: "Oops! Order can not be found. Please try again later",
+			};
+
+		order.orderStatus = OrderStatus.CANCELLED;
+		order.paymentStatus = PaymentStatus.FAILED;
+
+		await order.save();
+		revalidatePath(`/orders/${orderId}`);
+		revalidatePath(`/orders`);
+
+		return {
+			status: 200,
+			message: "Order successfully cancelled.",
 		};
 	} catch (error: any) {
 		handleError(error);

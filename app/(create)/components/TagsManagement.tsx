@@ -135,45 +135,6 @@ export default function TagsManagement({
 						))
 					)}
 				</div>
-				{/* <div
-					className="flex flex-wrap gap-2 min-h-10"
-					onClick={focusInput}
-				>
-					{tags.length === 0 ? (
-						<p className="text-gray-400 text-sm">
-							No tags added yet. Click to add tags.
-						</p>
-					) : (
-						tags.map((tag: any, index: string) => (
-							<Badge
-								key={index}
-								variant="secondary"
-								className="text-sm py-1 px-3"
-							>
-								<TagIcon className="w-3 h-3" />
-								{tag.name}
-									<X className="h-3 w-3" />
-								</button> */}
-
-				{/* <Button
-									type="button"
-									variant="ghost"
-									size="sm"
-									className="h-4 w-4 p-0 hover:bg-transparent"
-									onClick={(e) => {
-										e.stopPropagation();
-										removeTag(tag);
-									}}
-								>
-									<X className="h-3 w-3" />
-									<span className="sr-only">
-										Remove {tag} tag
-									</span>
-								</Button>
-							</Badge> */}
-				{/* ))
-					)} */}
-				{/* </div>  */}
 			</div>
 		</div>
 	);

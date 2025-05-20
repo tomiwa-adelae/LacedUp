@@ -1,8 +1,6 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { getOrderDetails } from "@/lib/actions/order.actions";
 import { getUserInfo } from "@/lib/actions/user.actions";
-import { IOrder } from "@/lib/database/models/order.model";
 import {
 	formatDate,
 	formatMoneyInput,
@@ -10,21 +8,17 @@ import {
 } from "@/lib/utils";
 import { currentUser } from "@clerk/nextjs/server";
 import {
+	Ban,
 	Banknote,
 	Check,
 	CircleCheckBig,
 	CircleDashed,
 	CreditCard,
 	Dot,
-	Download,
 	Hash,
 	Mail,
 	MapPinHouse,
-	MessageSquareWarning,
 	Phone,
-	Printer,
-	Share,
-	Share2,
 	Smartphone,
 	User,
 } from "lucide-react";
@@ -35,6 +29,7 @@ import { InformationBox } from "../../components/InformationBox";
 import { PaymentButton } from "../../components/PaymentButton";
 import { MarkAsPaidButton } from "../../components/MarkAsPaidButton";
 import { MarkAsDeliveredButton } from "../../components/MarkAsDeliveredButton";
+import { CancelOrderButton } from "../../components/CancelOrderButton";
 
 const page = async ({ params }: { params: any }) => {
 	const clerkUser = await currentUser();
@@ -67,9 +62,7 @@ const page = async ({ params }: { params: any }) => {
 								}
 								className="inline-flex px-2 py-1 rounded-full text-xs"
 							>
-								{order.order.paymentStatus === "pending"
-									? "Unpaid"
-									: order?.order?.paymentStatus}
+								{order?.order?.paymentStatus}
 							</Badge>
 							<Badge
 								variant={
@@ -80,13 +73,22 @@ const page = async ({ params }: { params: any }) => {
 										? "success"
 										: order?.order?.orderStatus === "failed"
 										? "danger"
+										: order?.order?.orderStatus ===
+										  "cancelled"
+										? "danger"
 										: "default"
 								}
 							>
-								<CircleCheckBig />{" "}
-								{order?.order?.orderStatus === "pending"
-									? "Undelivered"
-									: order?.order?.orderStatus}
+								{order?.order?.orderStatus === "cancelled" && (
+									<Ban />
+								)}
+								{order?.order?.orderStatus === "delivered" && (
+									<CircleCheckBig />
+								)}
+								{order?.order?.orderStatus === "pending" && (
+									<CircleDashed />
+								)}
+								{order?.order?.orderStatus}
 							</Badge>
 						</div>
 					</div>
@@ -94,16 +96,14 @@ const page = async ({ params }: { params: any }) => {
 						Order date: {formatDate(order.order.createdAt)}
 					</p>
 				</div>
-				<div className="flex items-center justify-center gap-4">
-					<Button size="md" variant={"ghost"}>
-						<MessageSquareWarning className="size-4" />
-						Report
-					</Button>
-					<Button size="md">
-						<Share2 className="size-4" />
-						Share order{" "}
-					</Button>
-				</div>
+				{order?.order.orderStatus !== "cancelled" && (
+					<div className="flex items-center justify-center gap-4">
+						<CancelOrderButton
+							userId={user?.user?._id}
+							orderId={order?.order?._id}
+						/>
+					</div>
+				)}
 			</div>
 			<div>
 				<div className="grid-cols-1 grid gap-4 lg:grid-cols-3 pt-4">
@@ -248,8 +248,7 @@ const page = async ({ params }: { params: any }) => {
 												{order?.order?.orderStatus ===
 													"delivered" && (
 													<InformationBox
-														description={`Orders are delivered already.`}
-														icon={CircleDashed}
+														icon={Check}
 														title="Orders delivered"
 														variant="success"
 													/>
@@ -257,10 +256,17 @@ const page = async ({ params }: { params: any }) => {
 												{order?.order?.orderStatus ===
 													"pending" && (
 													<InformationBox
-														description={`Orders are yet to be delivered.`}
 														icon={CircleDashed}
 														title="Orders pending"
 														variant="pending"
+													/>
+												)}
+												{order?.order?.orderStatus ===
+													"cancelled" && (
+													<InformationBox
+														icon={Ban}
+														title="Orders cancelled"
+														variant="danger"
 													/>
 												)}
 											</div>
@@ -298,32 +304,10 @@ const page = async ({ params }: { params: any }) => {
 											)}
 										</span>
 									</p>
-									{/* {!user?.user?.isAdmin &&
-									!order?.order?.isPaid &&
-									order.order.paymentMethod === "card" && (
-										<Button
-											className="w-full mt-4"
-											size="lg"
-										>
-											Pay now
-										</Button>
-									)}
-									{user?.user?.isAdmin &&
-									order.order.paymentMethod ===
-										"cash_on_delivery" &&
-										!order?.order?.isPaid && (
-										<Button
-										className="w-full mt-4"
-											size="lg"
-											>
-											Mark as paid
-										</Button>
-									)} */}
 									{!user?.user.isAdmin &&
 										order?.order.paymentStatus ===
 											"pending" && (
 											<InformationBox
-												description={`You are yet to make payment`}
 												icon={CircleDashed}
 												title="Payment pending"
 												variant="pending"
@@ -333,7 +317,6 @@ const page = async ({ params }: { params: any }) => {
 										order?.order.paymentStatus ===
 											"paid" && (
 											<InformationBox
-												description={`You have successfully made payment`}
 												icon={Check}
 												title="Payment success"
 												variant="success"
@@ -353,7 +336,7 @@ const page = async ({ params }: { params: any }) => {
 						</div>
 					</div>
 					<div className="col-span-2 lg:col-span-1 grid gap-4">
-						<div className="p-8 rounded-lg shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-40  dark:border">
+						<div className="p-4 rounded-lg shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-40  dark:border">
 							<h4 className="font-medium text-muted-foreground dark:text-gray-100 text-sm lg:text-base uppercase">
 								Customer
 							</h4>
@@ -410,7 +393,7 @@ const page = async ({ params }: { params: any }) => {
 								</div>
 							</div>
 						</div>
-						<div className="p-8 pb-4 rounded-lg shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-40  dark:border">
+						<div className="p-4 rounded-lg shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-40  dark:border">
 							<h4 className="font-medium text-muted-foreground dark:text-gray-100 text-sm lg:text-base uppercase">
 								Shipping address
 							</h4>
@@ -458,7 +441,7 @@ const page = async ({ params }: { params: any }) => {
 									)}
 							</div>
 						</div>
-						<div className="p-8 pb-4 rounded-lg shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-40  dark:border">
+						<div className="p-4 rounded-lg shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-40  dark:border">
 							<h4 className="font-medium text-muted-foreground dark:text-gray-100 text-sm lg:text-base uppercase">
 								Payment Information
 							</h4>
@@ -481,7 +464,8 @@ const page = async ({ params }: { params: any }) => {
 										}
 									</span>
 								</p>
-								{!user?.user?.isAdmin &&
+								{order?.order.orderStatus !== "cancelled" &&
+									!user?.user?.isAdmin &&
 									!order?.order?.isPaid &&
 									order.order.paymentMethod === "card" && (
 										<PaymentButton

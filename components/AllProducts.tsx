@@ -4,28 +4,26 @@ import Link from "next/link";
 import { ShoeCard } from "./shared/ShoeCard";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import LoadMore from "./shared/LoadMore";
-import { IProduct } from "@/lib/database/models/product.model";
 import { DEFAULT_LIMIT } from "@/constants";
+import { IProduct } from "@/lib/database/models/product.model";
 
 interface Props {
 	products: IProduct[];
 }
 
-export const ShopNew = ({ products = [] }: Props) => {
+export const AllProducts = ({ products = [] }: Props) => {
 	return (
 		<div className="dark:bg-black dark:text-white py-8">
 			<div className="container">
 				<div className="flex items-center justify-between gap-8">
 					<h2 className="text-xl md:text-2xl uppercase font-semibold">
-						New Arrivals
+						All products
 					</h2>
-					{products.length > DEFAULT_LIMIT && (
-						<Button asChild size="md" variant={"ghost"}>
-							<Link href="/category/new">
-								View all <ChevronRight />
-							</Link>
-						</Button>
-					)}
+					<Button asChild size="md" variant={"ghost"}>
+						<Link href="/category/all">
+							View all <ChevronRight />
+						</Link>
+					</Button>
 				</div>
 				<ScrollArea className="">
 					<div className="flex w-max space-x-4 pt-4 pr-10 pb-4">
@@ -54,7 +52,7 @@ export const ShopNew = ({ products = [] }: Props) => {
 								/>
 							)
 						)}
-						{/* {products.length > DEFAULT_LIMIT && <LoadMore />} */}
+						{products.length > DEFAULT_LIMIT && <LoadMore />}
 					</div>
 					<ScrollBar orientation="horizontal" />
 				</ScrollArea>

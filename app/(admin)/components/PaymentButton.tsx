@@ -64,7 +64,18 @@ export const PaymentButton = ({
 				};
 
 				const res = await updateOrder({ details, userId, orderId });
-				console.log(res);
+
+				if (res?.status === 400)
+					return toast({
+						title: "Error!",
+						description: res?.message,
+						variant: "destructive",
+					});
+
+				toast({
+					title: "Success!",
+					description: res.message,
+				});
 			});
 		} catch (error: any) {
 			toast({

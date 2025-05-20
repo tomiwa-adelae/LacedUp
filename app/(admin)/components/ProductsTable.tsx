@@ -4,51 +4,18 @@ import { Button } from "@/components/ui/button";
 import {
 	Table,
 	TableBody,
-	TableCaption,
 	TableCell,
-	TableFooter,
 	TableHead,
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
 import { IProduct } from "@/lib/database/models/product.model";
 import { formatMoneyInput } from "@/lib/utils";
-import { Edit, EllipsisVertical, Eye, Trash } from "lucide-react";
+import { Edit, Eye, Trash } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { DeleteProductModal } from "./DeleteProductModal";
-
-const invoices = [
-	{
-		image: "/assets/images/sneakers.jpg",
-		name: "Nike Cosmic Unity",
-		date: "December 12, 2025",
-		price: "₦14,900",
-		totalOrder: "35",
-	},
-	{
-		image: "/assets/images/sneakers.jpg",
-		name: "Nike Cosmic Unity",
-		date: "December 12, 2025",
-		price: "₦14,900",
-		totalOrder: "35",
-	},
-	{
-		image: "/assets/images/sneakers.jpg",
-		name: "Nike Cosmic Unity",
-		date: "December 12, 2025",
-		price: "₦14,900",
-		totalOrder: "35",
-	},
-	{
-		image: "/assets/images/sneakers.jpg",
-		name: "Nike Cosmic Unity",
-		date: "December 12, 2025",
-		price: "₦14,900",
-		totalOrder: "35",
-	},
-];
 
 export const ProductsTable = ({
 	products,
@@ -105,7 +72,7 @@ export const ProductsTable = ({
 									<Ratings />
 								</TableCell>
 								<TableCell>
-									<div className="flex gap-2 items-center justify-end">
+									<div className="flex gap-1 items-center justify-end">
 										<Button
 											variant={"ghost"}
 											size="icon"

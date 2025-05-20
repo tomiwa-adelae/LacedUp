@@ -21,13 +21,7 @@ import { useEffect, useState } from "react";
 import { AddNewCategoryForm } from "./AddNewCategoryForm";
 import Image from "next/image";
 
-export const CategorySelector = ({
-	form,
-}: // onCategorySelect,
-{
-	form: any;
-	// onCategorySelect: (categoryId: string) => void;
-}) => {
+export const CategorySelector = ({ form }: { form: any }) => {
 	const [categories, setCategories] = useState<ICategory[]>([]);
 	const [openNewCategory, setOpenNewCategory] = useState<boolean>(false);
 
@@ -57,7 +51,6 @@ export const CategorySelector = ({
 								defaultValue={field.value}
 								onValueChange={(value) => {
 									field.onChange(value); // update the form state
-									// onCategorySelect(value); // send value up to parent
 								}}
 							>
 								<FormControl>

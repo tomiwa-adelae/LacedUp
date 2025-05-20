@@ -1,17 +1,11 @@
 import { CategoryBreadCrumbs } from "@/components/CategoryBreadCrumbs";
 import { Filter } from "@/components/shared/Filter";
-import { FilterModal } from "@/components/shared/FilterModal";
 import { ShoeCard } from "@/components/shared/ShoeCard";
 import { Showcase } from "@/components/shared/Showcase";
-import { ShopNew } from "@/components/ShopNew";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { DEFAULT_LIMIT, DEFAULT_PRODUCT_IMAGE } from "@/constants";
-import { getCategoryDetails } from "@/lib/actions/category.actions";
-import {
-	getCategoryProducts,
-	getNewProducts,
-} from "@/lib/actions/product.actions";
+import { getNewProducts } from "@/lib/actions/product.actions";
 import { IProduct } from "@/lib/database/models/product.model";
 import { redirect } from "next/navigation";
 
@@ -59,7 +53,6 @@ const page = async ({
 			<div className="container grid grid-cols-1 lg:grid-cols-3 gap-8 py-8">
 				<div className="col-span-2 lg:col-span-1">
 					<Filter categoryName={"/new"} tags={categoryTags} />
-					<FilterModal categoryName={"/new"} tags={categoryTags} />
 				</div>
 				<div className="col-span-2 gap-4 grid grid-cols-2">
 					{newProducts?.products?.map(
@@ -95,10 +88,6 @@ const page = async ({
 					)}
 				</div>
 			</div>
-			<div className="container">
-				<Separator />
-			</div>
-			{/* <ShopNew products={newProducts?.products} /> */}
 			<div className="container">
 				<Separator />
 			</div>

@@ -1,26 +1,32 @@
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import Link from "next/link";
-import { CustomersTable } from "../components/CustomersTable";
-import { AnalyticBox } from "../components/AnalyticBox";
-import { AnalyticChart } from "../components/AnalyticChart";
-import { RecentActivity } from "../components/RecentActivty";
+import { RecentActivity } from "../components/RecentActivity";
 import { currentUser } from "@clerk/nextjs/server";
 import { getCustomers, getUserInfo } from "@/lib/actions/user.actions";
 import { redirect } from "next/navigation";
 import { getAllOrders } from "@/lib/actions/order.actions";
 import { AnalyticBoxes } from "../components/AnalyticBoxes";
 import { getAdminProducts } from "@/lib/actions/product.actions";
+import { DEFAULT_LIMIT } from "@/constants";
+import { AnalyticChart } from "../components/AnalyticChart";
 
-const page = async () => {
+const page = async ({ searchParams }: { searchParams: any }) => {
+	const { query, page } = await searchParams;
+
 	const clerkUser = await currentUser();
 
 	const user = await getUserInfo(clerkUser?.id!);
 
-	const orders = await getAllOrders(user.user._id);
+	const orders = await getAllOrders({
+		userId: user.user._id,
+		query,
+		page,
+		limit: DEFAULT_LIMIT,
+	});
 	const customers = await getCustomers({ userId: user.user._id });
 	const products = await getAdminProducts({
 		userId: user.user._id,
+		query,
+		page,
+		limit: DEFAULT_LIMIT,
 	});
 
 	if (

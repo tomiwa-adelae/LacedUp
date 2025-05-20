@@ -16,7 +16,7 @@ const page = async ({ searchParams }: { searchParams: any }) => {
 	const user = await getUserInfo(clerkUser?.id!);
 
 	const order = await getOrderDetails({ userId: user.user._id, orderId: id });
-	const newProducts = await getNewProducts();
+	const newProducts = await getNewProducts({});
 
 	if (order.status === 400) redirect("/not found");
 	return (
