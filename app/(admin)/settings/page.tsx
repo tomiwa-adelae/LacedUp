@@ -1,7 +1,7 @@
-import { SettingsForm } from "@/components/forms/SettingsForm";
+import { currentUser } from "@clerk/nextjs/server";
 import { Separator } from "@/components/ui/separator";
 import { getUserInfo } from "@/lib/actions/user.actions";
-import { currentUser } from "@clerk/nextjs/server";
+import { SettingsForm } from "@/components/forms/SettingsForm";
 
 const page = async () => {
 	const clerkUser = await currentUser();

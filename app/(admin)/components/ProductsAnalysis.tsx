@@ -15,7 +15,7 @@ import {
 	Line,
 	Bar,
 } from "recharts";
-import { CircleCheckBig, OctagonPause } from "lucide-react";
+import { CircleCheckBig, CircleOff, OctagonPause } from "lucide-react";
 import _ from "lodash";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CardDescription, CardTitle } from "@/components/ui/card";
@@ -32,6 +32,7 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { formatMoneyInput } from "@/lib/utils";
 import Image from "next/image";
+import { InformationBox } from "./InformationBox";
 
 // Dashboard component for ecommerce analytics
 export function ProductsAnalysis({ productsData }: { productsData: any }) {
@@ -338,6 +339,15 @@ export function ProductsAnalysis({ productsData }: { productsData: any }) {
 							))}
 						</TableBody>
 					</Table>
+					<div className="pb-4 px-4">
+						{products?.length === 0 && (
+							<InformationBox
+								variant="pending"
+								title="You have no products in your store."
+								icon={CircleOff}
+							/>
+						)}
+					</div>
 				</div>
 			</div>
 		</div>

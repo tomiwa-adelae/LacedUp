@@ -1,30 +1,21 @@
 "use client";
-
+import Logo from "./Logo";
+import Link from "next/link";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
+import { useClerk } from "@clerk/nextjs";
+import { ScrollArea } from "../ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import {
-	Sheet,
-	SheetClose,
-	SheetContent,
-	SheetTrigger,
-} from "@/components/ui/sheet";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { usePathname, useRouter } from "next/navigation";
+import { IUser } from "@/lib/database/models/user.model";
+import { Info, LogOut, MenuIcon, Settings } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
 	adminSidebarLinks,
 	DEFAULT_USER_IMAGE,
-	navLinks,
 	sidebarLinks,
 } from "@/constants";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { Separator } from "../ui/separator";
-import { cn } from "@/lib/utils";
-import Logo from "./Logo";
-import { ScrollArea } from "../ui/scroll-area";
-import { Info, LogOut, MenuIcon, Settings } from "lucide-react";
-import { IUser } from "@/lib/database/models/user.model";
-import { SidebarContent } from "@/app/(admin)/components/SidebarContent";
-import { useClerk } from "@clerk/nextjs";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 export function MobileNavbar({
 	user,
@@ -164,7 +155,7 @@ export function MobileNavbar({
 							>
 								<Image
 									src={user?.picture || DEFAULT_USER_IMAGE}
-									alt={`${user.firstName}'s picture`}
+									alt={`${user?.firstName}'s picture`}
 									width={1000}
 									height={1000}
 									className="w-14 h-14 rounded-full object-cover"

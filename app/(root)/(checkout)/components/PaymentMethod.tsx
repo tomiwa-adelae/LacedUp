@@ -1,10 +1,15 @@
 "use client";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
-
+import { useState } from "react";
+import { Check } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { toast } from "@/hooks/use-toast";
+import { paymentMethods } from "@/constants";
 import { Button } from "@/components/ui/button";
+import { PaymentFormSchema } from "@/lib/validations";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { InformationBox } from "@/app/(admin)/components/InformationBox";
 import {
 	Form,
 	FormControl,
@@ -13,13 +18,6 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { paymentMethods } from "@/constants";
-import { toast } from "@/hooks/use-toast";
-import { useState } from "react";
-import { InformationBox } from "@/app/(admin)/components/InformationBox";
-import { Check } from "lucide-react";
-import { PaymentFormSchema } from "@/lib/validations";
 
 export const PaymentMethod = () => {
 	const [success, setSuccess] = useState(false);

@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/context/ThemeProvider";
+import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Montserrat } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 import { CartProvider } from "@/context/CartProvider";
+import { ThemeProvider } from "@/context/ThemeProvider";
 
 const montserrat = Montserrat({
 	subsets: ["latin"],

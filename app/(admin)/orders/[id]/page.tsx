@@ -1,12 +1,20 @@
+import Link from "next/link";
+import Image from "next/image";
+import { redirect } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
-import { getOrderDetails } from "@/lib/actions/order.actions";
+import { currentUser } from "@clerk/nextjs/server";
 import { getUserInfo } from "@/lib/actions/user.actions";
+import { getOrderDetails } from "@/lib/actions/order.actions";
+import { PaymentButton } from "../../components/PaymentButton";
+import { InformationBox } from "../../components/InformationBox";
+import { MarkAsPaidButton } from "../../components/MarkAsPaidButton";
+import { CancelOrderButton } from "../../components/CancelOrderButton";
+import { MarkAsDeliveredButton } from "../../components/MarkAsDeliveredButton";
 import {
 	formatDate,
 	formatMoneyInput,
 	formattedPaymentMethod,
 } from "@/lib/utils";
-import { currentUser } from "@clerk/nextjs/server";
 import {
 	Ban,
 	Banknote,
@@ -22,14 +30,6 @@ import {
 	Smartphone,
 	User,
 } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { redirect } from "next/navigation";
-import { InformationBox } from "../../components/InformationBox";
-import { PaymentButton } from "../../components/PaymentButton";
-import { MarkAsPaidButton } from "../../components/MarkAsPaidButton";
-import { MarkAsDeliveredButton } from "../../components/MarkAsDeliveredButton";
-import { CancelOrderButton } from "../../components/CancelOrderButton";
 
 const page = async ({ params }: { params: any }) => {
 	const clerkUser = await currentUser();
@@ -53,7 +53,7 @@ const page = async ({ params }: { params: any }) => {
 							<Badge
 								variant={
 									order?.order?.paymentStatus === "pending"
-										? "warning"
+										? "pending"
 										: order.order.paymentStatus === "paid"
 										? "success"
 										: order.order.paymentStatus === "failed"
@@ -67,7 +67,7 @@ const page = async ({ params }: { params: any }) => {
 							<Badge
 								variant={
 									order?.order?.orderStatus === "pending"
-										? "warning"
+										? "pending"
 										: order?.order?.orderStatus ===
 										  "delivered"
 										? "success"
@@ -244,35 +244,35 @@ const page = async ({ params }: { params: any }) => {
 													</h3>
 												</div>
 											</div>
-											<div className="mt-4">
-												{order?.order?.orderStatus ===
-													"delivered" && (
-													<InformationBox
-														icon={Check}
-														title="Orders delivered"
-														variant="success"
-													/>
-												)}
-												{order?.order?.orderStatus ===
-													"pending" && (
-													<InformationBox
-														icon={CircleDashed}
-														title="Orders pending"
-														variant="pending"
-													/>
-												)}
-												{order?.order?.orderStatus ===
-													"cancelled" && (
-													<InformationBox
-														icon={Ban}
-														title="Orders cancelled"
-														variant="danger"
-													/>
-												)}
-											</div>
 										</div>
 									)
 								)}
+								<div className="mt-4">
+									{order?.order?.orderStatus ===
+										"delivered" && (
+										<InformationBox
+											icon={Check}
+											title="Orders delivered"
+											variant="success"
+										/>
+									)}
+									{order?.order?.orderStatus ===
+										"pending" && (
+										<InformationBox
+											icon={CircleDashed}
+											title="Orders pending"
+											variant="pending"
+										/>
+									)}
+									{order?.order?.orderStatus ===
+										"cancelled" && (
+										<InformationBox
+											icon={Ban}
+											title="Orders cancelled"
+											variant="danger"
+										/>
+									)}
+								</div>
 							</div>
 							<div>
 								<h4 className="mb-2 font-medium text-muted-foreground text-sm lg:text-base uppercase">
@@ -410,6 +410,34 @@ const page = async ({ params }: { params: any }) => {
 												?.lastName
 										}
 									</span>
+								</p>
+								<p>
+									<a
+										href={`mailto:${order?.order?.shippingDetails?.email}`}
+										className="hover:underline hover:text-primary transition-all"
+									>
+										<Mail className="inline mr-2 size-4" />
+										<span>
+											{
+												order?.order?.shippingDetails
+													?.email
+											}
+										</span>
+									</a>
+								</p>
+								<p>
+									<a
+										href={`tel:${order?.order?.shippingDetails?.phoneNumber}`}
+										className="hover:underline hover:text-primary transition-all"
+									>
+										<Phone className="inline mr-2 size-4" />
+										<span>
+											{
+												order?.order?.shippingDetails
+													?.phoneNumber
+											}
+										</span>
+									</a>
 								</p>
 								<p>
 									<MapPinHouse className="inline mr-2 size-4" />

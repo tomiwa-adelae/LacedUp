@@ -1,4 +1,12 @@
 "use client";
+import React from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { useClerk } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { LogOut, Settings } from "lucide-react";
+import { IUser } from "@/lib/database/models/user.model";
+import { adminSidebarLinks, sidebarLinks } from "@/constants";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -8,17 +16,8 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Image from "next/image";
-import Link from "next/link";
-import { useClerk, useUser } from "@clerk/nextjs";
-import React from "react";
-import { useRouter } from "next/navigation";
-import { adminSidebarLinks, sidebarLinks } from "@/constants";
-import { LogOut, Settings } from "lucide-react";
-import { IUser } from "@/lib/database/models/user.model";
 
 export function ProfileDropdown({ user }: { user: IUser }) {
-	// const { user } = useUser();
 	const { signOut } = useClerk();
 
 	const router = useRouter();

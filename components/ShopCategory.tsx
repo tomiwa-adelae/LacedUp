@@ -1,18 +1,13 @@
-import { ChevronRight } from "lucide-react";
-import { Button } from "./ui/button";
 import Link from "next/link";
-import { ShoeCard } from "./shared/ShoeCard";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import Image from "next/image";
+import { Button } from "./ui/button";
 import Category from "./shared/Category";
-import LoadMore from "./shared/LoadMore";
-import { shopByCategories } from "@/constants";
+import { ChevronRight } from "lucide-react";
 import { getAllCategories } from "@/lib/actions/category.actions";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 export const ShopCategory = async () => {
 	const allCategories = await getAllCategories();
-
-	// if (newProducts.status === 400) redirect("/not-found");
 
 	return (
 		<div className="dark:bg-black dark:text-white py-8">

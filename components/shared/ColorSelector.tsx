@@ -1,7 +1,6 @@
 "use client";
-import { useState } from "react";
-import { Button } from "../ui/button";
 import { Label } from "../ui/label";
+import { Button } from "../ui/button";
 import { IAvailableColor } from "@/lib/database/models/product.model";
 
 interface ColorSelectorProps {

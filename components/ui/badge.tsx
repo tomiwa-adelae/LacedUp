@@ -15,7 +15,7 @@ const badgeVariants = cva(
 				secondary:
 					"border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90",
 				pending:
-					"bg-yellow-100 text-yellow-800 border-transparent bg-yellow-100 [a&]:hover:bg-yellow-400/90",
+					"bg-yellow-100 dark:bg-yellow-900 dark:text-white text-yellow-800 border-transparent bg-yellow-100 [a&]:hover:bg-yellow-400/90",
 				shipped:
 					"bg-blue-100 text-blue-800 border-transparent bg-blue-100 [a&]:hover:bg-blue-400/90",
 				delivered:
@@ -23,7 +23,7 @@ const badgeVariants = cva(
 				success:
 					"inline-flex px-2 py-1 rounded-full bg-green-100 text-green-800 [a&]:hover:bg-green/90 rounded-full",
 				warning:
-					"inline-flex px-2 py-1 rounded-full bg-orange-100 text-orange-800 [a&]:hover:bg-orange/90 rounded-full",
+					"inline-flex px-2 py-1 rounded-full bg-orange-100 dark:bg-orange-900 dark:text-white text-orange-800 [a&]:hover:bg-orange/90 rounded-full",
 				danger: "inline-flex px-2 py-1 rounded-full bg-red-100 text-red-800 [a&]:hover:bg-green/90 rounded-full",
 				destructive:
 					"border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",

@@ -1,45 +1,20 @@
 "use client";
-import { Input } from "@/components/ui/input";
-import { formUrlQuery, removeKeysFromQuery } from "@/lib/utils";
 import { Search } from "lucide-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export function SearchBar() {
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 
-	const initialQuery = searchParams.get("query") || "";
 	const [query, setQuery] = useState("");
 
-	// Load the current query param into state on first render or when searchParams changes
 	useEffect(() => {
 		const urlQuery = searchParams.get("query") || "";
 		setQuery(urlQuery);
 	}, [searchParams]);
-
-	// useEffect(() => {
-	// 	const delayDebounceFn = setTimeout(() => {
-	// 		let newUrl = "";
-
-	// 		if (query) {
-	// 			newUrl = formUrlQuery({
-	// 				params: searchParams.toString(),
-	// 				key: "query",
-	// 				value: query,
-	// 			});
-	// 		} else {
-	// 			newUrl = removeKeysFromQuery({
-	// 				params: searchParams.toString(),
-	// 				keysToRemove: ["query"],
-	// 			});
-	// 		}
-
-	// 		router.push(newUrl, { scroll: false });
-	// 	}, 3000);
-	// 	return () => clearTimeout(delayDebounceFn);
-	// }, [query, searchParams, router]);
 
 	// Debounced update to URL when query changes
 	useEffect(() => {

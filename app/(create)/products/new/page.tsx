@@ -1,6 +1,6 @@
+import { currentUser } from "@clerk/nextjs/server";
 import { getUserInfo } from "@/lib/actions/user.actions";
 import { ProductForm } from "../../components/forms/ProductForm";
-import { currentUser } from "@clerk/nextjs/server";
 import { getAdminProductDetails } from "@/lib/actions/product.actions";
 
 const page = async ({ searchParams }: SearchParamsProps) => {

@@ -1,5 +1,5 @@
-import { Footprints } from "lucide-react";
 import Link from "next/link";
+import { Footprints } from "lucide-react";
 
 const Logo = ({
 	hide = false,

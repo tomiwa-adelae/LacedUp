@@ -1,12 +1,10 @@
-import { CartSummary } from "@/components/CartSummary";
-import { ShippingForm } from "@/components/forms/ShippingForm";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { getUserInfo } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs/server";
-import { ShippingInformation } from "../components/ShippingInformation";
+import { Separator } from "@/components/ui/separator";
+import { CartSummary } from "@/components/CartSummary";
+import { getUserInfo } from "@/lib/actions/user.actions";
 import { PaymentMethod } from "../components/PaymentMethod";
 import { getShippingDetails } from "@/lib/actions/shipping.actions";
+import { ShippingInformation } from "../components/ShippingInformation";
 
 const page = async () => {
 	const clerkUser = await currentUser();

@@ -282,7 +282,7 @@ export const suggestedTags = [
 
 export const DEFAULT_PRODUCT_IMAGE = "/assets/icons/shoe.svg";
 export const DEFAULT_USER_IMAGE = "/assets/icons/shoe.svg";
-export const DEFAULT_LIMIT = 1;
+export const DEFAULT_LIMIT = 10;
 export const DEFAULT_NEW_LIMITS = 10;
 export const DEFAULT_SHIPPING_PRICE = 0;
 

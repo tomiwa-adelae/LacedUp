@@ -1,14 +1,14 @@
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import Link from "next/link";
 import React from "react";
+import Link from "next/link";
+import { Plus } from "lucide-react";
+import { redirect } from "next/navigation";
+import { DEFAULT_LIMIT } from "@/constants";
+import { Button } from "@/components/ui/button";
+import Pagination from "@/components/Pagination";
 import { currentUser } from "@clerk/nextjs/server";
 import { getUserInfo } from "@/lib/actions/user.actions";
-import { getAdminProducts } from "@/lib/actions/product.actions";
 import { ProductsTable } from "../components/ProductsTable";
-import { redirect } from "next/navigation";
-import Pagination from "@/components/Pagination";
-import { DEFAULT_LIMIT } from "@/constants";
+import { getAdminProducts } from "@/lib/actions/product.actions";
 
 const page = async ({ searchParams }: { searchParams: any }) => {
 	const { query, page } = await searchParams;

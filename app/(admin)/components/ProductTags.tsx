@@ -11,7 +11,7 @@ export const ProductTags = ({ tags }: any) => {
 					<Badge
 						key={tag._id}
 						variant="secondary"
-						className="text-sm py-1 px-3"
+						className="py-1 px-3"
 					>
 						<TagIcon className="w-3 h-3" />
 						{tag.name}

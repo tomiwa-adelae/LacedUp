@@ -7,7 +7,13 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { Ban, CircleCheckBig, CircleDashed, Eye } from "lucide-react";
+import {
+	Ban,
+	CircleCheckBig,
+	CircleDashed,
+	CircleOff,
+	Eye,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { IOrder } from "@/lib/database/models/order.model";
 import { formatDate, formatMoneyInput } from "@/lib/utils";
@@ -15,6 +21,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { CancelOrderModal } from "./CancelOrderModal";
+import { InformationBox } from "./InformationBox";
 
 export const RecentOrders = ({
 	userId,
@@ -151,6 +158,15 @@ export const RecentOrders = ({
 					)}
 				</TableBody>
 			</Table>
+			<div className="mt-4">
+				{orders?.length === 0 && (
+					<InformationBox
+						variant="pending"
+						title="You have no orders."
+						icon={CircleOff}
+					/>
+				)}
+			</div>
 
 			{openCancelModal && (
 				<CancelOrderModal

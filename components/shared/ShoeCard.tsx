@@ -73,9 +73,10 @@ export const ShoeCard = ({
 				>
 					{name}
 				</Link>
-				<div className="space-y-1 text-sm text-muted-foreground dark:text-gray-200">
+				<div className="space-y-1 flex items-center justify-between gap-4 text-sm text-muted-foreground dark:text-gray-200 mt-2">
 					<Link
 						href={`/category/${category._id}?name=${category.name}`}
+						className="capitalize"
 					>
 						{category.name}
 					</Link>

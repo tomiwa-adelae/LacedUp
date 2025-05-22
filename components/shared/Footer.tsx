@@ -1,7 +1,7 @@
-import { footerDetails, socialLinks } from "@/constants";
+import Logo from "./Logo";
 import Link from "next/link";
 import { Separator } from "../ui/separator";
-import Logo from "./Logo";
+import { footerDetails, socialLinks } from "@/constants";
 
 const Footer = () => {
 	const year = new Date().getFullYear();
@@ -12,9 +12,9 @@ const Footer = () => {
 					<div className="col-span-2 md:col-span-1 lg:col-span-2">
 						<Logo />
 						<p className="text-muted-foreground dark:text-gray-200 text-base mt-4">
-							Digitalizing Africa's housing market. Connecting
-							landlords with renters for a seamless property
-							experience.
+							Digitalizing the buying and selling market.
+							Connecting buyers and have a seamless experience
+							shopping online.
 						</p>
 						<div className="flex items-center justify-start gap-6 mt-8">
 							{socialLinks.map(({ icon, name, slug }, index) => {

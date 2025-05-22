@@ -99,7 +99,7 @@ export const updateUser = async ({
 // Get all customers by admin
 export const getCustomers = async ({
 	query,
-	limit = DEFAULT_LIMIT,
+	limit = 0,
 	page,
 	userId,
 }: {

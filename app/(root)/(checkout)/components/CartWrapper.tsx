@@ -1,10 +1,10 @@
 "use client";
-import { CartDetails } from "@/components/CartDetails";
-import { CartSummary } from "@/components/CartSummary";
-import { EmptyCart } from "@/components/EmptyCart";
+import { useEffect } from "react";
 import { useCart } from "@/context/CartProvider";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { EmptyCart } from "@/components/EmptyCart";
+import { CartSummary } from "@/components/CartSummary";
+import { CartDetails } from "@/components/CartDetails";
 
 export const CartWrapper = () => {
 	const { cart } = useCart();

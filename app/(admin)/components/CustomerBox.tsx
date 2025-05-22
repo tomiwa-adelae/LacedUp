@@ -1,8 +1,11 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Dot, ListFilter } from "lucide-react";
+import { CircleOff, Dot, ListFilter } from "lucide-react";
 import { Customer } from "./Customer";
 import { IUser } from "@/lib/database/models/user.model";
+import { InformationBox } from "./InformationBox";
+import { Separator } from "@/components/ui/separator";
+import React from "react";
 
 export const CustomerBox = ({ customers }: { customers: IUser[] }) => {
 	return (
@@ -16,9 +19,9 @@ export const CustomerBox = ({ customers }: { customers: IUser[] }) => {
 						Information about your customers
 					</p>
 				</div>
-				<Button size="icon" variant={"ghost"}>
+				{/* <Button size="icon" variant={"ghost"}>
 					<ListFilter className="size-4" />
-				</Button>
+				</Button> */}
 			</div>
 			<div className="grid gap-4 mt-4">
 				{customers.map(
@@ -26,15 +29,27 @@ export const CustomerBox = ({ customers }: { customers: IUser[] }) => {
 						{ firstName, lastName, email, picture, phoneNumber },
 						index
 					) => (
-						<Customer
-							picture={picture}
-							firstName={firstName}
-							lastName={lastName}
-							email={email}
-							phoneNumber={phoneNumber}
-							key={index}
-						/>
+						<React.Fragment key={index}>
+							<Customer
+								picture={picture}
+								firstName={firstName}
+								lastName={lastName}
+								email={email}
+								phoneNumber={phoneNumber}
+								key={index}
+							/>
+							{index !== customers.length - 1 && <Separator />}
+						</React.Fragment>
 					)
+				)}
+			</div>
+			<div className="mt-4">
+				{customers?.length === 0 && (
+					<InformationBox
+						variant="pending"
+						title="You have no customers yet."
+						icon={CircleOff}
+					/>
 				)}
 			</div>
 		</div>

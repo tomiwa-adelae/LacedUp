@@ -1,14 +1,14 @@
 import React from "react";
-import { ProductDetails } from "../../components/ProductDetails";
-import { ProductImages } from "../../components/ProductImages";
-import { Separator } from "@/components/ui/separator";
-import { Reviews } from "@/components/Reviews";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { getAdminProductDetails } from "@/lib/actions/product.actions";
-import { getUserInfo } from "@/lib/actions/user.actions";
-import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { Reviews } from "@/components/Reviews";
+import { Button } from "@/components/ui/button";
+import { currentUser } from "@clerk/nextjs/server";
+import { Separator } from "@/components/ui/separator";
+import { getUserInfo } from "@/lib/actions/user.actions";
+import { ProductImages } from "../../components/ProductImages";
+import { ProductDetails } from "../../components/ProductDetails";
+import { getAdminProductDetails } from "@/lib/actions/product.actions";
 
 const page = async ({ params }: { params: any }) => {
 	const clerkUser = await currentUser();

@@ -11,8 +11,10 @@ import {
 import { DEFAULT_USER_IMAGE } from "@/constants";
 import { IUser } from "@/lib/database/models/user.model";
 import { formatDate } from "@/lib/utils";
-import { EllipsisVertical } from "lucide-react";
+import { CircleOff, EllipsisVertical, Mail, Phone } from "lucide-react";
 import Image from "next/image";
+import { InformationBox } from "./InformationBox";
+import { Button } from "@/components/ui/button";
 
 export const CustomersTable = ({ customers }: { customers: IUser[] }) => {
 	return (
@@ -63,18 +65,61 @@ export const CustomersTable = ({ customers }: { customers: IUser[] }) => {
 										{email}
 									</a>
 								</TableCell>
-								<TableCell>{phoneNumber}</TableCell>
+								<TableCell>
+									{phoneNumber ? (
+										<a
+											href={`tel:${phoneNumber}`}
+											className="hover:text-primary hover:underline dark:text-gray-200"
+										>
+											{phoneNumber}
+										</a>
+									) : (
+										<p className="italic">
+											No phone number
+										</p>
+									)}
+								</TableCell>
 								<TableCell className="text-center">
 									{formatDate(createdAt)}
 								</TableCell>
 								<TableCell>
-									<EllipsisVertical className="size-5" />
+									<div className="flex items-center justify-end gap-2">
+										{phoneNumber && (
+											<Button
+												asChild
+												size={"icon"}
+												variant={"outline"}
+											>
+												<a href={`tel:${phoneNumber}`}>
+													<Phone className="size-4" />
+												</a>
+											</Button>
+										)}
+										<Button
+											asChild
+											size={"icon"}
+											variant={"outline"}
+										>
+											<a href={`mailto:${email}`}>
+												<Mail className="size-4" />
+											</a>
+										</Button>
+									</div>
 								</TableCell>
 							</TableRow>
 						)
 					)}
 				</TableBody>
 			</Table>
+			<div className="mt-4">
+				{customers?.length === 0 && (
+					<InformationBox
+						variant="pending"
+						title="You have no customers in your store."
+						icon={CircleOff}
+					/>
+				)}
+			</div>
 		</div>
 	);
 };

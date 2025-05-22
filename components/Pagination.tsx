@@ -1,9 +1,8 @@
 "use client";
-
-import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "./ui/button";
-import { useRouter, useSearchParams } from "next/navigation";
 import { formUrlQuery } from "@/lib/utils";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const Pagination = ({
 	page = 1,
@@ -12,7 +11,6 @@ const Pagination = ({
 	page?: string | number;
 	totalPages?: number;
 }) => {
-	console.log(page);
 	const router = useRouter();
 	const searchParams = useSearchParams();
 

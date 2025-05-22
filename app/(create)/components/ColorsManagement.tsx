@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { X, Plus, Check } from "lucide-react";
-import { useForm } from "react-hook-form";
 import * as z from "zod";
-
-// Import shadcn components
+import { useForm } from "react-hook-form";
+import { X, Plus, Check } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import React, { useState, useEffect } from "react";
+import { Separator } from "@/components/ui/separator";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
 	Form,
 	FormControl,
@@ -12,7 +13,6 @@ import {
 	FormItem,
 	FormLabel,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
@@ -23,8 +23,6 @@ import {
 	DialogTrigger,
 	DialogClose,
 } from "@/components/ui/dialog";
-import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
 	Tooltip,
 	TooltipContent,

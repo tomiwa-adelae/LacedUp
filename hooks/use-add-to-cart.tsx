@@ -1,8 +1,7 @@
 "use client";
-
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 import { useCart, CartItem } from "@/context/CartProvider";
 import { IAvailableColor } from "@/lib/database/models/product.model";
 

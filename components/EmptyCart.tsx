@@ -1,5 +1,5 @@
-import { FolderOpen } from "lucide-react";
 import Link from "next/link";
+import { FolderOpen } from "lucide-react";
 
 export const EmptyCart = () => {
 	return (

@@ -1,5 +1,6 @@
 "use server";
-
+import Mailjet from "node-mailjet";
+import { handleError } from "../utils";
 import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "../database";
 import Order, {
@@ -7,11 +8,7 @@ import Order, {
 	PaymentStatus,
 } from "../database/models/order.model";
 import User from "../database/models/user.model";
-import { handleError } from "../utils";
 import Product from "../database/models/product.model";
-import { DEFAULT_LIMIT } from "@/constants";
-
-import Mailjet from "node-mailjet";
 import { OrderConfirmationEmail } from "@/templates/order-confirmation-email";
 import { NewOrderAlert } from "@/templates/new-order-alert";
 import { OrderDelivered } from "@/templates/order-delivered";
@@ -142,7 +139,7 @@ export const createOrder = async (details: any) => {
 		return {
 			status: 201,
 			order: JSON.parse(JSON.stringify(newOrder)),
-			message: "Order has been successfully created.",
+			message: "Order has been successfully made.",
 		};
 	} catch (error: any) {
 		handleError(error);
@@ -210,12 +207,12 @@ export const getOrderDetails = async ({
 
 export const getAllOrders = async ({
 	query,
-	limit = DEFAULT_LIMIT,
+	limit = 0,
 	page,
 	userId,
 }: {
 	query: string;
-	limit: number;
+	limit?: number;
 	page: string;
 	userId: string;
 }) => {
@@ -266,22 +263,6 @@ export const getAllOrders = async ({
 			  };
 
 		const skip = (parseInt(page || "1") - 1) * limit;
-
-		// let orders;
-
-		// if (user.isAdmin) {
-		// 	orders = await Order.find()
-		// 		.sort({ createdAt: -1 })
-		// 		.populate("user");
-		// } else {
-		// 	orders = await Order.find({ user: userId })
-		// 		.sort({ createdAt: -1 })
-		// 		.populate("user");
-		// }
-		// return {
-		// 	status: 200,
-		// 	orders: JSON.parse(JSON.stringify(orders)),
-		// };
 
 		const orders = await Order.find({ ...keyword })
 			.sort({ createdAt: -1 })
@@ -373,14 +354,14 @@ export const adminUpdateOrderDetails = async ({
 					},
 					To: [
 						{
-							Email: user.email,
-							Name: `${user.firstName} ${user.lastName}`,
+							Email: order?.user.email,
+							Name: `${order?.user?.firstName} ${order?.user?.lastName}`,
 						},
 					],
 					Subject: `Order delivered - LacedUp.`,
 					TextPart: `Order delivered - LacedUp. `,
 					HTMLPart: OrderDelivered({
-						name: `${order.user.firstName} ${order.user.lastName}`,
+						name: `${order?.user?.firstName} ${order?.user?.lastName}`,
 						orderId: order._id,
 						items: order.orderItems,
 						totalPrice: order.totalPrice,
@@ -481,8 +462,8 @@ export const updateOrder = async ({
 					},
 					To: [
 						{
-							Email: user.email,
-							Name: `${user.firstName} ${user.lastName}`,
+							Email: order?.user.email,
+							Name: `${order?.user?.firstName} ${order?.user?.lastName}`,
 						},
 					],
 					Subject: `Payment successful - LacedUp.`,
@@ -492,6 +473,7 @@ export const updateOrder = async ({
 						orderId: order._id,
 						items: order.orderItems,
 						totalPrice: order.totalPrice,
+						name: `${order?.user.firstName} ${order?.user?.lastName}`,
 					}),
 				},
 			],

@@ -1,8 +1,8 @@
+import { redirect } from "next/navigation";
 import { ShopNew } from "@/components/ShopNew";
 import { Separator } from "@/components/ui/separator";
-import { getNewProducts } from "@/lib/actions/product.actions";
-import { redirect } from "next/navigation";
 import { CartWrapper } from "../components/CartWrapper";
+import { getNewProducts } from "@/lib/actions/product.actions";
 
 const page = async () => {
 	const newProducts = await getNewProducts({});

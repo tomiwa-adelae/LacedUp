@@ -7,7 +7,13 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { Ban, CircleCheckBig, CircleDashed, Eye } from "lucide-react";
+import {
+	Ban,
+	CircleCheckBig,
+	CircleDashed,
+	CircleOff,
+	Eye,
+} from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { IOrder } from "@/lib/database/models/order.model";
@@ -17,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { CancelOrderModal } from "./CancelOrderModal";
 import { useRouter, useSearchParams } from "next/navigation";
+import { InformationBox } from "./InformationBox";
 
 export const OrdersTable = ({
 	userId,
@@ -53,12 +60,12 @@ export const OrdersTable = ({
 					<TabsTrigger onClick={() => filterSearch("")} value="all">
 						All orders
 					</TabsTrigger>
-					<TabsTrigger
+					{/* <TabsTrigger
 						onClick={() => filterSearch("processing")}
 						value="processing"
 					>
 						Processing
-					</TabsTrigger>
+					</TabsTrigger> */}
 					<TabsTrigger
 						onClick={() => filterSearch("delivered")}
 						value="delivered"
@@ -212,6 +219,13 @@ export const OrdersTable = ({
 						)}
 					</TableBody>
 				</Table>
+				{orders?.length === 0 && (
+					<InformationBox
+						variant="pending"
+						title="You have no orders."
+						icon={CircleOff}
+					/>
+				)}
 			</Tabs>
 			{openCancelModal && (
 				<CancelOrderModal

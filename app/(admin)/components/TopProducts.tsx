@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ListFilter } from "lucide-react";
+import { CircleOff, ListFilter } from "lucide-react";
 
 import {
 	Table,
@@ -15,6 +15,7 @@ import { DEFAULT_PRODUCT_IMAGE } from "@/constants";
 import { formatMoneyInput } from "@/lib/utils";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { InformationBox } from "./InformationBox";
 
 export const TopProducts = ({ products }: { products: IProduct[] }) => {
 	return (
@@ -28,9 +29,9 @@ export const TopProducts = ({ products }: { products: IProduct[] }) => {
 						Best selling products in your store
 					</p>
 				</div>
-				<Button size="icon" variant={"ghost"}>
+				{/* <Button size="icon" variant={"ghost"}>
 					<ListFilter className="size-4" />
-				</Button>
+				</Button> */}
 			</div>
 			<div className="mt-4">
 				<Table>
@@ -98,6 +99,15 @@ export const TopProducts = ({ products }: { products: IProduct[] }) => {
 						)}
 					</TableBody>
 				</Table>
+				<div className="mt-4">
+					{products?.length === 0 && (
+						<InformationBox
+							variant="pending"
+							title="You have no products yet. Create some today"
+							icon={CircleOff}
+						/>
+					)}
+				</div>
 			</div>
 		</div>
 	);

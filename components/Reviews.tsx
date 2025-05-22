@@ -1,8 +1,8 @@
-import { ChevronRight } from "lucide-react";
-import { Button } from "./ui/button";
 import Link from "next/link";
+import { Button } from "./ui/button";
 import Ratings from "./shared/Ratings";
 import { Progress } from "./ui/progress";
+import { ChevronRight } from "lucide-react";
 
 export const Reviews = () => {
 	return (

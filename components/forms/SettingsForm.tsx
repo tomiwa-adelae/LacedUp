@@ -1,29 +1,20 @@
 "use client";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
-
-import { Button } from "@/components/ui/button";
-import {
-	Form,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { useState } from "react";
-import { ProfileImageModal } from "../ProfileImageModal";
-import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
-import "react-phone-number-input/style.css";
-import { updateUser } from "@/lib/actions/user.actions";
 import { toast } from "@/hooks/use-toast";
+import { useForm } from "react-hook-form";
+import "react-phone-number-input/style.css";
 import { useRouter } from "next/navigation";
 import { nigerianStates } from "@/constants";
+import { Separator } from "../ui/separator";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import PhoneInput from "react-phone-number-input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ProfileImageModal } from "../ProfileImageModal";
+import { SettingsFormSchema } from "@/lib/validations";
+import { updateUser } from "@/lib/actions/user.actions";
 import {
 	Select,
 	SelectContent,
@@ -31,8 +22,14 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "../ui/select";
-import { Separator } from "../ui/separator";
-import { SettingsFormSchema } from "@/lib/validations";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
 
 interface Props {
 	userId: string;
@@ -94,7 +91,7 @@ export function SettingsForm({
 				description: res?.message,
 			});
 
-			router.push("/dashboard");
+			router.push("/my-account");
 		} catch (error) {
 			toast({
 				title: "Error!",
@@ -294,17 +291,6 @@ export function SettingsForm({
 								: "Update profile"}
 						</Button>
 					</form>
-				</Form>
-			</div>
-			<div className="mt-8">
-				<h4 className="font-medium text-muted-foreground text-sm lg:text-base uppercase">
-					Shipping details
-				</h4>
-				<Form {...form}>
-					<form
-						onSubmit={form.handleSubmit(onSubmit)}
-						className="space-y-6 mt-8"
-					></form>
 				</Form>
 			</div>
 			{openImageModal && (

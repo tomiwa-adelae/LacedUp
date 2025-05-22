@@ -1,10 +1,10 @@
 "use client";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
-
+import { useForm } from "react-hook-form";
+import { TagsFormSchema } from "@/lib/validations";
 import { Checkbox } from "@/components/ui/checkbox";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
 	Form,
 	FormControl,
@@ -13,9 +13,6 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { TagsFormSchema } from "@/lib/validations";
 
 export function TagOptions({ tags }: { tags: any }) {
 	const router = useRouter();
@@ -98,7 +95,7 @@ export function TagOptions({ tags }: { tags: any }) {
 														}}
 													/>
 												</FormControl>
-												<FormLabel className="font-medium">
+												<FormLabel className="font-medium uppercase">
 													{item}
 												</FormLabel>
 											</FormItem>

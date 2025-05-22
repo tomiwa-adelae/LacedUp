@@ -1,14 +1,15 @@
-import { AllCategoryBox } from "@/components/AllCategoryBox";
-import { CategoryBreadCrumbs } from "@/components/CategoryBreadCrumbs";
+import { redirect } from "next/navigation";
+import { DEFAULT_LIMIT } from "@/constants";
+import { Button } from "@/components/ui/button";
+import Pagination from "@/components/Pagination";
+import { Separator } from "@/components/ui/separator";
 import { ShoeCard } from "@/components/shared/ShoeCard";
 import { Showcase } from "@/components/shared/Showcase";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { DEFAULT_LIMIT } from "@/constants";
-import { getAllCategories } from "@/lib/actions/category.actions";
+import { AllCategoryBox } from "@/components/AllCategoryBox";
 import { getAllProducts } from "@/lib/actions/product.actions";
+import { getAllCategories } from "@/lib/actions/category.actions";
 import { IProduct } from "@/lib/database/models/product.model";
-import { redirect } from "next/navigation";
+import { CategoryBreadCrumbs } from "@/components/CategoryBreadCrumbs";
 
 const page = async ({
 	params,
@@ -17,9 +18,13 @@ const page = async ({
 	params: any;
 	searchParams: any;
 }) => {
-	const { query, page, tags, minPrice, maxPrice } = await searchParams;
+	const { query, page } = await searchParams;
 
-	const products = await getAllProducts({});
+	const products = await getAllProducts({
+		query,
+		page,
+		limit: DEFAULT_LIMIT,
+	});
 	const categoryList = await getAllCategories();
 
 	if (products.status === 400) redirect("/not-found");
@@ -58,15 +63,14 @@ const page = async ({
 							/>
 						)
 					)}
-					{products?.products?.length > DEFAULT_LIMIT && (
-						<div
-							className={`flex flex-col items-center justify-center gap-4 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] aspect-auto w-full rounded-lg object-cover hover:bg-accent dark:hover:bg-accent/50 cursor-pointer`}
-						>
-							<Button variant={"ghost"} size={"lg"}>
-								Load more
-							</Button>
-						</div>
-					)}
+					<div className="col-span-2 ">
+						{products?.totalPages! > 1 && (
+							<Pagination
+								totalPages={products?.totalPages}
+								page={page}
+							/>
+						)}
+					</div>
 				</div>
 			</div>
 			<div className="container">

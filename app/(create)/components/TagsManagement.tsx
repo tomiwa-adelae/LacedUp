@@ -1,11 +1,10 @@
 "use client";
-
-import { useState, useRef, KeyboardEvent } from "react";
 import { X, TagIcon } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { FormLabel } from "@/components/ui/form";
+import { useState, useRef, KeyboardEvent } from "react";
 
 export interface Tag {
 	name: string;
@@ -112,7 +111,7 @@ export default function TagsManagement({
 							<Badge
 								key={index}
 								variant="secondary"
-								className="text-sm py-1 px-3"
+								className="py-1 px-3"
 							>
 								<TagIcon className="w-3 h-3" />
 								{tag.name}

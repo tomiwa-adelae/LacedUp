@@ -1,19 +1,17 @@
 "use client";
-
-import { Button } from "@/components/ui/button";
-import { Drawer, DrawerClose, DrawerContent } from "@/components/ui/drawer";
-
+import Image from "next/image";
+import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
+import { FileUpload } from "./ui/file-upload";
+import { Button } from "@/components/ui/button";
+import { updateUser } from "@/lib/actions/user.actions";
+import { Drawer, DrawerClose, DrawerContent } from "@/components/ui/drawer";
+import { uploadImage } from "@/lib/actions/upload.actions";
 import {
 	deleteProduct,
 	deleteProductImage,
 } from "@/lib/actions/product.actions";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { FileUpload } from "./ui/file-upload";
-import { uploadImage } from "@/lib/actions/upload.actions";
-import { updateUser } from "@/lib/actions/user.actions";
 
 interface Props {
 	open: boolean;
@@ -48,6 +46,16 @@ export function ProfileImageModal({ open, closeModal, userId }: Props) {
 			};
 
 			const res = await updateUser({ details, userId });
+
+			console.log(res);
+
+			if (res?.status === 400)
+				return toast({
+					title: "Error!",
+					description: res?.message,
+					variant: "destructive",
+				});
+
 			toast({ title: "Success!", description: res?.message });
 			closeModal();
 		} catch (error) {

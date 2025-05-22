@@ -1,15 +1,15 @@
 "use client";
-import { cn, formatMoneyInput } from "@/lib/utils";
-import { Button } from "./ui/button";
-import { Separator } from "./ui/separator";
 import Link from "next/link";
-import { useCart } from "@/context/CartProvider";
-import { IShipping } from "@/lib/database/models/shipping.model";
-import { DEFAULT_SHIPPING_PRICE } from "@/constants";
-import { toast } from "@/hooks/use-toast";
-import { createOrder } from "@/lib/actions/order.actions";
 import { useState } from "react";
+import { Button } from "./ui/button";
+import { toast } from "@/hooks/use-toast";
+import { Separator } from "./ui/separator";
 import { useRouter } from "next/navigation";
+import { useCart } from "@/context/CartProvider";
+import { cn, formatMoneyInput } from "@/lib/utils";
+import { DEFAULT_SHIPPING_PRICE } from "@/constants";
+import { createOrder } from "@/lib/actions/order.actions";
+import { IShipping } from "@/lib/database/models/shipping.model";
 
 interface Props {
 	cta?: { slug: string; label: string };
@@ -24,7 +24,7 @@ export const CartSummary = ({
 	userId,
 	shippingDetails,
 }: Props) => {
-	const { cart, cartTotal } = useCart();
+	const { cart, cartTotal, clearCart } = useCart();
 
 	const [loading, setLoading] = useState(false);
 
@@ -44,13 +44,6 @@ export const CartSummary = ({
 					variant: "destructive",
 					description: "You have not selected a payment method.",
 				});
-
-			// if (!shippingDetails)
-			// 	return toast({
-			// 		title: "Success!",
-			// 		variant: "destructive",
-			// 		description: "You have not provided a shipping details.",
-			// 	});
 
 			const updatedCart = cart.map(({ id, ...rest }) => ({
 				...rest,
@@ -92,6 +85,7 @@ export const CartSummary = ({
 			setLoading(false);
 
 			router.push(`/orders/success?id=${res.order._id}`);
+			clearCart();
 		} catch (error) {
 			setLoading(false);
 			toast({

@@ -33,6 +33,8 @@ import Link from "next/link";
 import { formatDate, formatMoneyInput } from "@/lib/utils";
 import Image from "next/image";
 import { DEFAULT_USER_IMAGE } from "@/constants";
+import { InformationBox } from "./InformationBox";
+import { CircleOff } from "lucide-react";
 
 // Dashboard Overview component
 export function OverviewAnalysis({
@@ -502,6 +504,13 @@ export function OverviewAnalysis({
 						))}
 					</TableBody>
 				</Table>
+				{topSellingProducts?.length === 0 && (
+					<InformationBox
+						variant="pending"
+						title="You have no products in your store."
+						icon={CircleOff}
+					/>
+				)}
 			</div>
 
 			<div className="shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] p-4 rounded-lg dark:border space-y-6">
@@ -541,6 +550,13 @@ export function OverviewAnalysis({
 						))}
 					</TableBody>
 				</Table>
+				{recentOrders?.length === 0 && (
+					<InformationBox
+						variant="pending"
+						title="You have no orders."
+						icon={CircleOff}
+					/>
+				)}
 			</div>
 
 			{/* Recent Customers */}
@@ -614,6 +630,13 @@ export function OverviewAnalysis({
 						))}
 					</TableBody>
 				</Table>
+				{recentCustomers?.length === 0 && (
+					<InformationBox
+						variant="pending"
+						title="You have no customers in your store."
+						icon={CircleOff}
+					/>
+				)}
 			</div>
 		</div>
 	);

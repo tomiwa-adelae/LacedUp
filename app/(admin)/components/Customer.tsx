@@ -19,7 +19,7 @@ export const Customer = ({
 	phoneNumber,
 }: Props) => {
 	return (
-		<div className="flex items-center justify-between gap-4 border-b pb-2">
+		<div className="flex items-center justify-between gap-4 pb-2">
 			<div className="flex items-center justify-start gap-2">
 				<Image
 					src={picture || DEFAULT_USER_IMAGE}
@@ -41,14 +41,16 @@ export const Customer = ({
 				</div>
 			</div>
 			<div className="flex items-center justify-end gap-2">
+				{phoneNumber && (
+					<Button asChild size={"icon"} variant={"outline"}>
+						<a href={`tel:${phoneNumber}`}>
+							<Phone className="size-4" />
+						</a>
+					</Button>
+				)}
 				<Button asChild size={"icon"} variant={"outline"}>
-					<a href={`mailto:${phoneNumber}`}>
+					<a href={`mailto:${email}`}>
 						<Mail className="size-4" />
-					</a>
-				</Button>
-				<Button asChild size={"icon"} variant={"outline"}>
-					<a href={`tel:${phoneNumber}`}>
-						<Phone className="size-4" />
 					</a>
 				</Button>
 			</div>

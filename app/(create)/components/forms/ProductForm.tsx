@@ -1,9 +1,26 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
+import Image from "next/image";
+import { X } from "lucide-react";
+import React, { useState } from "react";
+import { toast } from "@/hooks/use-toast";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { ColorsSelector } from "../ColorsManagement";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ProductFormSchema } from "@/lib/validations";
+import TagsManagement, { Tag } from "../TagsManagement";
+import { FileUpload } from "@/components/ui/file-upload";
+import { IMedia, IProduct } from "@/lib/database/models/product.model";
+import { RequiredAsterisk } from "@/components/shared/RequiredAsterisk";
+import { formatMoneyInput, handleKeyDown, removeCommas } from "@/lib/utils";
+import { DeleteImageModal } from "@/app/(admin)/components/DeleteImageModal";
+import { CategorySelector } from "@/app/(admin)/components/CategorySelector";
+import { createNewProduct, updateProduct } from "@/lib/actions/product.actions";
 import {
 	Form,
 	FormControl,
@@ -12,23 +29,6 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { FileUpload } from "@/components/ui/file-upload";
-import { RequiredAsterisk } from "@/components/shared/RequiredAsterisk";
-import { ColorsSelector } from "../ColorsManagement";
-import { toast } from "@/hooks/use-toast";
-import { formatMoneyInput, handleKeyDown, removeCommas } from "@/lib/utils";
-import React, { useState } from "react";
-import { CategorySelector } from "@/app/(admin)/components/CategorySelector";
-import Image from "next/image";
-import TagsManagement, { Tag } from "../TagsManagement";
-import { createNewProduct, updateProduct } from "@/lib/actions/product.actions";
-import { useRouter } from "next/navigation";
-import { IMedia, IProduct } from "@/lib/database/models/product.model";
-import { X } from "lucide-react";
-import { DeleteImageModal } from "@/app/(admin)/components/DeleteImageModal";
-import { ProductFormSchema } from "@/lib/validations";
 
 interface Props {
 	userId: string;

@@ -1,10 +1,6 @@
-import { ChevronRight } from "lucide-react";
-import { Button } from "./ui/button";
-import Link from "next/link";
 import { ShoeCard } from "./shared/ShoeCard";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import LoadMore from "./shared/LoadMore";
 import { IProduct } from "@/lib/database/models/product.model";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 interface Props {
 	products: IProduct[];

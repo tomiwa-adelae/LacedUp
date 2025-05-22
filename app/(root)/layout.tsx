@@ -1,6 +1,6 @@
-import { Header } from "@/components/shared/Header";
 import Footer from "@/components/shared/Footer";
 import { currentUser } from "@clerk/nextjs/server";
+import { Header } from "@/components/shared/Header";
 import { getUserInfo } from "@/lib/actions/user.actions";
 
 export default async function Layout({

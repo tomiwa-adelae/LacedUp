@@ -1,11 +1,10 @@
 "use client";
-
+import Link from "next/link";
+import Image from "next/image";
+import { Dot } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useCart } from "@/context/CartProvider";
 import { formatMoneyInput, formattedPaymentMethod } from "@/lib/utils";
-import { Dot } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useState } from "react";
 
 interface Props {
 	firstName: string;
@@ -61,7 +60,7 @@ export const OrderReviews = ({
 						},
 						index
 					) => (
-						<div key={index}>
+						<div className="grid gap-4" key={index}>
 							<div className="md:hidden shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] rounded-lg p-2 flex flex-col items-start justify-between gap-4 dark:border">
 								<Image
 									src={image}

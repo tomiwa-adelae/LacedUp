@@ -1,5 +1,5 @@
 "use client";
-import { TrendingDown } from "lucide-react";
+import { Icon, TrendingDown } from "lucide-react";
 import { TrendingUp } from "lucide-react";
 import { CartesianGrid, Line, LineChart } from "recharts";
 import {
@@ -28,69 +28,27 @@ const chartConfig = {
 interface Props {
 	title: string;
 	description: string;
+	icon: any;
 	number: string;
-	percentage: string;
-	direction: string;
 }
 
-export const DashboardBox = ({
-	title,
-	description,
-	number,
-	percentage,
-	direction,
-}: Props) => {
+export const DashboardBox = ({ title, description, icon, number }: Props) => {
+	const Icon = icon;
 	return (
-		<div className="shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] p-4 rounded-lg dark:border">
-			<div className="flex items-center justify-start gap-4">
-				<h4 className="font-medium text-base">{title}</h4>
-				<span
-					className={`text-xs  ${
-						direction === "up"
-							? "bg-green-100 text-green-400 border-green-400"
-							: "bg-red-100 text-red-400 border-red-400"
-					} p-1 rounded-lg border`}
-				>
-					{direction === "up" ? (
-						<TrendingUp className="size-4 inline" />
-					) : (
-						<TrendingDown className="size-4 inline" />
-					)}
-					<span> {percentage}</span>
-				</span>
-			</div>
-			<div className="flex items-center justify-between gap-4 mt-4">
-				<div className="flex-1">
-					<h3 className="font-semibold text-3xl">{number}</h3>
-					<p className="text-xs mt-1 text-muted-foreground">
-						{description}
-					</p>
+		<div className="shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] p-4 pb-6 rounded-lg dark:border">
+			<div>
+				<div className="flex justify-between items-start">
+					<div>
+						<h4 className="font-medium text-base">{title}</h4>
+						<p className="text-xs mt-1 text-muted-foreground">
+							{description}
+						</p>
+					</div>
+					<div className="bg-primary/10 p-2 rounded-full">
+						<Icon className="h-6 w-6 text-primary" />
+					</div>
 				</div>
-				<div className="w-24">
-					<ChartContainer config={chartConfig}>
-						<LineChart
-							accessibilityLayer
-							data={chartData}
-							margin={{
-								left: 12,
-								right: 12,
-							}}
-						>
-							<CartesianGrid vertical={false} />
-							<ChartTooltip
-								cursor={false}
-								content={<ChartTooltipContent hideLabel />}
-							/>
-							<Line
-								dataKey="desktop"
-								type="natural"
-								stroke="green"
-								strokeWidth={2}
-								dot={false}
-							/>
-						</LineChart>
-					</ChartContainer>
-				</div>
+				<h3 className="mt-8 font-semibold text-3xl">{number}</h3>
 			</div>
 		</div>
 	);

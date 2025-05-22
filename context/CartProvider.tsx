@@ -1,8 +1,6 @@
-// contexts/CartContext.tsx
 "use client";
-
-import React, { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "@/hooks/use-toast";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 // Define types for our cart items and context
 export type CartItem = {

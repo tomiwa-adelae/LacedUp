@@ -11,11 +11,12 @@ import {
 } from "@/components/ui/table";
 import { IProduct } from "@/lib/database/models/product.model";
 import { formatMoneyInput } from "@/lib/utils";
-import { Edit, Eye, Trash } from "lucide-react";
+import { CircleOff, Edit, Eye, Trash } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { DeleteProductModal } from "./DeleteProductModal";
+import { InformationBox } from "./InformationBox";
 
 export const ProductsTable = ({
 	products,
@@ -113,6 +114,15 @@ export const ProductsTable = ({
 					)}
 				</TableBody>
 			</Table>
+			<div className="mt-4">
+				{products?.length === 0 && (
+					<InformationBox
+						variant="pending"
+						title="You have no products in your store."
+						icon={CircleOff}
+					/>
+				)}
+			</div>
 			{openDeleteModal && (
 				<DeleteProductModal
 					productId={productId}

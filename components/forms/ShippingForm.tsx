@@ -1,10 +1,22 @@
 "use client";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
-
+import { useState } from "react";
+import { Check } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { toast } from "@/hooks/use-toast";
+import "react-phone-number-input/style.css";
+import { nigerianStates } from "@/constants";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import PhoneInput from "react-phone-number-input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ShippingFormSchema } from "@/lib/validations";
+import { RequiredAsterisk } from "../shared/RequiredAsterisk";
+import { InformationBox } from "@/app/(admin)/components/InformationBox";
+import {
+	saveShippingDetails,
+	updateShippingDetails,
+} from "@/lib/actions/shipping.actions";
 import {
 	Form,
 	FormControl,
@@ -20,22 +32,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { RequiredAsterisk } from "../shared/RequiredAsterisk";
-import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
-import "react-phone-number-input/style.css";
-import { nigerianStates } from "@/constants";
-import { Checkbox } from "@/components/ui/checkbox";
-import Link from "next/link";
-import { toast } from "@/hooks/use-toast";
-import {
-	saveShippingDetails,
-	updateShippingDetails,
-} from "@/lib/actions/shipping.actions";
-import { useState } from "react";
-import { InformationBox } from "@/app/(admin)/components/InformationBox";
-import { ShippingFormSchema } from "@/lib/validations";
-import { Check } from "lucide-react";
 
 interface Props {
 	userId: string;

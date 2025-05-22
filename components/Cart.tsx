@@ -1,11 +1,10 @@
 "use client";
-import { Dot, Minus, Plus, Trash } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "./ui/button";
-import { useState } from "react";
-import { useCart } from "@/context/CartProvider";
 import { formatMoneyInput } from "@/lib/utils";
+import { useCart } from "@/context/CartProvider";
+import { Dot, Minus, Plus, Trash } from "lucide-react";
 
 interface Props {
 	name: string;

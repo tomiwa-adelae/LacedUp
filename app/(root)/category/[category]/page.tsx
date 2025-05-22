@@ -1,18 +1,18 @@
-import { CategoryBreadCrumbs } from "@/components/CategoryBreadCrumbs";
-import { Filter } from "@/components/shared/Filter";
-import { ShoeCard } from "@/components/shared/ShoeCard";
-import { Showcase } from "@/components/shared/Showcase";
+import { redirect } from "next/navigation";
+import { DEFAULT_LIMIT } from "@/constants";
 import { ShopNew } from "@/components/ShopNew";
 import { Button } from "@/components/ui/button";
+import { Filter } from "@/components/shared/Filter";
 import { Separator } from "@/components/ui/separator";
-import { DEFAULT_LIMIT } from "@/constants";
+import { Showcase } from "@/components/shared/Showcase";
+import { ShoeCard } from "@/components/shared/ShoeCard";
+import { IProduct } from "@/lib/database/models/product.model";
 import { getCategoryDetails } from "@/lib/actions/category.actions";
+import { CategoryBreadCrumbs } from "@/components/CategoryBreadCrumbs";
 import {
 	getCategoryProducts,
 	getNewProducts,
 } from "@/lib/actions/product.actions";
-import { IProduct } from "@/lib/database/models/product.model";
-import { redirect } from "next/navigation";
 
 const page = async ({
 	params,

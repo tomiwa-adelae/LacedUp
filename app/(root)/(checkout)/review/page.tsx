@@ -1,7 +1,7 @@
-import { CartSummary } from "@/components/CartSummary";
-import { Separator } from "@/components/ui/separator";
-import { getUserInfo } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs/server";
+import { Separator } from "@/components/ui/separator";
+import { CartSummary } from "@/components/CartSummary";
+import { getUserInfo } from "@/lib/actions/user.actions";
 import { OrderReviews } from "../components/OrderReviews";
 import { getShippingDetails } from "@/lib/actions/shipping.actions";
 

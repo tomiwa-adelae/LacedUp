@@ -29,6 +29,8 @@ import { formatDate } from "@/lib/utils";
 import { IUser } from "@/lib/database/models/user.model";
 import Image from "next/image";
 import { DEFAULT_USER_IMAGE } from "@/constants";
+import { InformationBox } from "./InformationBox";
+import { CircleOff } from "lucide-react";
 
 export function CustomersAnalysis({
 	customersData,
@@ -332,6 +334,15 @@ export function CustomersAnalysis({
 							))}
 					</TableBody>
 				</Table>
+				<div className="mt-4">
+					{customers?.length === 0 && (
+						<InformationBox
+							variant="pending"
+							title="You have no customers in your store."
+							icon={CircleOff}
+						/>
+					)}
+				</div>
 			</div>
 		</div>
 	);

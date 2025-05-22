@@ -8,6 +8,7 @@ interface Props {
 	items: any;
 	totalPrice: string;
 	paymentId: string;
+	name: string;
 }
 
 export const PaymentSuccess = ({
@@ -15,6 +16,7 @@ export const PaymentSuccess = ({
 	items,
 	totalPrice,
 	paymentId,
+	name,
 }: Props) => `
     <!DOCTYPE html>
 <html>

@@ -1,7 +1,7 @@
-import { ChevronRight } from "lucide-react";
-import { Button } from "./ui/button";
 import Link from "next/link";
 import { Cart } from "./Cart";
+import { Button } from "./ui/button";
+import { ChevronRight } from "lucide-react";
 
 export const CartDetails = ({ carts }: { carts: any }) => {
 	return (

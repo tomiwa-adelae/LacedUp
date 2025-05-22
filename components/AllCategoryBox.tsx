@@ -1,5 +1,6 @@
-import { ICategory } from "@/lib/database/models/category.model";
 import Link from "next/link";
+import { Button } from "./ui/button";
+import { ListFilter } from "lucide-react";
 import { Separator } from "./ui/separator";
 import {
 	Dialog,
@@ -8,8 +9,7 @@ import {
 	DialogFooter,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "./ui/button";
-import { ListFilter } from "lucide-react";
+import { ICategory } from "@/lib/database/models/category.model";
 
 export const AllCategoryBox = ({ categories }: { categories: ICategory[] }) => {
 	return (

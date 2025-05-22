@@ -19,7 +19,6 @@ const page = async ({ searchParams }: { searchParams: any }) => {
 		userId: user.user._id,
 		query,
 		page,
-		limit: DEFAULT_LIMIT,
 	});
 	const customers = await getCustomers({ userId: user.user._id });
 	const products = await getAdminProducts({

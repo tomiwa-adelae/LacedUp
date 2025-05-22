@@ -1,7 +1,7 @@
-import { Showcase } from "@/components/shared/Showcase";
-import { ShopCategory } from "@/components/ShopCategory";
 import { ShopNew } from "@/components/ShopNew";
 import { Separator } from "@/components/ui/separator";
+import { Showcase } from "@/components/shared/Showcase";
+import { ShopCategory } from "@/components/ShopCategory";
 import { getNewProducts } from "@/lib/actions/product.actions";
 
 const page = async () => {

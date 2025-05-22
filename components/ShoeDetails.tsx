@@ -1,20 +1,17 @@
 "use client";
-
-import { useEffect, useRef, useState } from "react";
-import { Heart } from "lucide-react";
-import { Button } from "./ui/button";
-
-import { ColorSelector } from "./shared/ColorSelector";
 import { Label } from "./ui/label";
-import { SelectQuantity } from "./shared/SelectQuantity";
+import { Button } from "./ui/button";
+import { Heart } from "lucide-react";
 import { Separator } from "./ui/separator";
-import { IAvailableColor, IMedia } from "@/lib/database/models/product.model";
+import { useRouter } from "next/navigation";
 import { formatMoneyInput } from "@/lib/utils";
 import { SelectSizes } from "./shared/SelectSizes";
-import { toast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
-import { useAddToCart } from "@/hooks/use-add-to-cart";
 import { DEFAULT_PRODUCT_IMAGE } from "@/constants";
+import { useEffect, useRef, useState } from "react";
+import { useAddToCart } from "@/hooks/use-add-to-cart";
+import { ColorSelector } from "./shared/ColorSelector";
+import { SelectQuantity } from "./shared/SelectQuantity";
+import { IAvailableColor, IMedia } from "@/lib/database/models/product.model";
 
 interface Props {
 	id: string;
@@ -127,7 +124,11 @@ export const ShoeDetails = ({
 			{showFixedButton && (
 				<div className="fixed md:hidden w-full bg-white dark:bg-black border-t py-2 bottom-0 left-0 z-50">
 					<div className="container">
-						<Button className="w-full" size="lg">
+						<Button
+							onClick={handleAddToCart}
+							className="w-full"
+							size="lg"
+						>
 							Add to cart
 						</Button>
 					</div>

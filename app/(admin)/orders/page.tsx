@@ -1,10 +1,10 @@
-import { OrdersTable } from "../components/OrdersTable";
-import { currentUser } from "@clerk/nextjs/server";
-import { getUserInfo } from "@/lib/actions/user.actions";
 import { redirect } from "next/navigation";
-import { getAllOrders } from "@/lib/actions/order.actions";
 import { DEFAULT_LIMIT } from "@/constants";
 import Pagination from "@/components/Pagination";
+import { currentUser } from "@clerk/nextjs/server";
+import { OrdersTable } from "../components/OrdersTable";
+import { getUserInfo } from "@/lib/actions/user.actions";
+import { getAllOrders } from "@/lib/actions/order.actions";
 
 const page = async ({ searchParams }: { searchParams: any }) => {
 	const { query, page } = await searchParams;

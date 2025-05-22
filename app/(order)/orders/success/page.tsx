@@ -1,12 +1,12 @@
-import { Showcase } from "@/components/shared/Showcase";
-import { ShopCategory } from "@/components/ShopCategory";
+import { redirect } from "next/navigation";
 import { ShopNew } from "@/components/ShopNew";
+import { currentUser } from "@clerk/nextjs/server";
 import { Separator } from "@/components/ui/separator";
+import { Showcase } from "@/components/shared/Showcase";
+import { getUserInfo } from "@/lib/actions/user.actions";
+import { ShopCategory } from "@/components/ShopCategory";
 import { getOrderDetails } from "@/lib/actions/order.actions";
 import { getNewProducts } from "@/lib/actions/product.actions";
-import { getUserInfo } from "@/lib/actions/user.actions";
-import { currentUser } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
 
 const page = async ({ searchParams }: { searchParams: any }) => {
 	const clerkUser = await currentUser();

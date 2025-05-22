@@ -8,7 +8,6 @@ import { handleError } from "../utils";
 import { deleteImages, uploadImages } from "./upload.actions";
 
 import { v2 as cloudinary } from "cloudinary";
-import { DEFAULT_LIMIT, DEFAULT_NEW_LIMITS } from "@/constants";
 import Order from "../database/models/order.model";
 import "../database/models"; // Ensures all schemas are registered
 import mongoose from "mongoose";
@@ -62,7 +61,7 @@ export const createNewProduct = async (details: CreateNewProductParams) => {
 
 		return {
 			status: 201,
-			message: "Success.",
+			message: "You have successfully created a product.",
 			product: JSON.parse(JSON.stringify(newProduct)),
 		};
 	} catch (error: any) {
@@ -393,12 +392,12 @@ export const deleteProductImage = async ({
 // Get all the products by admin
 export const getAdminProducts = async ({
 	query,
-	limit = DEFAULT_LIMIT,
+	limit = 0,
 	page,
 	userId,
 }: {
 	query: string;
-	limit: number;
+	limit?: number;
 	page: string;
 	userId: string;
 }) => {
@@ -529,7 +528,7 @@ export const getAdminProducts = async ({
 // Get all the products
 export const getAllProducts = async ({
 	query,
-	limit = DEFAULT_LIMIT,
+	limit = 0,
 	page,
 }: {
 	query?: string;
@@ -619,7 +618,7 @@ export const getTopProducts = async () => {
 // Get new products
 export const getNewProducts = async ({
 	query,
-	limit = DEFAULT_LIMIT,
+	limit = 0,
 	page,
 	tags,
 	minPrice,
@@ -718,18 +717,32 @@ export const getNewProducts = async ({
 				  }
 				: {};
 
+		const skipAmount = (Number(page) - 1) * limit;
+
+		console.log(limit);
+
 		const products = await Product.find({
 			...keyword,
 			...tagFilter,
 			...priceConditions,
 		})
+			.skip(skipAmount)
 			.populate("category")
 			.sort({ createdAt: -1 })
-			.limit(DEFAULT_NEW_LIMITS);
+			.limit(0);
+
+		const productCount = await Product.countDocuments({
+			...keyword,
+			...tagFilter,
+			...priceConditions,
+		});
+
+		console.log("COUNT", productCount);
 
 		return {
 			status: 200,
 			products: JSON.parse(JSON.stringify(products)),
+			totalPages: Math.ceil(productCount / limit),
 		};
 	} catch (error: any) {
 		handleError(error);
@@ -746,7 +759,7 @@ export const getNewProducts = async ({
 export const getCategoryProducts = async ({
 	category,
 	query,
-	limit = DEFAULT_LIMIT,
+	limit = 0,
 	page,
 	tags,
 	minPrice,
@@ -920,6 +933,36 @@ export const getProductDetails = async ({
 			message:
 				error?.message ||
 				"Oops! Couldn't get product! Try again later.",
+		};
+	}
+};
+
+export const getSimilarProducts = async ({
+	category,
+	productId,
+}: {
+	category: string;
+	productId: string;
+}) => {
+	try {
+		await connectToDatabase();
+
+		const products = await Product.find({
+			_id: { $ne: productId },
+			category,
+		}).populate("category");
+
+		return {
+			status: 200,
+			products: JSON.parse(JSON.stringify(products)),
+		};
+	} catch (error: any) {
+		handleError(error);
+		return {
+			status: error?.status || 400,
+			message:
+				error?.message ||
+				"Oops! Couldn't get products! Try again later.",
 		};
 	}
 };

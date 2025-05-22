@@ -1,13 +1,12 @@
-import { CategoryBreadCrumbs } from "@/components/CategoryBreadCrumbs";
+import Pagination from "@/components/Pagination";
 import { Filter } from "@/components/shared/Filter";
+import { Separator } from "@/components/ui/separator";
 import { ShoeCard } from "@/components/shared/ShoeCard";
 import { Showcase } from "@/components/shared/Showcase";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { DEFAULT_LIMIT, DEFAULT_PRODUCT_IMAGE } from "@/constants";
-import { getNewProducts } from "@/lib/actions/product.actions";
 import { IProduct } from "@/lib/database/models/product.model";
-import { redirect } from "next/navigation";
+import { getNewProducts } from "@/lib/actions/product.actions";
+import { DEFAULT_NEW_LIMITS, DEFAULT_PRODUCT_IMAGE } from "@/constants";
+import { CategoryBreadCrumbs } from "@/components/CategoryBreadCrumbs";
 
 const page = async ({
 	params,
@@ -21,13 +20,13 @@ const page = async ({
 	const newProducts = await getNewProducts({
 		query,
 		page,
-		limit: DEFAULT_LIMIT,
+		limit: DEFAULT_NEW_LIMITS,
 		tags,
 		minPrice: minPrice || "",
 		maxPrice: maxPrice || "",
 	});
 
-	if (newProducts.status === 400) redirect("/not-found");
+	// if (newProducts.status === 400) redirect("/not-found");
 
 	const categoryTags = [
 		...new Set(
@@ -77,15 +76,14 @@ const page = async ({
 							/>
 						)
 					)}
-					{newProducts?.products?.length > DEFAULT_LIMIT && (
-						<div
-							className={`flex flex-col items-center justify-center gap-4 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] aspect-auto w-full rounded-lg object-cover hover:bg-accent dark:hover:bg-accent/50 cursor-pointer`}
-						>
-							<Button variant={"ghost"} size={"lg"}>
-								Load more
-							</Button>
-						</div>
-					)}
+					<div className="col-span-2 ">
+						{newProducts?.totalPages! > 1 && (
+							<Pagination
+								totalPages={newProducts?.totalPages}
+								page={page}
+							/>
+						)}
+					</div>
 				</div>
 			</div>
 			<div className="container">

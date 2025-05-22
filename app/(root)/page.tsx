@@ -1,16 +1,16 @@
-import { AllProducts } from "@/components/AllProducts";
+import { redirect } from "next/navigation";
+import { ShopNew } from "@/components/ShopNew";
 import { BestSellers } from "@/components/BestSellers";
-import JoinWaitlist from "@/components/shared/JoinWaitlist";
+import { AllProducts } from "@/components/AllProducts";
 import { Showcase } from "@/components/shared/Showcase";
 import { ShopCategory } from "@/components/ShopCategory";
-import { ShopNew } from "@/components/ShopNew";
 import { Separator } from "@/components/ui/separator";
+import JoinWaitlist from "@/components/shared/JoinWaitlist";
 import {
 	getAllProducts,
 	getNewProducts,
 	getTopProducts,
 } from "@/lib/actions/product.actions";
-import { redirect } from "next/navigation";
 
 const page = async () => {
 	const newProducts = await getNewProducts({});
