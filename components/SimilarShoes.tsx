@@ -21,6 +21,7 @@ export const SimilarShoes = () => {
 				</div>
 				<ScrollArea className="">
 					<div className="flex w-max space-x-4 pt-4 pr-10 pb-4">
+						{/* <ShoeCard />
 						<ShoeCard />
 						<ShoeCard />
 						<ShoeCard />
@@ -28,8 +29,7 @@ export const SimilarShoes = () => {
 						<ShoeCard />
 						<ShoeCard />
 						<ShoeCard />
-						<ShoeCard />
-						<LoadMore />
+						<LoadMore /> */}
 					</div>
 					<ScrollBar orientation="horizontal" />
 				</ScrollArea>

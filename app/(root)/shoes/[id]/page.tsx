@@ -3,7 +3,7 @@ import { ShoeBreadCrumbs } from "@/components/shared/ShoeBreadCrumbs";
 import { ShoeDetails } from "@/components/ShoeDetails";
 import { ShoeImages } from "@/components/ShoeImages";
 import { ShopNew } from "@/components/ShopNew";
-import { SimilarShoes } from "@/components/SimilarShoes";
+// import { SimilarShoes } from "@/components/SimilarShoes";
 import { Separator } from "@/components/ui/separator";
 import {
 	getNewProducts,
