@@ -16,6 +16,7 @@ import { OrderConfirmationEmail } from "@/templates/order-confirmation-email";
 import { NewOrderAlert } from "@/templates/new-order-alert";
 import { OrderDelivered } from "@/templates/order-delivered";
 import { PaymentSuccess } from "@/templates/payment-success";
+import { OrderCancellation } from "@/templates/order-cancellation";
 
 const mailjet = Mailjet.apiConnect(
 	process.env.MAILJET_API_PUBLIC_KEY!,
@@ -470,7 +471,7 @@ export const updateOrder = async ({
 
 		await order.save();
 
-		// **Send order confirmation email to customer**
+		// **Send order payment success email to customer**
 		await mailjet.post("send", { version: "v3.1" }).request({
 			Messages: [
 				{
@@ -547,7 +548,10 @@ export const cancelOrder = async ({
 				message: "Oops! User can not be found. Please try again later",
 			};
 
-		const order = await Order.findById(orderId);
+		const order = await Order.findOne({
+			_id: orderId,
+			user: userId,
+		}).populate("user");
 
 		if (!order)
 			return {
@@ -559,6 +563,33 @@ export const cancelOrder = async ({
 		order.paymentStatus = PaymentStatus.FAILED;
 
 		await order.save();
+
+		// **Send order cancellation email to customer**
+		await mailjet.post("send", { version: "v3.1" }).request({
+			Messages: [
+				{
+					From: {
+						Email: process.env.SENDER_EMAIL_ADDRESS!,
+						Name: process.env.COMPANY_NAME!,
+					},
+					To: [
+						{
+							Email: user.email,
+							Name: `${user.firstName} ${user.lastName}`,
+						},
+					],
+					Subject: `Order cancellation - LacedUp.`,
+					TextPart: `Order cancellation - LacedUp. `,
+					HTMLPart: OrderCancellation({
+						orderId: order._id,
+						items: order.orderItems,
+						totalPrice: order.totalPrice,
+						name: `${order.user.firstName} ${order.user.lastName}`,
+					}),
+				},
+			],
+		});
+
 		revalidatePath(`/orders/${orderId}`);
 		revalidatePath(`/orders`);
 
