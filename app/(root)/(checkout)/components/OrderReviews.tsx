@@ -167,7 +167,7 @@ export const OrderReviews = ({
 
 								<div className="flex flex-col justify-center gap-1 items-center h-full">
 									<h3 className="font-medium text-base">
-										₦ {formatMoneyInput(price)}
+										₦{formatMoneyInput(price)}
 									</h3>
 								</div>
 							</div>

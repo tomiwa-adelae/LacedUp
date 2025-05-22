@@ -305,3 +305,4 @@ export const DEFAULT_LOGO =
 	"https://res.cloudinary.com/dh0rc6p1c/image/upload/v1747658722/lacedup/cloud/footprints_qwtcbt.svg";
 
 export const WEBSITE_URL = "www.lacedup.com";
+export const emailAddress = "support@lacedup.com";

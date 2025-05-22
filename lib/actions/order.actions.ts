@@ -11,6 +11,17 @@ import { handleError } from "../utils";
 import Product from "../database/models/product.model";
 import { DEFAULT_LIMIT } from "@/constants";
 
+import Mailjet from "node-mailjet";
+import { OrderConfirmationEmail } from "@/templates/order-confirmation-email";
+import { NewOrderAlert } from "@/templates/new-order-alert";
+import { OrderDelivered } from "@/templates/order-delivered";
+import { PaymentSuccess } from "@/templates/payment-success";
+
+const mailjet = Mailjet.apiConnect(
+	process.env.MAILJET_API_PUBLIC_KEY!,
+	process.env.MAILJET_API_PRIVATE_KEY!
+);
+
 export const createOrder = async (details: any) => {
 	try {
 		await connectToDatabase();
@@ -69,8 +80,63 @@ export const createOrder = async (details: any) => {
 		if (!newOrder)
 			return {
 				status: 400,
-				message: "Order not created. Please try again later",
+				message: "Order not successful. Please try again later",
 			};
+
+		// **Send order confirmation email to customer**
+		await mailjet.post("send", { version: "v3.1" }).request({
+			Messages: [
+				{
+					From: {
+						Email: process.env.SENDER_EMAIL_ADDRESS!,
+						Name: process.env.COMPANY_NAME!,
+					},
+					To: [
+						{
+							Email: user.email,
+							Name: `${user.firstName} ${user.lastName}`,
+						},
+					],
+					Subject: `Order confirmation - LacedUp.`,
+					TextPart: `Order confirmation - LacedUp. `,
+					HTMLPart: OrderConfirmationEmail({
+						name: `${user.firstName} ${user.lastName}`,
+						email: user.email,
+						orderId: newOrder._id,
+						items: newOrder.orderItems,
+						totalPrice,
+						address: `${newOrder.shippingDetails.address}, ${newOrder.shippingDetails.city}, ${newOrder.shippingDetails.state}`,
+					}),
+				},
+			],
+		});
+		// **Send new order alert to admin**
+		await mailjet.post("send", { version: "v3.1" }).request({
+			Messages: [
+				{
+					From: {
+						Email: process.env.SENDER_EMAIL_ADDRESS!,
+						Name: process.env.COMPANY_NAME!,
+					},
+					To: [
+						{
+							Email: process.env.ADMIN_EMAIL_ADDRESS,
+							Name: `${process.env.COMPANY_NAME} Admin`,
+						},
+					],
+					Subject: `New order alert - LacedUp.`,
+					TextPart: `New order alert - LacedUp. `,
+					HTMLPart: NewOrderAlert({
+						name: `${user.firstName} ${user.lastName}`,
+						email: user.email,
+						orderId: newOrder._id,
+						items: newOrder.orderItems,
+						totalPrice,
+						address: `${newOrder.shippingDetails.address}, ${newOrder.shippingDetails.city}, ${newOrder.shippingDetails.state}`,
+					}),
+				},
+			],
+		});
 
 		return {
 			status: 201,
@@ -282,7 +348,7 @@ export const adminUpdateOrderDetails = async ({
 					"Oops! You are not authorized to make this update. Please try again later",
 			};
 
-		const order = await Order.findById(orderId);
+		const order = await Order.findById(orderId).populate("user");
 
 		if (!order)
 			return {
@@ -295,6 +361,32 @@ export const adminUpdateOrderDetails = async ({
 		order.paymentStatus = details.paymentStatus || order.paymentStatus;
 
 		await order.save();
+
+		// **Send order confirmation email to customer**
+		await mailjet.post("send", { version: "v3.1" }).request({
+			Messages: [
+				{
+					From: {
+						Email: process.env.SENDER_EMAIL_ADDRESS!,
+						Name: process.env.COMPANY_NAME!,
+					},
+					To: [
+						{
+							Email: user.email,
+							Name: `${user.firstName} ${user.lastName}`,
+						},
+					],
+					Subject: `Order delivered - LacedUp.`,
+					TextPart: `Order delivered - LacedUp. `,
+					HTMLPart: OrderDelivered({
+						name: `${order.user.firstName} ${order.user.lastName}`,
+						orderId: order._id,
+						items: order.orderItems,
+						totalPrice: order.totalPrice,
+					}),
+				},
+			],
+		});
 
 		revalidatePath(`/orders/${orderId}`);
 		revalidatePath("/orders");
@@ -377,6 +469,33 @@ export const updateOrder = async ({
 		order.paymentStatus = PaymentStatus.PAID; // Or use PaymentStatus.PAID if you're importing the enum
 
 		await order.save();
+
+		// **Send order confirmation email to customer**
+		await mailjet.post("send", { version: "v3.1" }).request({
+			Messages: [
+				{
+					From: {
+						Email: process.env.SENDER_EMAIL_ADDRESS!,
+						Name: process.env.COMPANY_NAME!,
+					},
+					To: [
+						{
+							Email: user.email,
+							Name: `${user.firstName} ${user.lastName}`,
+						},
+					],
+					Subject: `Payment successful - LacedUp.`,
+					TextPart: `Payment successful - LacedUp. `,
+					HTMLPart: PaymentSuccess({
+						paymentId: order.paymentResult.id,
+						orderId: order._id,
+						items: order.orderItems,
+						totalPrice: order.totalPrice,
+					}),
+				},
+			],
+		});
+
 		revalidatePath(`/orders/${orderId}`);
 		revalidatePath(`/orders`);
 		return {
