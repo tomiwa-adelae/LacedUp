@@ -419,7 +419,7 @@ export const getAdminProducts = async ({
 				message: "You are not authorized to get these products.",
 			};
 
-		const skipAmount = (Number(page) || 1 - 1) * limit;
+		const skipAmount = (Number(page) - 1) * limit;
 
 		const keywordMatch = query
 			? {
