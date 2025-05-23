@@ -28,7 +28,7 @@ export const Showcase = ({
 					<p className="text-base text-muted-foreground dark:text-gray-200 mt-4">
 						{description}
 					</p>
-					<div className="flex items-center justify-start gap-4">
+					<div className="flex flex-col md:flex-row items-center justify-start gap-4">
 						{cta?.map(({ slug, label }, index) => (
 							<Button
 								className="w-full md:w-auto mt-6"

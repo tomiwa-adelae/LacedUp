@@ -26,7 +26,7 @@ export const ShippingInformation = ({
 	shippingDetails,
 }: Props) => {
 	return (
-		<div className="p-8 rounded-lg shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-40 bg-white dark:border dark:bg-black dark:text-white w-full">
+		<div className="md:p-8 md:rounded-lg md:shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-40 bg-white dark:md:border dark:bg-black dark:text-white w-full">
 			<h2 className="text-xl md:text-2xl uppercase font-semibold mb-4">
 				Shipping Information
 			</h2>

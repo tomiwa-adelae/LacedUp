@@ -78,7 +78,7 @@ export const OrderReviews = ({
 											{name}
 										</Link>
 									</h3>
-									<div className="flex items-center justify-start text-xs my-1 font-medium text-muted-foreground dark:text-gray-200">
+									<div className="flex flex-wrap items-center justify-start text-xs my-1 font-medium text-muted-foreground dark:text-gray-200">
 										<Link href={`/category/${category}`}>
 											Category:{" "}
 											<span className="text-black dark:text-white hover:text-primary dark:hover:text-primary capitalize">
@@ -133,7 +133,7 @@ export const OrderReviews = ({
 											{name}
 										</Link>
 									</h3>
-									<div className="flex items-center justify-start text-xs my-1 font-medium text-muted-foreground dark:text-gray-200">
+									<div className="flex flex-wrap items-center justify-start text-xs my-1 font-medium text-muted-foreground dark:text-gray-200">
 										<Link href={`/category/${category}`}>
 											Category:{" "}
 											<span className="text-black dark:text-white hover:text-primary dark:hover:text-primary">

@@ -76,7 +76,7 @@ const page = async ({ params }: { params: any }) => {
 		<div>
 			<AppNavbar user={user?.user} />
 			<Header user={user?.user} />
-			<div className="flex items-center justify-between gap-8 bg-white dark:bg-black">
+			<div className="flex flex-col md:flex-row items-center justify-between gap-8 bg-white dark:bg-black">
 				<div>
 					<div className="flex items-center justify-between gap-4">
 						<h2 className="text-lg lg:text-3xl uppercase font-semibold">
@@ -374,63 +374,65 @@ const page = async ({ params }: { params: any }) => {
 						</div>
 					</div>
 					<div className="col-span-2 lg:col-span-1 grid gap-4">
-						<div className="p-4 rounded-lg shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-40  dark:border">
-							<h4 className="font-medium text-muted-foreground dark:text-gray-100 text-sm lg:text-base uppercase">
-								Customer
-							</h4>
-							<div className="text-sm mt-4">
-								<p className="flex items-center justify-start gap-2">
-									<Image
-										src={order?.order?.user?.picture}
-										alt={`${order?.order?.user?.firstName}'s picture`}
-										width={1000}
-										height={1000}
-										className="size-8 object-cover rounded-full"
-									/>
-									<span>
-										{order?.order?.user?.firstName}{" "}
-										{order?.order?.user?.lastName}
-									</span>
-								</p>
-
-								<div className="space-y-2 mt-4">
-									<p>
-										<a
-											className="hover:underline hover:text-primary"
-											href={`mailto:${order?.order?.user.email}`}
-										>
-											<Mail className="inline mr-2 size-4" />
-											<span>
-												{order?.order?.user?.email}{" "}
-											</span>
-										</a>
+						{user?.user?.isAdmin && (
+							<div className="p-4 rounded-lg shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-40  dark:border">
+								<h4 className="font-medium text-muted-foreground dark:text-gray-100 text-sm lg:text-base uppercase">
+									Customer
+								</h4>
+								<div className="text-sm mt-4">
+									<p className="flex items-center justify-start gap-2">
+										<Image
+											src={order?.order?.user?.picture}
+											alt={`${order?.order?.user?.firstName}'s picture`}
+											width={1000}
+											height={1000}
+											className="size-8 object-cover rounded-full"
+										/>
+										<span>
+											{order?.order?.user?.firstName}{" "}
+											{order?.order?.user?.lastName}
+										</span>
 									</p>
-									<p>
-										{order?.order?.user?.phoneNumber ? (
+
+									<div className="space-y-2 mt-4">
+										<p>
 											<a
-												className="hover:underline hover:text-primary block"
-												href={`tel:${order?.order?.user.phoneNumber}`}
+												className="hover:underline hover:text-primary"
+												href={`mailto:${order?.order?.user.email}`}
 											>
-												<Phone className="inline mr-2 size-4" />
+												<Mail className="inline mr-2 size-4" />
 												<span>
-													{
-														order?.order?.user
-															?.phoneNumber
-													}{" "}
+													{order?.order?.user?.email}{" "}
 												</span>
 											</a>
-										) : (
-											<p className="italic block">
-												<Phone className="inline mr-2 size-4" />
-												<span>
-													No phone number found
-												</span>
-											</p>
-										)}
-									</p>
+										</p>
+										<p>
+											{order?.order?.user?.phoneNumber ? (
+												<a
+													className="hover:underline hover:text-primary block"
+													href={`tel:${order?.order?.user.phoneNumber}`}
+												>
+													<Phone className="inline mr-2 size-4" />
+													<span>
+														{
+															order?.order?.user
+																?.phoneNumber
+														}{" "}
+													</span>
+												</a>
+											) : (
+												<p className="italic block">
+													<Phone className="inline mr-2 size-4" />
+													<span>
+														No phone number found
+													</span>
+												</p>
+											)}
+										</p>
+									</div>
 								</div>
 							</div>
-						</div>
+						)}
 						<div className="p-4 rounded-lg shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-40  dark:border">
 							<h4 className="font-medium text-muted-foreground dark:text-gray-100 text-sm lg:text-base uppercase">
 								Shipping address
