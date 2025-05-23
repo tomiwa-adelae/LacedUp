@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
 import { Separator } from "@/components/ui/separator";
 import { CartSummary } from "@/components/CartSummary";
@@ -6,6 +7,14 @@ import { PaymentMethod } from "../components/PaymentMethod";
 import { getShippingDetails } from "@/lib/actions/shipping.actions";
 import { ShippingInformation } from "../components/ShippingInformation";
 import { Header } from "@/components/shared/Header";
+
+export const metadata: Metadata = {
+	title: "Your shipping details – Secure Checkout | LacedUp",
+	description:
+		"Add your shipping details. Ready for a smooth and secure checkout experience with multiple payment options including Flutterwave.",
+	keywords:
+		"Shoe cart, checkout shoes online, review order, secure payment Nigeria, Flutterwave shopping cart",
+};
 
 const page = async () => {
 	const clerkUser = await currentUser();

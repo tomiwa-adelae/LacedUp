@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { ShopNew } from "@/components/ShopNew";
 import { currentUser } from "@clerk/nextjs/server";
@@ -7,6 +8,14 @@ import { getUserInfo } from "@/lib/actions/user.actions";
 import { ShopCategory } from "@/components/ShopCategory";
 import { getOrderDetails } from "@/lib/actions/order.actions";
 import { getNewProducts } from "@/lib/actions/product.actions";
+
+export const metadata: Metadata = {
+	title: "Order Successful – Thank You for Shopping | LacedUp",
+	description:
+		"Your order has been placed successfully. A confirmation email has been sent. Track your delivery or shop more amazing styles now.",
+	keywords:
+		"Order confirmation shoes, successful payment, shoe delivery, track order Nigeria",
+};
 
 const page = async ({ searchParams }: { searchParams: any }) => {
 	const clerkUser = await currentUser();

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import type { Metadata, ResolvingMetadata } from "next";
 import { redirect } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { currentUser } from "@clerk/nextjs/server";
@@ -32,6 +33,31 @@ import {
 } from "lucide-react";
 import { AppNavbar } from "../../components/AppNavbar";
 import { Header } from "../../components/Header";
+
+export async function generateMetadata(
+	{ params }: any,
+	parent: ResolvingMetadata
+): Promise<Metadata> {
+	const clerkUser = await currentUser();
+	const { id } = await params;
+	try {
+		const user = await getUserInfo(clerkUser?.id!);
+
+		const order = await getOrderDetails({
+			userId: user?.user?._id,
+			orderId: id,
+		});
+		return {
+			title: `ORDER-${order?.order?._id} - Manage Orders - Admin Panel | LacedUp`,
+		};
+	} catch (error) {
+		return {
+			title: "Quality Shoes Online | LacedUp",
+			description:
+				"Discover premium sneakers, boots, heels, and sandals at unbeatable prices. Shop quality shoes for men, women, and kids in Nigeria. Fast delivery & secure payment.",
+		};
+	}
+}
 
 const page = async ({ params }: { params: any }) => {
 	const clerkUser = await currentUser();

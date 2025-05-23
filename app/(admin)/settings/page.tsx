@@ -1,9 +1,18 @@
+import type { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
 import { Separator } from "@/components/ui/separator";
 import { getUserInfo } from "@/lib/actions/user.actions";
 import { SettingsForm } from "@/components/forms/SettingsForm";
 import { AppNavbar } from "../components/AppNavbar";
 import { Header } from "../components/Header";
+
+export const metadata: Metadata = {
+	title: "Store Settings – Admin Configuration | LacedUp",
+	description:
+		"Configure payment settings, email notifications, shipping options, and other preferences for your online shoe store.",
+	keywords:
+		"store settings, admin preferences, ecommerce config, shoe store backend settings",
+};
 
 const page = async () => {
 	const clerkUser = await currentUser();

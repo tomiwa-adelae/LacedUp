@@ -1,4 +1,5 @@
 import React from "react";
+import type { Metadata } from "next";
 import { RecentOrders } from "../components/RecentOrders";
 import { currentUser } from "@clerk/nextjs/server";
 import { getUserInfo } from "@/lib/actions/user.actions";
@@ -12,6 +13,11 @@ import { DEFAULT_LIMIT } from "@/constants";
 import { AppNavbar } from "../components/AppNavbar";
 import { Header } from "../components/Header";
 import Pagination from "@/components/Pagination";
+
+export const metadata: Metadata = {
+	title: "My Dashboard | LacedUp",
+	description: "Get a quick overview of your orders.",
+};
 
 const page = async ({ searchParams }: { searchParams: any }) => {
 	const { query, page } = await searchParams;

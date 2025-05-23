@@ -762,10 +762,10 @@ export const getCategoryProducts = async ({
 	maxPrice,
 }: {
 	category: string;
-	query: string;
-	limit: number;
-	page: string;
-	tags: any;
+	query?: string;
+	limit?: number;
+	page?: string;
+	tags?: any;
 	minPrice?: string;
 	maxPrice?: string;
 }) => {

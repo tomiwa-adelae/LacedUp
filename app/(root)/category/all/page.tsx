@@ -1,6 +1,6 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { DEFAULT_LIMIT } from "@/constants";
-import { Button } from "@/components/ui/button";
 import Pagination from "@/components/Pagination";
 import { Separator } from "@/components/ui/separator";
 import { ShoeCard } from "@/components/shared/ShoeCard";
@@ -13,6 +13,12 @@ import { CategoryBreadCrumbs } from "@/components/CategoryBreadCrumbs";
 import { Header } from "@/components/shared/Header";
 import { currentUser } from "@clerk/nextjs/server";
 import { getUserInfo } from "@/lib/actions/user.actions";
+
+export const metadata: Metadata = {
+	title: "Explore All Shoe Categories – Sneakers, Heels, Boots & More | LacedUp",
+	description:
+		"Browse our wide collection of stylish shoes including sneakers, formal shoes, and sandals. Quality guaranteed. Sizes from 38–50. Free delivery on select orders.",
+};
 
 const page = async ({
 	params,

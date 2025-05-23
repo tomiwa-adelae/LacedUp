@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { RecentActivity } from "../components/RecentActivity";
 import { currentUser } from "@clerk/nextjs/server";
 import { getCustomers, getUserInfo } from "@/lib/actions/user.actions";
@@ -9,6 +10,14 @@ import { DEFAULT_LIMIT } from "@/constants";
 import { AnalyticChart } from "../components/AnalyticChart";
 import { AppNavbar } from "../components/AppNavbar";
 import { Header } from "../components/Header";
+
+export const metadata: Metadata = {
+	title: "Store Analytics – Sales & Insights | LacedUp",
+	description:
+		"Analyze sales trends, customer behavior, popular products, and conversion rates. Make data-driven decisions to grow your shoe business.",
+	keywords:
+		"sales analytics, ecommerce insights, product performance, shoe sales dashboard, admin analytics",
+};
 
 const page = async ({ searchParams }: { searchParams: any }) => {
 	const { query, page } = await searchParams;

@@ -4,6 +4,7 @@ import { ShopNew } from "@/components/ShopNew";
 import { Button } from "@/components/ui/button";
 import { Filter } from "@/components/shared/Filter";
 import { Separator } from "@/components/ui/separator";
+import type { Metadata, ResolvingMetadata } from "next";
 import { Showcase } from "@/components/shared/Showcase";
 import { ShoeCard } from "@/components/shared/ShoeCard";
 import { IProduct } from "@/lib/database/models/product.model";
@@ -13,6 +14,26 @@ import {
 	getCategoryProducts,
 	getNewProducts,
 } from "@/lib/actions/product.actions";
+import { Header } from "@/components/shared/Header";
+import { currentUser } from "@clerk/nextjs/server";
+import { getUserInfo } from "@/lib/actions/user.actions";
+
+export async function generateMetadata(
+	{ params }: any,
+	parent: ResolvingMetadata
+): Promise<Metadata> {
+	const { category } = await params;
+	try {
+		const categoryDetails = await getCategoryDetails(category);
+		return {
+			title: `${categoryDetails?.category?.name} - ${categoryDetails?.category?.name} | LacedUp`,
+		};
+	} catch (error) {
+		return {
+			title: "Quality Shoes Online | LacedUp",
+		};
+	}
+}
 
 const page = async ({
 	params,
@@ -24,7 +45,8 @@ const page = async ({
 	const { query, page, tags, minPrice, maxPrice } = await searchParams;
 
 	const { category } = await params;
-
+	const clerkUser = await currentUser();
+	const user = await getUserInfo(clerkUser?.id!);
 	const newProducts = await getNewProducts({});
 	const categoryProducts = await getCategoryProducts({
 		category,
@@ -49,6 +71,7 @@ const page = async ({
 
 	return (
 		<div className="bg-white dark:bg-black py-4 relative">
+			<Header search={true} user={user?.user} />
 			<CategoryBreadCrumbs
 				categoryName={categoryDetails?.category.name}
 			/>

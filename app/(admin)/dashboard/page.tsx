@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
 import { CustomerBox } from "../components/CustomerBox";
 import { TopProducts } from "../components/TopProducts";
@@ -12,6 +13,14 @@ import { DEFAULT_LIMIT } from "@/constants";
 import { DashboardBoxes } from "../components/DashboardBoxes";
 import { AppNavbar } from "../components/AppNavbar";
 import { Header } from "../components/Header";
+
+export const metadata: Metadata = {
+	title: "Admin Dashboard | LacedUp",
+	description:
+		"Get a quick overview of sales, orders, product performance, and store metrics. Monitor activity and manage store operations from your admin dashboard.",
+	keywords:
+		"admin dashboard, ecommerce admin, store performance, shoe store dashboard, sales analytics Nigeria",
+};
 
 const page = async ({ searchParams }: { searchParams: any }) => {
 	const { query, page } = await searchParams;

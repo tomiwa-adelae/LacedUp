@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { CustomersTable } from "../components/CustomersTable";
 import { currentUser } from "@clerk/nextjs/server";
 import { getCustomers, getUserInfo } from "@/lib/actions/user.actions";
@@ -6,6 +7,14 @@ import { DEFAULT_LIMIT } from "@/constants";
 import Pagination from "@/components/Pagination";
 import { AppNavbar } from "../components/AppNavbar";
 import { Header } from "../components/Header";
+
+export const metadata: Metadata = {
+	title: "Manage Customers – Admin Panel | LacedUp",
+	description:
+		"View customer profiles, track order history, and manage contact information. Stay connected with your shoe store’s loyal buyers.",
+	keywords:
+		"customer management, user accounts admin, order history, customer insights Nigeria",
+};
 
 const page = async ({ searchParams }: { searchParams: any }) => {
 	const { query, page } = await searchParams;

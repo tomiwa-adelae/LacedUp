@@ -1,7 +1,12 @@
+import type { Metadata } from "next";
+import { SignUp } from "@clerk/nextjs";
 import Logo from "@/components/shared/Logo";
 import { Theme } from "@/components/shared/Theme";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { SignUp } from "@clerk/nextjs";
+
+export const metadata: Metadata = {
+	title: "Create an account | LacedUp",
+};
 
 export default function Page() {
 	return (

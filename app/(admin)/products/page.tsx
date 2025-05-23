@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { Plus } from "lucide-react";
 import { redirect } from "next/navigation";
 import { DEFAULT_LIMIT } from "@/constants";
@@ -11,6 +12,14 @@ import { ProductsTable } from "../components/ProductsTable";
 import { getAdminProducts } from "@/lib/actions/product.actions";
 import { AppNavbar } from "../components/AppNavbar";
 import { Header } from "../components/Header";
+
+export const metadata: Metadata = {
+	title: "Manage Products – Admin Panel | LacedUp",
+	description:
+		"View, add, or update product listings. Manage shoe categories, prices, stock levels, and images in your product catalog.",
+	keywords:
+		"manage products, update product info, shoe inventory admin, ecommerce product panel, shoe store CMS",
+};
 
 const page = async ({ searchParams }: { searchParams: any }) => {
 	const { query, page } = await searchParams;

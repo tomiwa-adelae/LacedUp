@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { DEFAULT_LIMIT } from "@/constants";
 import { Header } from "../components/Header";
@@ -7,6 +8,14 @@ import { AppNavbar } from "../components/AppNavbar";
 import { OrdersTable } from "../components/OrdersTable";
 import { getUserInfo } from "@/lib/actions/user.actions";
 import { getAllOrders } from "@/lib/actions/order.actions";
+
+export const metadata: Metadata = {
+	title: "Manage Orders – Admin Panel | LacedUp",
+	description:
+		"Track customer orders, update delivery status, handle returns, and manage order history for your online shoe store.",
+	keywords:
+		"manage orders, order fulfillment admin, customer orders Nigeria, order tracking backend",
+};
 
 const page = async ({ searchParams }: { searchParams: any }) => {
 	const { query, page } = await searchParams;

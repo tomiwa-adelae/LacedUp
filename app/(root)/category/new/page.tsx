@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Pagination from "@/components/Pagination";
 import { Filter } from "@/components/shared/Filter";
 import { Separator } from "@/components/ui/separator";
@@ -11,13 +12,13 @@ import { Header } from "@/components/shared/Header";
 import { currentUser } from "@clerk/nextjs/server";
 import { getUserInfo } from "@/lib/actions/user.actions";
 
-const page = async ({
-	params,
-	searchParams,
-}: {
-	params: any;
-	searchParams: any;
-}) => {
+export const metadata: Metadata = {
+	title: "Explore new arrival Shoes  – Sneakers, Heels, Boots & More | LacedUp",
+	description:
+		"Browse our wide collection of stylish shoes including sneakers, formal shoes, and sandals. Quality guaranteed. Sizes from 38–50. Free delivery on select orders.",
+};
+
+const page = async ({ searchParams }: { searchParams: any }) => {
 	const { query, page, tags, minPrice, maxPrice } = await searchParams;
 
 	const clerkUser = await currentUser();
