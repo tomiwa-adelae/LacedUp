@@ -10,6 +10,8 @@ import { redirect } from "next/navigation";
 import { getAllOrders } from "@/lib/actions/order.actions";
 import { DEFAULT_LIMIT } from "@/constants";
 import { DashboardBoxes } from "../components/DashboardBoxes";
+import { AppNavbar } from "../components/AppNavbar";
+import { Header } from "../components/Header";
 
 const page = async ({ searchParams }: { searchParams: any }) => {
 	const { query, page } = await searchParams;
@@ -43,6 +45,8 @@ const page = async ({ searchParams }: { searchParams: any }) => {
 
 	return (
 		<div>
+			<AppNavbar user={user?.user} />
+			<Header user={user?.user} />
 			<DashboardBoxes
 				orders={orders?.orders}
 				products={products?.products}

@@ -17,7 +17,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function ProfileDropdown({ user }: { user: IUser }) {
+export function ProfileDropdown({ user }: { user?: IUser }) {
 	const { signOut } = useClerk();
 
 	const router = useRouter();

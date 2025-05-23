@@ -4,6 +4,7 @@ import { CartSummary } from "@/components/CartSummary";
 import { getUserInfo } from "@/lib/actions/user.actions";
 import { OrderReviews } from "../components/OrderReviews";
 import { getShippingDetails } from "@/lib/actions/shipping.actions";
+import { Header } from "@/components/shared/Header";
 
 const page = async () => {
 	const clerkUser = await currentUser();
@@ -14,6 +15,7 @@ const page = async () => {
 
 	return (
 		<div className="relative">
+			<Header user={user?.user} />
 			<div className="container grid grid-cols-1 lg:grid-cols-3 gap-8 py-4">
 				<div className="col-span-2 grid gap-8">
 					<div>

@@ -14,9 +14,9 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
 		<div>
 			<Sidebar user={user?.user} />
 			<div className="lg:ml-[16rem]">
-				<AppNavbar user={user?.user} />
+				{/* <AppNavbar user={user?.user} /> */}
 				<div className="lg:pt-16">
-					<Header user={user?.user} />
+					{/* <Header user={user?.user} /> */}
 					<div className="min-h-screen pt-20 lg:pt-4 flex items-center justify-center flex-col">
 						<div className="flex-1 container py-4 lg:py-0">
 							{children}

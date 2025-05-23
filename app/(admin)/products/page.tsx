@@ -9,6 +9,8 @@ import { currentUser } from "@clerk/nextjs/server";
 import { getUserInfo } from "@/lib/actions/user.actions";
 import { ProductsTable } from "../components/ProductsTable";
 import { getAdminProducts } from "@/lib/actions/product.actions";
+import { AppNavbar } from "../components/AppNavbar";
+import { Header } from "../components/Header";
 
 const page = async ({ searchParams }: { searchParams: any }) => {
 	const { query, page } = await searchParams;
@@ -28,13 +30,15 @@ const page = async ({ searchParams }: { searchParams: any }) => {
 
 	return (
 		<div>
+			<AppNavbar search={true} user={user?.user} />
+			<Header search={true} user={user?.user} />
 			<div className="flex items-center justify-between gap-8">
 				<div>
 					<h2 className="text-lg lg:text-3xl uppercase font-semibold">
 						My Shoes
 					</h2>
 					<p className="text-muted-foreground text-sm">
-						All your shoes selling shoes in your store
+						All your shoes in your store
 					</p>
 				</div>
 				<Button size="md" asChild variant={"ghost"}>

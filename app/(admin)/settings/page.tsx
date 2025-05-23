@@ -2,6 +2,8 @@ import { currentUser } from "@clerk/nextjs/server";
 import { Separator } from "@/components/ui/separator";
 import { getUserInfo } from "@/lib/actions/user.actions";
 import { SettingsForm } from "@/components/forms/SettingsForm";
+import { AppNavbar } from "../components/AppNavbar";
+import { Header } from "../components/Header";
 
 const page = async () => {
 	const clerkUser = await currentUser();
@@ -10,6 +12,8 @@ const page = async () => {
 
 	return (
 		<div>
+			<AppNavbar user={user?.user} />
+			<Header user={user?.user} />
 			<div className="flex items-center justify-between gap-8">
 				<div>
 					<h2 className="text-lg lg:text-3xl uppercase font-semibold">

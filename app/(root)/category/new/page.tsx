@@ -7,6 +7,9 @@ import { IProduct } from "@/lib/database/models/product.model";
 import { getNewProducts } from "@/lib/actions/product.actions";
 import { DEFAULT_NEW_LIMITS, DEFAULT_PRODUCT_IMAGE } from "@/constants";
 import { CategoryBreadCrumbs } from "@/components/CategoryBreadCrumbs";
+import { Header } from "@/components/shared/Header";
+import { currentUser } from "@clerk/nextjs/server";
+import { getUserInfo } from "@/lib/actions/user.actions";
 
 const page = async ({
 	params,
@@ -17,6 +20,8 @@ const page = async ({
 }) => {
 	const { query, page, tags, minPrice, maxPrice } = await searchParams;
 
+	const clerkUser = await currentUser();
+	const user = await getUserInfo(clerkUser?.id!);
 	const newProducts = await getNewProducts({
 		query,
 		page,
@@ -38,6 +43,7 @@ const page = async ({
 
 	return (
 		<div className="bg-white dark:bg-black py-4 relative">
+			<Header search={true} user={user?.user} />
 			<CategoryBreadCrumbs categoryName={"New arrivals"} />
 			<Showcase
 				title={"New Arrivals"}

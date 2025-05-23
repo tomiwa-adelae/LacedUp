@@ -27,7 +27,7 @@ export const ShopNew = ({ products = [] }: Props) => {
 				</div>
 				<ScrollArea className="">
 					<div className="flex w-max space-x-4 pt-4 pr-10 pb-4">
-						{products.map(
+						{products?.map(
 							(
 								{
 									name,

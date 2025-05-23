@@ -200,19 +200,21 @@ export const OrdersTable = ({
 												<Eye className="size-5 text-primary" />
 											</Link>
 										</Button>
-										<Button
-											onClick={() => {
-												setOpenCancelModal(true);
-												setOrderId(_id);
-											}}
-											size="icon"
-											variant={"ghost"}
-											disabled={
-												orderStatus === "cancelled"
-											}
-										>
-											<Ban />
-										</Button>
+										{!isAdmin && (
+											<Button
+												onClick={() => {
+													setOpenCancelModal(true);
+													setOrderId(_id);
+												}}
+												size="icon"
+												variant={"ghost"}
+												disabled={
+													orderStatus === "cancelled"
+												}
+											>
+												<Ban />
+											</Button>
+										)}
 									</TableCell>
 								</TableRow>
 							)

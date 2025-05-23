@@ -36,7 +36,7 @@ export const ShopCategory = async () => {
 								All
 							</p>
 						</Link>
-						{allCategories.map(
+						{allCategories?.map(
 							({
 								name,
 								picture,

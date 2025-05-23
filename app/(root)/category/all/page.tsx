@@ -10,6 +10,9 @@ import { getAllProducts } from "@/lib/actions/product.actions";
 import { getAllCategories } from "@/lib/actions/category.actions";
 import { IProduct } from "@/lib/database/models/product.model";
 import { CategoryBreadCrumbs } from "@/components/CategoryBreadCrumbs";
+import { Header } from "@/components/shared/Header";
+import { currentUser } from "@clerk/nextjs/server";
+import { getUserInfo } from "@/lib/actions/user.actions";
 
 const page = async ({
 	params,
@@ -19,7 +22,8 @@ const page = async ({
 	searchParams: any;
 }) => {
 	const { query, page } = await searchParams;
-
+	const clerkUser = await currentUser();
+	const user = await getUserInfo(clerkUser?.id!);
 	const products = await getAllProducts({
 		query,
 		page,
@@ -31,7 +35,8 @@ const page = async ({
 
 	return (
 		<div className="bg-white dark:bg-black py-4 relative">
-			<CategoryBreadCrumbs categoryName={"New arrivals"} />
+			<Header search={true} user={user?.user} />
+			<CategoryBreadCrumbs categoryName={"All"} />
 			<Showcase title={"All products"} />
 			<div className="container">
 				<Separator />

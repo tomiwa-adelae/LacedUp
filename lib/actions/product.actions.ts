@@ -719,8 +719,6 @@ export const getNewProducts = async ({
 
 		const skipAmount = (Number(page) - 1) * limit;
 
-		console.log(limit);
-
 		const products = await Product.find({
 			...keyword,
 			...tagFilter,
@@ -736,8 +734,6 @@ export const getNewProducts = async ({
 			...tagFilter,
 			...priceConditions,
 		});
-
-		console.log("COUNT", productCount);
 
 		return {
 			status: 200,

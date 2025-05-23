@@ -9,6 +9,9 @@ import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { DEFAULT_LIMIT } from "@/constants";
+import { AppNavbar } from "../components/AppNavbar";
+import { Header } from "../components/Header";
+import Pagination from "@/components/Pagination";
 
 const page = async ({ searchParams }: { searchParams: any }) => {
 	const { query, page } = await searchParams;
@@ -27,6 +30,8 @@ const page = async ({ searchParams }: { searchParams: any }) => {
 
 	return (
 		<div>
+			<AppNavbar user={user?.user} />
+			<Header user={user?.user} />
 			<div>
 				<h2 className="text-lg lg:text-3xl uppercase font-semibold">
 					My Account
@@ -71,6 +76,9 @@ const page = async ({ searchParams }: { searchParams: any }) => {
 			</div>
 			<Separator className="my-8" />
 			<RecentOrders userId={user?.user?._id} orders={orders?.orders} />
+			{orders?.totalPages! > 1 && (
+				<Pagination totalPages={orders?.totalPages} page={page} />
+			)}
 		</div>
 	);
 };

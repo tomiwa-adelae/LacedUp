@@ -8,13 +8,8 @@ export default async function Layout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	const clerkUser = await currentUser();
-
-	const user = await getUserInfo(clerkUser?.id!);
-
 	return (
 		<div>
-			<Header user={user?.user} />
 			<div className="flex-1 pt-20">{children}</div>
 			<Footer />
 		</div>

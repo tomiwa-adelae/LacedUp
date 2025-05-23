@@ -42,7 +42,6 @@ export const RecentOrders = ({
 				<TableHeader>
 					<TableRow>
 						<TableHead>OrderID</TableHead>
-						<TableHead>Customer</TableHead>
 						<TableHead>Date</TableHead>
 						<TableHead>Price</TableHead>
 						<TableHead>Items</TableHead>
@@ -77,10 +76,6 @@ export const RecentOrders = ({
 										}
 										ORD-{_id.slice(-6)}
 									</Link>
-								</TableCell>
-								<TableCell>
-									{shippingDetails.firstName}{" "}
-									{shippingDetails.lastName}
 								</TableCell>
 								<TableCell>{formatDate(createdAt)}</TableCell>
 								<TableCell>

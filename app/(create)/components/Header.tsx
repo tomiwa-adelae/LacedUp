@@ -3,7 +3,7 @@
 import Logo from "@/components/shared/Logo";
 import { Theme } from "@/components/shared/Theme";
 import { IUser } from "@/lib/database/models/user.model";
-import { MobileNavbar } from "@/app/(admin)/components/MobileNavbar";
+import { MobileNavbar } from "@/components/shared/MobileNavbar";
 
 export const Header = ({ user }: { user: IUser }) => {
 	return (

@@ -11,16 +11,22 @@ import {
 	getNewProducts,
 	getTopProducts,
 } from "@/lib/actions/product.actions";
+import { Header } from "@/components/shared/Header";
+import { currentUser } from "@clerk/nextjs/server";
+import { getUserInfo } from "@/lib/actions/user.actions";
 
 const page = async () => {
+	const clerkUser = await currentUser();
+	const user = await getUserInfo(clerkUser?.id!);
 	const newProducts = await getNewProducts({});
 	const topProducts = await getTopProducts();
 	const products = await getAllProducts({});
 
-	if (newProducts.status === 400) redirect("/not-found");
+	// if (newProducts.status === 400) redirect("/not-found");
 
 	return (
 		<div>
+			<Header search={true} user={user?.user} />
 			<Showcase
 				title={
 					<>
@@ -37,7 +43,7 @@ const page = async () => {
 			<div className="container">
 				<Separator />
 			</div>
-			<ShopNew products={newProducts.products} />
+			<ShopNew products={newProducts?.products} />
 			<div className="container">
 				<Separator />
 			</div>
@@ -45,11 +51,11 @@ const page = async () => {
 			<div className="container">
 				<Separator />
 			</div>
-			<BestSellers products={topProducts.products} />
+			<BestSellers products={topProducts?.products} />
 			<div className="container">
 				<Separator />
 			</div>
-			<AllProducts products={products.products} />
+			<AllProducts products={products?.products} />
 			<div className="container">
 				<Separator />
 			</div>

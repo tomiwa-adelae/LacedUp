@@ -41,7 +41,7 @@ const Footer = () => {
 								{links.map(({ slug, label }, idx) => (
 									<li key={idx}>
 										<Link
-											className="text-base text-muted-foreground dark:text-gray-200 hover:text-primary"
+											className="text-sm text-muted-foreground dark:text-gray-200 hover:text-primary"
 											href={slug}
 										>
 											{label}

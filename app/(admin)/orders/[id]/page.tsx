@@ -30,6 +30,8 @@ import {
 	Smartphone,
 	User,
 } from "lucide-react";
+import { AppNavbar } from "../../components/AppNavbar";
+import { Header } from "../../components/Header";
 
 const page = async ({ params }: { params: any }) => {
 	const clerkUser = await currentUser();
@@ -38,11 +40,16 @@ const page = async ({ params }: { params: any }) => {
 
 	const user = await getUserInfo(clerkUser?.id!);
 
-	const order = await getOrderDetails({ userId: user.user._id, orderId: id });
+	const order = await getOrderDetails({
+		userId: user?.user?._id,
+		orderId: id,
+	});
 
 	if (order.status === 400) redirect("/not found");
 	return (
 		<div>
+			<AppNavbar user={user?.user} />
+			<Header user={user?.user} />
 			<div className="flex items-center justify-between gap-8 bg-white dark:bg-black">
 				<div>
 					<div className="flex items-center justify-between gap-4">
@@ -93,17 +100,19 @@ const page = async ({ params }: { params: any }) => {
 						</div>
 					</div>
 					<p className="text-sm text-muted-foreground">
-						Order date: {formatDate(order.order.createdAt)}
+						Order date: {formatDate(order?.order?.createdAt)}
 					</p>
 				</div>
-				{order?.order.orderStatus !== "cancelled" && (
-					<div className="flex items-center justify-center gap-4">
-						<CancelOrderButton
-							userId={user?.user?._id}
-							orderId={order?.order?._id}
-						/>
-					</div>
-				)}
+				{!user?.user?.isAdmin &&
+					order?.order?.orderStatus !== "delivered" &&
+					order?.order?.orderStatus !== "cancelled" && (
+						<div className="flex items-center justify-center gap-4">
+							<CancelOrderButton
+								userId={user?.user?._id}
+								orderId={order?.order?._id}
+							/>
+						</div>
+					)}
 			</div>
 			<div>
 				<div className="grid-cols-1 grid gap-4 lg:grid-cols-3 pt-4">
@@ -113,65 +122,125 @@ const page = async ({ params }: { params: any }) => {
 								<h4 className="mb-2 font-medium text-muted-foreground text-sm lg:text-base uppercase">
 									Order items
 								</h4>
-								{order.order.orderItems.map(
-									(
-										{
-											image,
-											name,
-											product,
-											color,
-											size,
-											quantity,
-											price,
-										}: any,
-										index: string
-									) => (
-										<div>
-											<div
-												key={index}
-												className="md:hidden shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] rounded-lg p-2 flex flex-col items-start justify-between gap-4 dark:border"
-											>
-												<Image
-													src={image}
-													alt={`${name}'s picture`}
-													width={1000}
-													height={1000}
-													className="aspect-video object-cover rounded-lg "
-												/>
-												<div className="w-full">
-													<h3>
-														<Link
-															href={`/shoes/${product}`}
-															className="text-base font-medium mb-1 hover:text-primary transition-all"
-														>
-															{name}
-														</Link>
-													</h3>
-													<div className="flex items-center justify-start text-xs my-1 font-medium text-muted-foreground dark:text-gray-200">
-														<p>
-															Color:{" "}
-															<span className="text-black dark:text-white">
-																{color}
-															</span>
-														</p>
-														<Dot className="text-black dark:text-white size-5" />
-														<p>
-															Size:{" "}
-															<span className="text-black dark:text-white">
-																{size}
-															</span>
-														</p>
-														<Dot className="text-black dark:text-white size-5" />
-														<p>
-															Quantity:{" "}
-															<span className="text-black dark:text-white">
-																{quantity}
-															</span>
-														</p>
-													</div>
-													<div className="flex mt-4 justify-start gap-2 font-medium text-sm items-center h-full">
+								<div className="grid gap-4">
+									{order.order.orderItems.map(
+										(
+											{
+												image,
+												name,
+												product,
+												color,
+												size,
+												quantity,
+												price,
+											}: any,
+											index: string
+										) => (
+											<div>
+												<div
+													key={index}
+													className="md:hidden shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] rounded-lg p-2 flex flex-col items-start justify-between gap-4 dark:border"
+												>
+													<Image
+														src={image}
+														alt={`${name}'s picture`}
+														width={1000}
+														height={1000}
+														className="aspect-video object-cover rounded-lg "
+													/>
+													<div className="w-full">
 														<h3>
-															( 2 x ₦{" "}
+															<Link
+																href={`/shoes/${product}`}
+																className="text-base font-medium mb-1 hover:text-primary transition-all"
+															>
+																{name}
+															</Link>
+														</h3>
+														<div className="flex items-center justify-start text-xs my-1 font-medium text-muted-foreground dark:text-gray-200">
+															<p>
+																Color:{" "}
+																<span className="text-black dark:text-white">
+																	{color}
+																</span>
+															</p>
+															<Dot className="text-black dark:text-white size-5" />
+															<p>
+																Size:{" "}
+																<span className="text-black dark:text-white">
+																	{size}
+																</span>
+															</p>
+															<Dot className="text-black dark:text-white size-5" />
+															<p>
+																Quantity:{" "}
+																<span className="text-black dark:text-white">
+																	{quantity}
+																</span>
+															</p>
+														</div>
+														<div className="flex mt-4 justify-start gap-2 font-medium text-sm items-center h-full">
+															<h3>
+																( 2 x ₦{" "}
+																{formatMoneyInput(
+																	price
+																)}
+																)
+															</h3>
+															=
+															<h3>
+																₦{" "}
+																{formatMoneyInput(
+																	quantity *
+																		price
+																)}
+															</h3>
+														</div>
+													</div>
+												</div>
+												<div className="hidden shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] rounded-lg p-2 md:flex items-center justify-between gap-4 dark:border">
+													<Image
+														src={image}
+														alt={`${name}'s picture`}
+														width={1000}
+														height={1000}
+														className="object-cover aspect-square size-[80px] rounded-lg"
+													/>
+													<div className="flex-1">
+														<h3>
+															<Link
+																href={`/shoes/${id}`}
+																className="text-base font-medium mb-1 hover:text-primary transition-all"
+															>
+																{name}
+															</Link>
+														</h3>
+														<div className="flex items-center justify-start text-xs my-1 font-medium text-muted-foreground dark:text-gray-200">
+															<p>
+																Color:{" "}
+																<span className="text-black dark:text-white">
+																	{color}
+																</span>
+															</p>
+															<Dot className="text-black dark:text-white size-5" />
+															<p>
+																Size:{" "}
+																<span className="text-black dark:text-white">
+																	{size}
+																</span>
+															</p>
+															<Dot className="text-black dark:text-white size-5" />
+															<p>
+																Quantity:{" "}
+																<span className="text-black dark:text-white">
+																	{quantity}
+																</span>
+															</p>
+														</div>
+													</div>
+													<div className="flex items-center justify-start gap-2 font-medium text-sm h-full">
+														<h3>
+															( 2 x ₦
 															{formatMoneyInput(
 																price
 															)}
@@ -187,66 +256,9 @@ const page = async ({ params }: { params: any }) => {
 													</div>
 												</div>
 											</div>
-											<div className="hidden shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] rounded-lg p-2 md:flex items-center justify-between gap-4 dark:border">
-												<Image
-													src={image}
-													alt={`${name}'s picture`}
-													width={1000}
-													height={1000}
-													className="object-cover aspect-square size-[80px] rounded-lg"
-												/>
-												<div className="flex-1">
-													<h3>
-														<Link
-															href={`/shoes/${id}`}
-															className="text-base font-medium mb-1 hover:text-primary transition-all"
-														>
-															{name}
-														</Link>
-													</h3>
-													<div className="flex items-center justify-start text-xs my-1 font-medium text-muted-foreground dark:text-gray-200">
-														<p>
-															Color:{" "}
-															<span className="text-black dark:text-white">
-																{color}
-															</span>
-														</p>
-														<Dot className="text-black dark:text-white size-5" />
-														<p>
-															Size:{" "}
-															<span className="text-black dark:text-white">
-																{size}
-															</span>
-														</p>
-														<Dot className="text-black dark:text-white size-5" />
-														<p>
-															Quantity:{" "}
-															<span className="text-black dark:text-white">
-																{quantity}
-															</span>
-														</p>
-													</div>
-												</div>
-												<div className="flex items-center justify-start gap-2 font-medium text-sm h-full">
-													<h3>
-														( 2 x ₦
-														{formatMoneyInput(
-															price
-														)}
-														)
-													</h3>
-													=
-													<h3>
-														₦{" "}
-														{formatMoneyInput(
-															quantity * price
-														)}
-													</h3>
-												</div>
-											</div>
-										</div>
-									)
-								)}
+										)
+									)}
+								</div>
 								<div className="mt-4">
 									{order?.order?.orderStatus ===
 										"delivered" && (
@@ -260,7 +272,7 @@ const page = async ({ params }: { params: any }) => {
 										"pending" && (
 										<InformationBox
 											icon={CircleDashed}
-											title="Orders pending"
+											title="Delivery pending"
 											variant="pending"
 										/>
 									)}

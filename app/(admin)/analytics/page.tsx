@@ -7,6 +7,8 @@ import { AnalyticBoxes } from "../components/AnalyticBoxes";
 import { getAdminProducts } from "@/lib/actions/product.actions";
 import { DEFAULT_LIMIT } from "@/constants";
 import { AnalyticChart } from "../components/AnalyticChart";
+import { AppNavbar } from "../components/AppNavbar";
+import { Header } from "../components/Header";
 
 const page = async ({ searchParams }: { searchParams: any }) => {
 	const { query, page } = await searchParams;
@@ -37,6 +39,8 @@ const page = async ({ searchParams }: { searchParams: any }) => {
 
 	return (
 		<div>
+			<AppNavbar user={user?.user} />
+			<Header user={user?.user} />
 			<div>
 				<h2 className="text-lg lg:text-3xl uppercase font-semibold">
 					Analytics

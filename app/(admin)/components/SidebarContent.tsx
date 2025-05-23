@@ -19,7 +19,7 @@ export const SidebarContent = ({
 	user,
 	setOpenMobile,
 }: {
-	user: IUser;
+	user?: IUser;
 	setOpenMobile?: any;
 }) => {
 	const router = useRouter();

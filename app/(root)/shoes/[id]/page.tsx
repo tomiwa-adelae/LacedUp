@@ -11,10 +11,14 @@ import {
 	getProductDetails,
 	getSimilarProducts,
 } from "@/lib/actions/product.actions";
+import { currentUser } from "@clerk/nextjs/server";
+import { getUserInfo } from "@/lib/actions/user.actions";
+import { Header } from "@/components/shared/Header";
 
 const page = async ({ params }: { params: any }) => {
 	const { id } = await params;
-
+	const clerkUser = await currentUser();
+	const user = await getUserInfo(clerkUser?.id!);
 	const product = await getProductDetails({
 		productId: id,
 	});
@@ -29,6 +33,7 @@ const page = async ({ params }: { params: any }) => {
 
 	return (
 		<div className="bg-white dark:bg-black py-4">
+			<Header user={user?.user} />
 			<ShoeBreadCrumbs
 				categoryName={product?.product?.category.name}
 				categoryId={product?.product?.category._id}
