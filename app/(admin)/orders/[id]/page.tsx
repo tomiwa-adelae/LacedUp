@@ -76,7 +76,7 @@ const page = async ({ params }: { params: any }) => {
 		<div>
 			<AppNavbar user={user?.user} />
 			<Header user={user?.user} />
-			<div className="flex flex-col md:flex-row items-center justify-between gap-8 bg-white dark:bg-black">
+			<div className="flex flex-col md:flex-row items-center justify-start md:justify-between gap-8 bg-white dark:bg-black">
 				<div>
 					<div className="flex items-center justify-between gap-4">
 						<h2 className="text-lg lg:text-3xl uppercase font-semibold">
