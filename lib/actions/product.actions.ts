@@ -390,6 +390,7 @@ export const deleteProductImage = async ({
 };
 
 // Get all the products by admin
+// Get all the products by admin
 export const getAdminProducts = async ({
 	query,
 	limit = 0,
@@ -411,15 +412,32 @@ export const getAdminProducts = async ({
 					"Oops! UserId can not be found. Please try again later",
 			};
 		}
+
 		const user = await User.findById(userId);
 
-		if (!user && !user.isAdmin)
+		if (!user || !user.isAdmin) {
 			return {
 				status: 400,
 				message: "You are not authorized to get these products.",
 			};
+		}
 
-		const skipAmount = (Number(page) - 1) * limit;
+		// Safely parse page and limit
+		const parsedPage = Number(page);
+		const validPage = !isNaN(parsedPage) && parsedPage > 0 ? parsedPage : 1;
+
+		const validLimit = typeof limit === "number" && limit > 0 ? limit : 0;
+
+		const skipAmount = validLimit > 0 ? (validPage - 1) * validLimit : 0;
+
+		console.log(
+			"PAGE:",
+			page,
+			"→ validPage:",
+			validPage,
+			"SKIP:",
+			skipAmount
+		);
 
 		const keywordMatch = query
 			? {
@@ -427,16 +445,15 @@ export const getAdminProducts = async ({
 						{ name: { $regex: query, $options: "i" } },
 						{ description: { $regex: query, $options: "i" } },
 						{ price: { $regex: query, $options: "i" } },
-						{ "category.name": { $regex: query, $options: "i" } }, // category name
+						{ "category.name": { $regex: query, $options: "i" } },
 					],
 			  }
 			: {};
 
-		// Use aggregation pipeline to search on populated category name
 		const pipeline: mongoose.PipelineStage[] = [
 			{
 				$lookup: {
-					from: "categories", // collection name in DB (check actual name if different)
+					from: "categories",
 					localField: "category",
 					foreignField: "_id",
 					as: "category",
@@ -456,17 +473,18 @@ export const getAdminProducts = async ({
 					createdAt: -1,
 				},
 			},
-			{
-				$skip: skipAmount,
-			},
-			{
-				$limit: limit,
-			},
 		];
+
+		// Add pagination only if limit is greater than 0
+		if (validLimit > 0) {
+			pipeline.push({ $skip: skipAmount });
+			pipeline.push({ $limit: validLimit });
+		}
 
 		const products = await Product.aggregate(pipeline);
 
-		const countPipeline = [
+		// Count pipeline
+		const countPipeline: mongoose.PipelineStage[] = [
 			{
 				$lookup: {
 					from: "categories",
@@ -492,27 +510,10 @@ export const getAdminProducts = async ({
 		const countResult = await Product.aggregate(countPipeline);
 		const totalCount = countResult[0]?.totalCount || 0;
 
-		// const skipAmount = (Number(page) - 1) * limit;
-
-		// const products = await Product.find({ ...keyword })
-		// 	.populate("category")
-		// 	.sort({ createdAt: -1 })
-		// 	.skip(skipAmount);
-
-		// const productCount = await Product.countDocuments({
-		// 	...keyword,
-		// });
-
-		// return {
-		// 	status: 200,
-		// 	products: JSON.parse(JSON.stringify(products)),
-		// 	totalPages: Math.ceil(productCount / limit),
-		// };
-
 		return {
 			status: 200,
 			products: JSON.parse(JSON.stringify(products)),
-			totalPages: Math.ceil(totalCount / limit),
+			totalPages: validLimit > 0 ? Math.ceil(totalCount / validLimit) : 1,
 		};
 	} catch (error: any) {
 		handleError(error);
@@ -524,6 +525,143 @@ export const getAdminProducts = async ({
 		};
 	}
 };
+
+// export const getAdminProducts = async ({
+// 	query,
+// 	limit = 0,
+// 	page,
+// 	userId,
+// }: {
+// 	query: string;
+// 	limit?: number;
+// 	page: string;
+// 	userId: string;
+// }) => {
+// 	try {
+// 		await connectToDatabase();
+
+// 		if (!userId) {
+// 			return {
+// 				status: 400,
+// 				message:
+// 					"Oops! UserId can not be found. Please try again later",
+// 			};
+// 		}
+// 		const user = await User.findById(userId);
+
+// 		if (!user && !user.isAdmin)
+// 			return {
+// 				status: 400,
+// 				message: "You are not authorized to get these products.",
+// 			};
+
+// 		const skipAmount = (Number(page) - 1) * limit;
+
+// 		console.log('NUMBER',Number(page));
+
+// 		const keywordMatch = query
+// 			? {
+// 					$or: [
+// 						{ name: { $regex: query, $options: "i" } },
+// 						{ description: { $regex: query, $options: "i" } },
+// 						{ price: { $regex: query, $options: "i" } },
+// 						{ "category.name": { $regex: query, $options: "i" } }, // category name
+// 					],
+// 			  }
+// 			: {};
+
+// 		// Use aggregation pipeline to search on populated category name
+// 		const pipeline: mongoose.PipelineStage[] = [
+// 			{
+// 				$lookup: {
+// 					from: "categories", // collection name in DB (check actual name if different)
+// 					localField: "category",
+// 					foreignField: "_id",
+// 					as: "category",
+// 				},
+// 			},
+// 			{
+// 				$unwind: {
+// 					path: "$category",
+// 					preserveNullAndEmptyArrays: true,
+// 				},
+// 			},
+// 			{
+// 				$match: keywordMatch,
+// 			},
+// 			{
+// 				$sort: {
+// 					createdAt: -1,
+// 				},
+// 			},
+// 			{
+// 				$skip: skipAmount,
+// 			},
+// 			{
+// 				$limit: limit,
+// 			},
+// 		];
+
+// 		const products = await Product.aggregate(pipeline);
+
+// 		const countPipeline = [
+// 			{
+// 				$lookup: {
+// 					from: "categories",
+// 					localField: "category",
+// 					foreignField: "_id",
+// 					as: "category",
+// 				},
+// 			},
+// 			{
+// 				$unwind: {
+// 					path: "$category",
+// 					preserveNullAndEmptyArrays: true,
+// 				},
+// 			},
+// 			{
+// 				$match: keywordMatch,
+// 			},
+// 			{
+// 				$count: "totalCount",
+// 			},
+// 		];
+
+// 		const countResult = await Product.aggregate(countPipeline);
+// 		const totalCount = countResult[0]?.totalCount || 0;
+
+// 		// const skipAmount = (Number(page) - 1) * limit;
+
+// 		// const products = await Product.find({ ...keyword })
+// 		// 	.populate("category")
+// 		// 	.sort({ createdAt: -1 })
+// 		// 	.skip(skipAmount);
+
+// 		// const productCount = await Product.countDocuments({
+// 		// 	...keyword,
+// 		// });
+
+// 		// return {
+// 		// 	status: 200,
+// 		// 	products: JSON.parse(JSON.stringify(products)),
+// 		// 	totalPages: Math.ceil(productCount / limit),
+// 		// };
+
+// 		return {
+// 			status: 200,
+// 			products: JSON.parse(JSON.stringify(products)),
+// 			totalPages: Math.ceil(totalCount / limit),
+// 		};
+// 	} catch (error: any) {
+// 		handleError(error);
+// 		return {
+// 			status: error?.status || 400,
+// 			message:
+// 				error?.message ||
+// 				"Oops! Couldn't get products! Try again later.",
+// 		};
+// 	}
+// };
 
 // Get all the products
 export const getAllProducts = async ({
